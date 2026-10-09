@@ -477,7 +477,7 @@ function applyTheme(rerender) {
 $('#themebtn').onclick = () => { const cur = document.documentElement.dataset.theme || 'auto'; const nx = cur === 'auto' ? (isDark() ? 'light' : 'dark') : cur === 'dark' ? 'light' : 'auto';
   if (nx === 'auto') { delete document.documentElement.dataset.theme; try { localStorage.removeItem('spcx-theme'); } catch (e) {} } else { document.documentElement.dataset.theme = nx; try { localStorage.setItem('spcx-theme', nx); } catch (e) {} } applyTheme(true); };
 if (window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { if (!document.documentElement.dataset.theme) applyTheme(true); });
-$('#foot').innerHTML = `Built from SpaceX's SEC filings (424(b)(4) prospectus, 10-Q, 8-K, S-8, Form 4, Schedule 13G), SpaceX and NASA mission pages and labelled third-party data. Company figures as of 30 Jun 2026 (Q2 2026); valuation at the ${esc(dlong(D.price.close_date))} close; real-time price via Robinhood (TradingView delayed quote as backup), live chart via TradingView. Not investment advice. Unavailable figures are shown as n/a; estimates are labelled. <a class="flink" href="#sources">Sources</a><br><b>© 2026 Hugo Tian. All rights reserved.</b>`;
+$('#foot').innerHTML = `© 2026 Hugo Tian. All rights reserved.`;
 palette(); buildNav(); applyTheme(false); hero(); route(); addEventListener('hashchange', route);
 
 /* ---------------- short interest (FINRA; si.js from build_si.py) ---------------- */
