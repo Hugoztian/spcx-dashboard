@@ -462,9 +462,9 @@ function boardHtml() {
   const B = window.SPCX_BOARD; if (!B) return '';
   const n = v => v == null || v === 0 ? '—' : v;
   const row = (r, exec) => { const c = r.cur, p = r.pro;
-    return [r.name, r.role, ...(exec ? [] : [r.dtype, r.ind, r.com]), r.joined, r.other,
+    return [r.name, r.role,
       c ? n(c.A) : 'n/a', c ? n(c.B) : 'n/a', c ? n(c.opt) : 'n/a', c ? n(c.rsu) : 'n/a', c ? dlong(c.asof) : 'n/a', c ? `Form ${c.form} filed ${dlong(c.filed)} ${c.url}` : 'n/a',
-      p ? n(p[0]) : 'n/a', p ? p[1] : 'n/a', p ? n(p[2]) : 'n/a', p ? p[3] : 'n/a', p ? p[4] : 'n/a', r.src]; };
+      p ? n(p[0]) : 'n/a', p ? p[1] : 'n/a', p ? n(p[2]) : 'n/a', p ? p[3] : 'n/a', p ? p[4] : 'n/a', ...(exec ? [] : [r.dtype, r.ind, r.com]), r.joined, r.other, r.src]; };
   const hold = ['Class A (latest filing)', 'Class B (latest filing)', 'Options (underlying shares)', 'RSUs', 'Holdings as of', 'Latest Form 3/4', 'Prospectus Class A', '% of Class A', 'Prospectus Class B', '% of Class B', 'Voting power', 'Source (role)'];
   const ex = list => (r, i) => list[i].note ? `<div style="font-size:12.5px;white-space:normal">${esc(list[i].note)}</div>` : '';
   const notes = ['Holdings are rebuilt from every Form 3, 4 and 5 (and amendment) filed with SpaceX as issuer since 1 Jun 2026: each later filing’s “owned following transaction” figure replaces the earlier one for the same security and holder; an amendment replaces the filing it amends. Direct and indirect (trusts, LLCs, funds) holdings are added together. “—” means none reported.',
@@ -472,9 +472,9 @@ function boardHtml() {
     B.pro_basis + ' Percentages and voting power are as disclosed in the prospectus (“<1%” = less than 1%); they include options exercisable within 60 days, so they differ from the Form 3/4 columns.',
     `Prospectus “Management” and beneficial-ownership sections: ${B.p424}`, `Built ${B.built} from ${B.nfil} Forms 3/4/5 on EDGAR.`];
   return `<div class="card" id="board" style="margin:16px 0"><h3 style="margin-top:0">Board of Directors <span class="mut">9 directors · holdings from the latest Form 3/4 · click a row for notes</span></h3>
-  ${tableBlock({columns: ['Name', 'Role', 'Seat', 'Independent', 'Committees', 'Joined board', 'Primary other role', ...hold], rows: B.board.map(r => row(r))}, {id: 'tBoard', wrap: true, expand: ex(B.board), notes})}
+  ${tableBlock({columns: ['Name', 'Role', ...hold.slice(0, -1), 'Seat', 'Independent', 'Committees', 'Joined board', 'Primary other role', 'Source (role)'], rows: B.board.map(r => row(r))}, {id: 'tBoard', wrap: true, expand: ex(B.board), notes})}
   <h3>Executive officers who are not directors</h3>
-  ${tableBlock({columns: ['Name', 'Role', 'Joined board', 'Primary other role', ...hold], rows: B.execs.map(r => row(r, true))}, {id: 'tExec', wrap: true, expand: ex(B.execs), notes: ['Gwynne Shotwell (President and COO) is also a director and is listed in the board table. Elon Musk is CEO, CTO and Chairman.']})}</div>`;
+  ${tableBlock({columns: ['Name', 'Role', ...hold.slice(0, -1), 'Joined board', 'Primary other role', 'Source (role)'], rows: B.execs.map(r => row(r, true))}, {id: 'tExec', wrap: true, expand: ex(B.execs), notes: ['Gwynne Shotwell (President and COO) is also a director and is listed in the board table. Elon Musk is CEO, CTO and Chairman.']})}</div>`;
 }
 
 /* ---------------- insiders ---------------- */
