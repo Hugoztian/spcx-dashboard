@@ -154,7 +154,7 @@ function renderQuote(q) {
   const box = $('#lq'); if (!box) return; box.classList.toggle('reg', reg); box.classList.toggle('stale', !!q.stale);
   const SESS = {premarket: '盘前', pre: '盘前', 'pre-market': '盘前', afterhours: '盘后', after: '盘后', 'after-hours': '盘后', post: '盘后', overnight: '夜盘', closed: '休市'};
   const sessZh = x => SESS[String(x || '').toLowerCase()] || SESS[String(q.session || '').toLowerCase()] || String(x || '');
-  $('#lq-sl').textContent = reg ? tl('Live · regular session', '实时 · 常规交易时段') : (q.session === 'closed' ? tl('Market closed', '休市') : tl(`${q.session_label || q.session} session`, `${sessZh(q.session_label || q.session)}时段`)) + (q.session === 'overnight' ? tl(' (8 PM–4 AM ET)', '（美东 20:00–04:00）') : '');
+  $('#lq-sl').textContent = reg ? tl('Live · regular session', '实时 · 常规交易时段') : (q.session === 'closed' ? tl('Market closed', '休市') : tl(`${q.session_label || q.session} session`, `${sessZh(q.session_label || q.session)}时段`)) + (q.session === 'overnight' ? tl(' (8 PM–4 AM ET)', '（美东 20–4 时）') : '');
   $('#lq-k').textContent = m.kind === 'regular' ? '' : tl(m.label || '', m.kind === 'close' ? '收盘价' : sessZh(m.label || m.kind));
   const px = $('#lq-px'); px.textContent = m.price != null ? usd(m.price) : 'n/a';
   if (LQ.prev != null && m.price != null && m.price !== LQ.prev) { px.classList.remove('up', 'dn'); void px.offsetWidth; px.classList.add(m.price > LQ.prev ? 'up' : 'dn'); }
