@@ -457,6 +457,26 @@ function valTab() {
     ${tableBlock({columns: ['Firm', 'Rating', 'Target'], rows: S.actions}, {id: 'tSt', notes: [S.src, S.note, 'See Sources → Bulls / Bears for what individual analysts said.']})}</div></div>`;
 }
 
+/* ---------------- Board of Directors (Insiders) ---------------- */
+function boardHtml() {
+  const B = window.SPCX_BOARD; if (!B) return '';
+  const n = v => v == null || v === 0 ? '—' : v;
+  const row = (r, exec) => { const c = r.cur, p = r.pro;
+    return [r.name, r.role, ...(exec ? [] : [r.dtype, r.ind, r.com]), r.joined, r.other,
+      c ? n(c.A) : 'n/a', c ? n(c.B) : 'n/a', c ? n(c.opt) : 'n/a', c ? n(c.rsu) : 'n/a', c ? dlong(c.asof) : 'n/a', c ? `Form ${c.form} filed ${dlong(c.filed)} ${c.url}` : 'n/a',
+      p ? n(p[0]) : 'n/a', p ? p[1] : 'n/a', p ? n(p[2]) : 'n/a', p ? p[3] : 'n/a', p ? p[4] : 'n/a', r.src]; };
+  const hold = ['Class A (latest filing)', 'Class B (latest filing)', 'Options (underlying shares)', 'RSUs', 'Holdings as of', 'Latest Form 3/4', 'Prospectus Class A', '% of Class A', 'Prospectus Class B', '% of Class B', 'Voting power', 'Source (role)'];
+  const ex = list => (r, i) => list[i].note ? `<div style="font-size:12.5px;white-space:normal">${esc(list[i].note)}</div>` : '';
+  const notes = ['Holdings are rebuilt from every Form 3, 4 and 5 (and amendment) filed with SpaceX as issuer since 1 Jun 2026: each later filing’s “owned following transaction” figure replaces the earlier one for the same security and holder; an amendment replaces the filing it amends. Direct and indirect (trusts, LLCs, funds) holdings are added together. “—” means none reported.',
+    'Class B shares carry 10 votes each and convert one-for-one into Class A. Class B rows on Form 3 are reported as derivative securities convertible into Class A.',
+    B.pro_basis + ' Percentages and voting power are as disclosed in the prospectus (“<1%” = less than 1%); they include options exercisable within 60 days, so they differ from the Form 3/4 columns.',
+    `Prospectus “Management” and beneficial-ownership sections: ${B.p424}`, `Built ${B.built} from ${B.nfil} Forms 3/4/5 on EDGAR.`];
+  return `<div class="card" id="board" style="margin:16px 0"><h3 style="margin-top:0">Board of Directors <span class="mut">9 directors · holdings from the latest Form 3/4 · click a row for notes</span></h3>
+  ${tableBlock({columns: ['Name', 'Role', 'Seat', 'Independent', 'Committees', 'Joined board', 'Primary other role', ...hold], rows: B.board.map(r => row(r))}, {id: 'tBoard', wrap: true, expand: ex(B.board), notes})}
+  <h3>Executive officers who are not directors</h3>
+  ${tableBlock({columns: ['Name', 'Role', 'Joined board', 'Primary other role', ...hold], rows: B.execs.map(r => row(r, true))}, {id: 'tExec', wrap: true, expand: ex(B.execs), notes: ['Gwynne Shotwell (President and COO) is also a director and is listed in the board table. Elon Musk is CEO, CTO and Chairman.']})}</div>`;
+}
+
 /* ---------------- insiders ---------------- */
 const CATL = {tax: 'Tax-driven (withholding / sell-to-cover)', planned: 'Planned sale (10b5-1)', voluntary: 'Voluntary open-market sale', buy: 'Open-market purchase', other: 'Grants, exercises, conversions, gifts, distributions'};
 function insTab() {
@@ -464,6 +484,7 @@ function insTab() {
   const tbl = (k, id) => tableBlock({columns: ['Date', 'Insider', 'Role', 'Code', 'Type', 'Shares', 'Price (US$)', 'Held after', 'Filing'], rows: by(k).map(f => [f.date, f.insider, f.role, f.code, f.type, f.shares, f.price == null ? '—' : f.price, f.after, `Form ${f.amend} filed ${f.filed} ${f.url}`])}, {id, expand: r => { const f = by(k).find(x => x.date === r[0] && x.shares === r[5]); return f && f.fn ? `<span class="mut">Footnotes: ${esc(f.fn)}</span>` : null; }});
   $('#s-ins').innerHTML = `<h2>Insiders <span class="mut">SEC Form 4 since the IPO, parsed from EDGAR XML · newest first</span></h2>
   <p class="lead sm">Sales are split by reason so tax-driven selling is not read as insiders losing confidence. <b>No Form 4 code F (shares withheld for tax) or footnoted sell-to-cover sales have been filed for SPCX so far.</b> No open-market insider purchases were found.</p>
+  ${boardHtml()}
   <h3>${CATL.tax}</h3>${by('tax').length ? tbl('tax', 'tTax') : '<div class="card na">None filed (as of 9 Oct 2026).</div>'}
   <h3>${CATL.planned}</h3>${by('planned').length ? tbl('planned', 'tPl') : '<div class="card na">None</div>'}
   <ul class="notes"><li>Gwynne Shotwell's 22 Sep sales (342,170 shares) followed same-day exercises of the same number of options (US$8.40–19.40 strikes) and were made under a Rule 10b5-1 plan adopted 23 Jun 2026 (Form 4 footnote F1). The footnotes do not say the sales were to cover tax.</li></ul>
