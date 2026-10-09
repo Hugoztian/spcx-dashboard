@@ -315,6 +315,7 @@ function ipoTab() {
     <div><div class="card" style="margin-bottom:16px"><h3>Rules from the prospectus</h3>${RULESORDER().map(rule).join('')}</div></div></div>
   <h3>Tranche table: investor releases vs employee equity <span class="mut">employee rows kept separate; estimates marked</span></h3>
   ${tableBlock({columns: ['Release', 'Row', 'Pool', 'Shares (m, max)', '% of shares out (calc.)', 'Tax-driven open-market supply', 'Status'], rows: trows}, {id: 'tRel', csvname: 'Lock-up releases', notes: ['Each release has its own employee-equity row (↳). Employee shares per tranche are not disclosed in the prospectus, S-8s or 10-Q, so they are n/a; the S-8 reoffer covers 136,949,657 employee shares in total (all pools). Musk’s release has no separate employee row. Tax-driven column: RSU ≈0 is an estimate assuming continued net settlement; option sell-to-cover amounts are not disclosed (n/a); “All holders” rows are not split between voluntary and tax-driven selling (n/a).', 'Tax-driven supply ≈0 is an ESTIMATE that assumes SpaceX keeps net-settling RSUs (it withholds shares and pays the tax in cash, per the prospectus). Option exercisers may still “sell to cover” (allowed by the lock-up); that amount is not disclosed.']})}
+  ${siPanel()}
   <h3>Employee equity & tax overhang</h3>
   <div class="grid g4" style="margin-bottom:12px">
     <div class="card kpi"><div class="l">RSUs outstanding (31 Mar 2026)</div><div class="v">128.5m + 0.9m B</div><div class="s">+23.8m granted after · none vest at the IPO</div></div>
@@ -323,6 +324,7 @@ function ipoTab() {
     <div class="card kpi"><div class="l">Employee shares registered for resale</div><div class="v">136.9m</div><div class="s">S-8 reoffer, 4 Aug 2026 · subject to lock-ups</div></div></div>
   ${tableBlock({columns: ['Item', 'Value', 'Exact wording', 'Source'], rows: facts}, {id: 'tEmp', csvname: 'Employee equity', wrap: true})}
   <div class="card" style="margin-top:12px"><h4 style="margin:0 0 6px">Estimate assumptions <span class="est">estimate</span></h4><ul class="lst">${E.assumptions.map(a => `<li>${esc(a)}</li>`).join('')}</ul></div>`;
+  siCharts();
 }
 const RULESORDER = () => { const o = ['vote', 'controlled', 'musk', 'pool180', 'earn1', 'price', 'dated', 'earn3', 'd180', 'ext', 'company', 'gs', 'sell2cover', 'tbp', 'quiet']; return o.map(k => D.rules.find(r => r.id === k)).filter(Boolean); };
 
@@ -477,3 +479,53 @@ $('#themebtn').onclick = () => { const cur = document.documentElement.dataset.th
 if (window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { if (!document.documentElement.dataset.theme) applyTheme(true); });
 $('#foot').innerHTML = `Built from SpaceX's SEC filings (424(b)(4) prospectus, 10-Q, 8-K, S-8, Form 4, Schedule 13G), SpaceX and NASA mission pages and labelled third-party data. Company figures as of 30 Jun 2026 (Q2 2026); valuation at the ${esc(dlong(D.price.close_date))} close; real-time price via Robinhood (TradingView delayed quote as backup), live chart via TradingView. Not investment advice. Unavailable figures are shown as n/a; estimates are labelled. <a class="flink" href="#sources">Sources</a><br><b>© 2026 Hugo Tian. All rights reserved.</b>`;
 palette(); buildNav(); applyTheme(false); hero(); route(); addEventListener('hashchange', route);
+
+/* ---------------- short interest (FINRA; si.js from build_si.py) ---------------- */
+function siPanel() {
+  const S = window.SPCX_SI; if (!S) return '<h3 id="short">Short interest</h3><div class="card na">Short-interest data did not load (n/a).</div>';
+  const H = S.hist, L = H[0], P = H[1], nx = S.pending[0], today = new Date().toISOString().slice(0, 10);
+  const pubTxt = p => `settlement ${dlong(p.settle)} → FINRA publication ${dlong(p.pub)}${p.pub <= today ? ' (due today/overdue, after the US close; not yet in FINRA’s API at build time)' : ''}`;
+  const head = `<h3 id="short">Short interest <span class="mut">FINRA exchange short interest · twice-monthly settlement dates, published 7 business days later · data built ${esc(S.built_sgt)}</span></h3>`;
+  if (!L) return head + `<div class="card na">No FINRA short-interest report for SpaceX since the IPO is available yet: n/a. Next: ${esc(nx ? pubTxt(nx) : 'n/a')}. ${ext(S.src.cal, 'FINRA schedule')}</div>`;
+  const pct = (a, b) => b ? (a / b * 100) : null;
+  const latestRel = S.float_steps.filter(s => s.date && s.date <= L.settle).slice(-1)[0];
+  const cards = `<div class="grid g4" style="margin-bottom:12px">
+    ${kpi('Short interest · settlement ' + dlong(L.settle), fmt(L.si / 1e6, 1) + 'm shares', `${fmt(L.si)} shares · published ${dlong(L.pub)}`, S.src.si_page)}
+    ${kpi('% of unlocked float (calc.)', fmt(L.pct_float, 1) + '%', `÷ ${fmt(L.float_m, 1)}m unlocked float at ${dlong(L.settle)} · ${fmt(L.pct_out, 1)}% of all 13,573m shares outstanding`)}
+    ${kpi('Days to cover', fmt(L.dtc, 2), `FINRA: SI ÷ ADV of ${fmt(L.adv)} shares (avg daily volume over the reporting period)`)}
+    ${kpi('Change vs ' + (P ? dlong(P.settle) : 'previous'), `${L.chg < 0 ? '−' : '+'}${fmt(Math.abs(L.chg) / 1e6, 1)}m`, `${(L.chg_pct < 0 ? '−' : '+') + fmt(Math.abs(L.chg_pct), 2)}% · previous ${fmt(L.prev)} shares (FINRA)`)}</div>
+    <p class="mut" style="font-size:12.5px;margin:0 0 12px">Next report: ${esc(nx ? pubTxt(nx) : 'n/a')}${S.pending[1] ? `; then ${esc(dlong(S.pending[1].settle))} → ${esc(dlong(S.pending[1].pub))}` : ''} (US dates; publication lands in the SGT evening/night). ${ext(S.src.cal, 'FINRA schedule')}</p>`;
+  const sg = (v, d) => (v < 0 ? '−' : '+') + fmt(Math.abs(v), d);
+  const hrows = H.map(h => [dlong(h.settle) + (h.rev === 'R' ? ' (revised)' : ''), fmt(h.si), `${sg(h.chg)} (${sg(h.chg_pct, 2)}%)`, fmt(h.adv), fmt(h.dtc, 2), fmt(h.float_m, 1), fmt(h.pct_float, 2) + '%', fmt(h.pct_out, 2) + '%', h.pub ? dlong(h.pub) : 'n/a']);
+  const fsteps = [...S.float_steps].sort((a, b) => (b.sort || b.date).localeCompare(a.sort || a.date) || b.float_m - a.float_m);
+  const frows = fsteps.map(s => [s.date ? dlong(s.date) : 'TBA', s.label, '+' + fmt(s.add_m, 1), fmt(s.float_m, 1), fmt(pct(L.si / 1e6, s.float_m), 2) + '%', (s.date && s.date <= today) ? 'Unlocked' : 'Upcoming']);
+  const D7 = S.daily, agg = D7.reduce((a, d) => [a[0] + d.short_vol, a[1] + d.total_vol], [0, 0]);
+  const drows = D7.map(d => [dlong(d.date), fmt(d.short_vol), fmt(d.exempt), fmt(d.total_vol), fmt(d.ratio, 1) + '%']);
+  return head + cards + `<div class="grid g2" style="margin-bottom:12px">${ccard('siHist', 'Short interest since the IPO (m shares) and % of unlocked float', 'FINRA · settlement dates', 280)}${ccard('siFloat', 'Unlocked float as tranches release (m shares, calc.)', 'latest SI as % of each step, line', 280)}</div>
+  ${tableBlock({title: 'All FINRA reports since the IPO (newest first)', columns: ['Settlement', 'Short interest', 'Change (%)', 'ADV used', 'Days to cover', 'Unlocked float (m, calc.)', '% of unl. float', '% of shares out', 'Published'], rows: hrows}, {id: 'tSI', csvname: 'SPCX short interest', notes: [
+    'Source: FINRA consolidated equity short interest (Rule 4560; exchange-listed incl. Nasdaq), via FINRA’s public Query API ' + S.src.si + ' . Short interest, ADV, days to cover, change and change % are FINRA’s figures; float and % columns are calculated.',
+    'The ticker SPCX was previously used by “The SPAC and New Issue ETF”; only records for Space Exploration Technologies settled on or after the 11 Jun 2026 IPO are shown.',
+    '15 Jun 2026 was reported as 23,341,117 shares; the next report lists the previous figure as 23,331,117. 30 Jun 2026 carries FINRA’s revision flag (R).']})}
+  ${tableBlock({title: 'Which float: unlocked float by lock-up step (newest first)', columns: ['Date', 'Step', 'Added (m)', 'Unlocked float (m, calc.)', 'Latest SI as % (illustrative)', 'Status'], rows: frows}, {id: 'tSIF', csvname: 'SPCX unlocked float', notes: [
+    'Float used = unlocked (tradable) float, NOT total shares outstanding: 638,888,888 Class A shares sold in the IPO incl. the full over-allotment (10-Q, Q2 2026: ' + S.src.ipo + ') plus each lock-up release on its date, from the 424(b)(4) “Shares Eligible for Future Sale” schedule.',
+    'Releases are the prospectus maximums (“up to”), so this is an upper bound for the tradable float and the % of float is a lower bound. The conditional 455.8m price-trigger release (not met per Chief) is excluded. Earnings-linked dates (TBA) are placed at an assumed month. Affiliate, employee (S-8) and Rule 144 nuances are not modelled.',
+    '“Latest SI as % (illustrative)” holds the latest FINRA short interest (' + fmt(L.si) + ' shares, ' + dlong(L.settle) + ') constant to show how the same position dilutes as more shares unlock; it is not a forecast.']})}
+  <h4 style="margin:18px 0 6px">FINRA daily short-sale volume <span class="est">not short interest</span></h4>
+  ${tableBlock({columns: ['Date', 'Short-sale volume', 'Short-exempt', 'FINRA-reported total volume', 'Short-sale ratio'], rows: drows}, {id: 'tSSV', csvname: 'SPCX FINRA daily short sale volume', notes: [
+    `Last ${D7.length} trading days: ${fmt(agg[0])} short-sale shares of ${fmt(agg[1])} FINRA-reported shares (${fmt(pct(agg[0], agg[1]), 1)}%).`,
+    'Source: FINRA Reg SHO daily short-sale volume files (CNMS, consolidated NMS), ' + S.src.daily + ' . These count trades marked short that were reported to FINRA facilities (mostly off-exchange); they exclude exchange-executed volume and include market-maker hedging, so they are a flow measure, not open short positions.',
+    'Borrow fee and utilisation: not shown — no official source; no third-party vendor figure is used.']})}`;
+}
+function siCharts() {
+  const S = window.SPCX_SI; if (!S || !S.hist.length) return;
+  const H = [...S.hist].reverse();
+  chart('siHist', {data: {labels: H.map(h => dlong(h.settle).replace(' 20', " '")), datasets: [
+    {type: 'bar', label: 'Short interest (m)', data: H.map(h => +(h.si / 1e6).toFixed(1)), backgroundColor: C.acc, yAxisID: 'y'},
+    {type: 'line', label: '% of unlocked float', data: H.map(h => h.pct_float), borderColor: C.g2, backgroundColor: C.g2, yAxisID: 'y1', tension: .2}]},
+    options: {scales: {y: {title: {display: true, text: 'm shares'}}, y1: {position: 'right', grid: {display: false}, ticks: {callback: v => v + '%'}}}}});
+  const L = S.hist[0], F = [...S.float_steps].sort((a, b) => (a.sort || a.date).localeCompare(b.sort || b.date) || a.float_m - b.float_m), today = new Date().toISOString().slice(0, 10);
+  chart('siFloat', {data: {labels: F.map(s => s.date ? dlong(s.date).replace(' 20', " '") : (s.label.match(/Q\d \d{4}/) || ['TBA'])[0]), datasets: [
+    {type: 'bar', label: 'Unlocked float (m, calc.)', data: F.map(s => s.float_m), backgroundColor: F.map(s => s.date && s.date <= today ? C.acc : C.g3), yAxisID: 'y'},
+    {type: 'line', label: 'Latest SI as % (illustrative)', data: F.map(s => +(L.si / 1e6 / s.float_m * 100).toFixed(2)), borderColor: C.g2, backgroundColor: C.g2, yAxisID: 'y1', tension: .2}]},
+    options: {scales: {y: {title: {display: true, text: 'm shares'}}, y1: {position: 'right', grid: {display: false}, ticks: {callback: v => v + '%'}}}}});
+}
