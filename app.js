@@ -477,7 +477,7 @@ function buildNav() { $('#nav').innerHTML = TABS.map(([id, l]) => `<a href="#${i
 function chrome() { /* static header text, language pill */
   $('.hero h1').innerHTML = tl('SpaceX <span class="tk">$SPCX</span> Dashboard', 'SpaceX <span class="tk">$SPCX</span> 看板'); $('.brand .bn').textContent = tl('Dashboard', '看板');
   $('.brand').setAttribute('aria-label', tl('SpaceX dashboard home', 'SpaceX 看板首页'));
-  $('#langlbl').textContent = LANG === 'zh' ? 'EN' : '中文';
+  $('#langlbl').textContent = LANG === 'zh' ? 'EN' : '中文'; $('#langflag').src = LANG === 'zh' ? 'flag-us.svg' : 'flag-cn.svg';
   $('#langbtn').title = tl('Language: English · click for 中文', '语言：中文 · 点击切换为 English'); $('#langbtn').setAttribute('aria-label', tl('Switch language to Chinese', '切换语言为英文'));
   $('#themebtn').title = tl('Theme: follows your system until you pick one', '主题：默认跟随系统，点击可切换'); }
 function applyTheme(rerender) {
