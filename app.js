@@ -10,7 +10,7 @@ const pct = (v, d = 1) => v == null || isNaN(v) ? 'n/a' : (v >= 0 ? '+' : '−')
 const pcls = v => v == null ? 'mut' : v >= 0 ? 'pos' : 'neg';
 const money = (v, d = 1) => v == null ? 'n/a' : (v < 0 ? '−$' : '$') + fmt(Math.abs(v), d) + 'm';
 const qshort = q => q.replace(/^Q(\d) (\d{2})(\d{2})$/, "Q$1'$3");
-const linkify = s => esc(s).replace(/(https?:\/\/[^\s;,)]+)/g, (u) => `<a href="${u}" target="_blank" rel="noopener">${u.length > 60 ? u.replace(/^https?:\/\/(www\.)?/, '').split('/')[0] + ' ↗' : u}</a>`);
+const linkify = s => esc(s).replace(/(https?:\/\/[^\s;,)]+)/g, (u) => `<a href="${u}" target="_blank" rel="noopener">${u.length > 60 || /\/status\/\d/.test(u) ? u.replace(/^https?:\/\/(www\.)?/, '').split('/')[0] + ' ↗' : u}</a>`);
 const isDark = () => { const t = document.documentElement.dataset.theme; return t ? t === 'dark' : !!(window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches); };
 const info = (k, extra = '') => `<i class="i" tabindex="0" data-tip="${esc('<b>' + esc(k) + '</b>' + (extra ? ' — ' + esc(extra) : ''))}">i</i>`;
 (function tips() {
@@ -372,10 +372,58 @@ function opsTab() {
   const done = O.starship.filter(s => s.date), y26 = done.filter(s => s.date >= '2026');
   $('#s-ops').innerHTML = `<h2>Operations <span class="mut">Launch cadence, Starship, Starlink and government contracts</span></h2>
   <div class="grid g4" style="margin-bottom:8px">${O.launch.map(k => kpi(k.l, esc(k.v), esc(k.s), k.url)).join('')}</div>
+  ${aiPanel()}
   <div style="margin-top:16px">
     <div class="card" style="margin-bottom:16px"><h3 style="margin-top:0">Starship test flights <span class="mut">newest first · ${done.length} flown, ${y26.length} in 2026</span></h3><ul class="lt">${ss}</ul></div>
     <div class="card"><h3 style="margin-top:0">Major government contracts & missions <span class="mut">newest first</span></h3>
       ${tableBlock({columns: ['Date', 'Customer', 'What', 'Value', 'Source'], rows: O.contracts.map(c => [c.dl || dlong(c.date), c.who, c.what, c.val, c.src + ' ' + c.url])}, {id: 'tCon', wrap: true, notes: [O.gov_note, 'Values are as reported by the sources; contract values are not revenue and are not split by year.']})}</div></div>`;
+  aiCharts();
+}
+
+/* ---------------- AI compute: GPUs & data centres (Operations) ---------------- */
+function aiPanel() {
+  const A = window.SPCX_AI; if (!A) return '';
+  const est = '<span class="est">estimate · illustration, not guidance</span>', tp = '<span class="est">third-party</span>';
+  const b = v => typeof v === 'number' ? 'US$' + fmt(v, 1) + 'bn' : v;
+  return `<div class="card" id="aic" style="margin:16px 0"><h3 style="margin-top:0">AI compute: GPUs &amp; data centres <span class="mut">newest first · as of ${esc(A.asof)}</span></h3>
+  <div class="grid g4" style="margin-bottom:12px">${A.kpis.map(k => kpi(k[0], esc(k[1]), esc(k[2]), k[3])).join('')}</div>
+  <h3>GPUs by type <span class="mut">filings first, then company statements</span></h3>
+  ${tableBlock({columns: ['As of', 'Site', 'GPU type', 'Count', 'Power (MW)', 'Basis', 'Source'], rows: A.gpus}, {id: 'tAiG', wrap: true, notes: ['CEO posts on X are company statements but are not filings. Post dates are in SGT. Counts the filings give as “approximately” are shown with ~.']})}
+  <h3>Data-centre sites</h3>
+  ${tableBlock({columns: ['Site', 'Location', 'What', 'Status', 'Basis', 'Source'], rows: A.sites}, {id: 'tAiS', wrap: true})}
+  <h3>Power: online, under construction, planned</h3>
+  ${tableBlock({columns: ['Date', 'Status', 'Capacity', 'What', 'Basis', 'Source'], rows: A.power}, {id: 'tAiP', wrap: true, notes: ['Nameplate compute draw = GPUs installed × their all-in power draw. It is not actual consumption or utilisation and excludes cooling, power-distribution losses and facility overhead (10-Q definition).', 'MW for future GB300 tranches = 220,000 × 2.0 kW (the per-GPU figure implied by the 424B4: 220 MW for 110,000 GB300). Calculated, not company-stated.']})}
+  <div class="grid g2" style="margin:12px 0">${ccard('aiGw', 'Compute capacity: actual vs forecasts (GW)', 'Actual = nameplate compute draw (filings). Elon = 1.5 GW in Apr 2026. Company = >2 GW end-2026 guidance, shown as 2.0. Street = low and high of named analysts (third-party).', 290)}${ccard('aiCap', 'Revenue capacity at 100% utilisation (US$bn, base case)', 'Estimate, not guidance. Bars: capacity × base GPU-hour price × 8,760 h. Line: Street revenue forecast for the same period (third-party).', 290)}</div>
+  <h3>Elon’s forecasts vs actual <span class="mut">verbatim quotes · newest first</span></h3>
+  ${tableBlock({columns: ['Said (SGT)', 'Elon said (verbatim)', 'Target', 'Deadline', 'Actual so far', 'Status', 'Source'], rows: A.forecasts}, {id: 'tAiF', wrap: true, notes: ['Only figures he stated are shown; nothing is converted into a number he did not say. “Actual” comes from filings or later company statements; n/a where nothing is disclosed.']})}
+  <h3>Company targets in filings and guidance</h3>
+  ${tableBlock({columns: ['Date', 'Statement', 'Target', 'Deadline', 'Actual so far', 'Status', 'Source'], rows: A.company}, {id: 'tAiC', wrap: true})}
+  <h3>Elon vs the Street <span class="mut">side by side</span> ${tp}</h3>
+  ${tableBlock({columns: ['Metric', 'Actual today', 'Elon / company forecast', 'Street low', 'Street average', 'Street high', 'Deadline'], rows: A.sbs}, {id: 'tAiX', wrap: true, notes: ['Street figures are third-party analyst forecasts as reported in the news; see the table below for each note, its date and link. No full consensus range was available, so low and high are the lowest and highest named analyst figures; n/a where no Street figure exists.']})}
+  <h3>Street forecasts <span class="mut">named analysts, newest first</span> ${tp}</h3>
+  ${tableBlock({columns: ['Analyst', 'Date', 'Metric', '2026', '2027', '2028', 'Note', 'Source'], rows: A.street}, {id: 'tAiSt', wrap: true, notes: ['Dates are when the note was published or reported. Analyst metrics differ (AI segment vs leasing only; year-end vs average capacity), so figures are not strictly comparable.']})}
+  <h3>Revenue capacity at 100% utilisation ${est}</h3>
+  <p class="mut" style="font-size:13px;margin:4px 0 8px">Formula: GPU count × rental price per GPU-hour × 8,760 hours. For capacity given in MW: MW ÷ all-in kW per GPU × price × 8,760. Market prices are third-party, dated rental rates; low = spot, base = reserved, high = on-demand. Real revenue would be lower (utilisation, internal Grok training, discounts, contract pricing).</p>
+  ${tableBlock({columns: ['GPU', 'Low $/GPU-h', 'Base $/GPU-h', 'High $/GPU-h', 'All-in kW per GPU', 'Low US$m per MW-yr', 'Base US$m per MW-yr', 'High US$m per MW-yr', 'Price source'], rows: A.prices}, {id: 'tAiPr', wrap: true, notes: [...A.price_notes, 'kW per GPU: H100, GB200 and GB300 are implied by the 424B4 cluster figures (130 MW / 100k H100; 210 MW / 110k GB200; 220 MW / 110k GB300). H200: assumed equal to H100 (no filing figure).', ...A.ref.map(r => `${r[0]}: ${r[1]} per GPU-hour. ${r[2]}. ${r[3]}`)]})}
+  ${tableBlock({columns: ['GPU', 'Count (CEO, 25 Sep 2026)', 'Low US$bn', 'Base US$bn', 'High US$bn'], rows: A.calc}, {id: 'tAiCa', notes: [`The 25 Sep 2026 fleet at the per-GPU kW above is about ${fmt(A.fleet_mw)} MW (calculated), close to the 1.4 GW nameplate in the 10-Q at 30 Jun 2026.`, `AI Solutions & Infrastructure revenue Q2 2026: US$2,194m × 4 = US$${fmt(A.ann_si)}m annualised, ${A.mon[1]}% of base-case capacity (${A.mon[2]}% on the high case, ${A.mon[0]}% on the low case). Whole AI segment Q2 2026: US$2,561m × 4 = US$${fmt(A.ann_ai)}m, which also includes X advertising and subscriptions.`, `Reported revenue per MW: US$${fmt(A.ann_si)}m ÷ 1,400 MW ≈ US$${A.si_per_mw}m per MW-year, against US$${A.gb300_mw[0]}m–${A.gb300_mw[2]}m per MW-year for GB300 at market rental rates (US$${A.gb300_mw[1]}m base).`]})}
+  <h3>Same calculation on Elon’s and the Street’s capacity forecasts ${est}</h3>
+  ${tableBlock({columns: ['Scenario', 'Whose forecast', 'Capacity', 'Low US$bn', 'Base US$bn', 'High US$bn', 'Street revenue forecast', 'Street ÷ base capacity %'], rows: A.cap}, {id: 'tAiFc', wrap: true, notes: ['MW-based rows use GB300 economics (2.0 kW per GPU; low/base/high GB300 rental prices). The 50m H100-equivalent row uses H100 prices. The orbital row is one year of launches at today’s terrestrial GB300 prices; no orbital rental price exists (n/a).', 'Street revenue is for the full year while capacity is year-end (or 2028 average for Morgan Stanley), so the % is a rough implied monetisation, not a utilisation rate. TD Cowen’s figures are compute leasing only.']})}
+  </div>`;
+}
+function aiCharts() {
+  const A = window.SPCX_AI; if (!A || !$('#aiGw')) return; const G = A.gwchart;
+  chart('aiGw', {type: 'line', data: {labels: G.labels, datasets: [
+    {label: 'Actual (nameplate)', data: G.actual, borderColor: C.acc, backgroundColor: C.acc, spanGaps: true, pointRadius: 4},
+    {label: 'Elon target', data: G.elon, borderColor: C.dn, backgroundColor: C.dn, showLine: false, pointRadius: 7, pointStyle: 'triangle'},
+    {label: 'Company guidance', data: G.company, borderColor: C.g, backgroundColor: C.g, showLine: false, pointRadius: 7, pointStyle: 'rectRot'},
+    {label: 'Street low', data: G.street_lo, borderColor: C.g2, backgroundColor: C.g2, spanGaps: true, borderDash: [4, 4], pointRadius: 4},
+    {label: 'Street high', data: G.street_hi, borderColor: C.g3, backgroundColor: C.g3, spanGaps: true, borderDash: [4, 4], pointRadius: 4}]},
+    options: {scales: {y: {beginAtZero: true, title: {display: true, text: 'GW'}}}}});
+  const rows = A.cap.filter(r => !/H100|orbit/.test(r[0]));
+  chart('aiCap', {data: {labels: rows.map(r => r[2]), datasets: [
+    {type: 'bar', label: 'Capacity revenue at 100% (base)', data: rows.map(r => r[4]), backgroundColor: C.acc},
+    {type: 'line', label: 'Street revenue forecast', data: rows.map(r => ({'Fleet today': A.ann_si / 1000})[r[0]] ?? (r[6] === 'n/a' ? null : parseFloat(String(r[6]).replace(/.*US\$|bn.*/g, '')))), borderColor: C.dn, backgroundColor: C.dn, showLine: false, pointRadius: 6}]},
+    options: {scales: {y: {beginAtZero: true, title: {display: true, text: 'US$bn'}}}}});
 }
 
 /* ---------------- Elon Musk ---------------- */
