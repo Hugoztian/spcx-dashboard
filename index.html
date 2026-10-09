@@ -8,8 +8,8 @@
 <meta name="description" content="Space Exploration Technologies Corp. (Nasdaq: SPCX) investor dashboard: live price, IPO lock-up calendar, financials, Starlink, Starship, Elon Musk, valuation, insiders and SEC filings.">
 <meta name="copyright" content="© 2026 Hugo Tian. All rights reserved.">
 <meta name="color-scheme" content="light dark">
-<link rel="icon" type="image/png" href="favicon.png">
-<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png?v=2">
+<link rel="apple-touch-icon" href="icon-180.png?v=2">
 <script>(function(){var h=document.documentElement;try{var t=localStorage.getItem('spcx-theme');if(t==='light'||t==='dark')h.dataset.theme=t;}catch(e){}
 var l=null;try{l=localStorage.getItem('spcx-lang');}catch(e){}if(l!=='en'&&l!=='zh'){l=/^zh/i.test(navigator.language||'')?'zh':'en';}h.dataset.lang=l;h.lang=l==='zh'?'zh-CN':'en';
 if(/[?&]collect=1/.test(location.search))window.__I18N_COLLECT=new Set();})();</script>
@@ -17,11 +17,11 @@ if(/[?&]collect=1/.test(location.search))window.__I18N_COLLECT=new Set();})();</
 <script src="vendor/hammer.min.js"></script>
 <script src="vendor/chartjs-plugin-zoom.min.js"></script>
 <script src="vendor/chartjs-plugin-annotation.min.js"></script>
-<script src="data.js?v=1791529063"></script>
-<script src="feed.js?v=1791529063"></script>
-<script src="x_feed.js?v=1791529063"></script>
-<script src="si.js?v=1791529063"></script>
-<script src="demand.js?v=1791529063"></script>
+<script src="data.js?v=1791534789"></script>
+<script src="feed.js?v=1791534789"></script>
+<script src="x_feed.js?v=1791534789"></script>
+<script src="si.js?v=1791534789"></script>
+<script src="demand.js?v=1791534789"></script>
 <style>
 /* Minimal Apple-style system: neutral surfaces, whitespace over lines, one SpaceX blue as the only accent */
 :root{--font:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;
@@ -46,7 +46,7 @@ header{position:sticky;top:0;z-index:30;background:var(--glass);-webkit-backdrop
 .bar{max-width:1200px;margin:0 auto;padding:0 32px;height:52px;display:flex;align-items:center;gap:20px}
 .brand{display:flex;align-items:center;gap:10px;flex:none;color:var(--txt);text-decoration:none!important}
 .wm{display:block;width:124px;height:16px;background:var(--txt);-webkit-mask:url(spacex.svg) no-repeat left center/contain;mask:url(spacex.svg) no-repeat left center/contain}
-.brand .bn{font-size:12px;font-weight:500;color:var(--mut);white-space:nowrap}
+.mlogo{display:block;height:28px;width:28px}.brand .bn{font-size:12px;font-weight:500;color:var(--mut);white-space:nowrap}
 nav{display:flex;gap:0;overflow-x:auto;scrollbar-width:none;flex:1;justify-content:flex-start;scroll-behavior:smooth}nav a:first-child{margin-left:auto}nav a:last-child{margin-right:auto}
 nav::-webkit-scrollbar{display:none}
 nav a{padding:6px 7px;border-radius:980px;color:var(--txt);opacity:.72;font-size:12px;white-space:nowrap;text-decoration:none!important;transition:opacity .15s,color .15s}
@@ -267,7 +267,7 @@ footer .flink{color:var(--mut)}footer .flink:hover{color:var(--acc)}
 </style>
 </head>
 <body>
-<header><div class="bar"><a class="brand" href="#overview" aria-label="SpaceX dashboard home"><span class="wm" role="img" aria-label="SpaceX"></span><span class="bn">Dashboard</span></a><nav id="nav"></nav><div class="hbtns"><button class="themebtn langbtn" id="langbtn" title="Language"><span class="lopt" id="flag-en"><img class="flag" src="flag-us.svg" alt="" width="16" height="16">EN</span><span class="fsl">/</span><span class="lopt" id="flag-zh"><img class="flag" src="flag-cn.svg" alt="" width="16" height="16">中文</span></button><button class="themebtn" id="themebtn" title="Theme: follows your system until you pick one"><span id="themeic">◐</span><span class="tl2" id="themelbl">Auto</span></button></div></div></header>
+<header><div class="bar"><a class="brand" href="#overview" aria-label="SpaceX dashboard home"><img class="mlogo" src="spacex-seal.png?v=1" alt="SpaceX" width="28" height="28"><span class="bn">Dashboard</span></a><nav id="nav"></nav><div class="hbtns"><button class="themebtn langbtn" id="langbtn" title="Language"><span class="lopt" id="flag-en"><img class="flag" src="flag-us.svg" alt="" width="16" height="16">EN</span><span class="fsl">/</span><span class="lopt" id="flag-zh"><img class="flag" src="flag-cn.svg" alt="" width="16" height="16">中文</span></button><button class="themebtn" id="themebtn" title="Theme: follows your system until you pick one"><span id="themeic">◐</span><span class="tl2" id="themelbl">Auto</span></button></div></div></header>
 <div class="hero"><h1>SpaceX <span class="tk">$SPCX</span> Dashboard</h1>
   <div class="sub" id="updated"></div>
   <div class="h4" id="hero4"></div>
@@ -276,8 +276,8 @@ footer .flink{color:var(--mut)}footer .flink:hover{color:var(--acc)}
 <main id="main"></main>
 <footer id="foot"></footer>
 <div id="tip" role="tooltip"></div>
-<script src="zh.js?v=1791529063"></script>
-<script src="i18n_rt.js?v=1791529063"></script>
-<script src="app.js?v=1791529063"></script>
+<script src="zh.js?v=1791534789"></script>
+<script src="i18n_rt.js?v=1791534789"></script>
+<script src="app.js?v=1791534789"></script>
 </body>
 </html>
