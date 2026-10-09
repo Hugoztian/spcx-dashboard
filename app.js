@@ -316,6 +316,7 @@ function ipoTab() {
   <h3>Tranche table: investor releases vs employee equity <span class="mut">employee rows kept separate; estimates marked</span></h3>
   ${tableBlock({columns: ['Release', 'Row', 'Pool', 'Shares (m, max)', '% of shares out (calc.)', 'Tax-driven open-market supply', 'Status'], rows: trows}, {id: 'tRel', csvname: 'Lock-up releases', notes: ['Each release has its own employee-equity row (↳). Employee shares per tranche are not disclosed in the prospectus, S-8s or 10-Q, so they are n/a; the S-8 reoffer covers 136,949,657 employee shares in total (all pools). Musk’s release has no separate employee row. Tax-driven column: RSU ≈0 is an estimate assuming continued net settlement; option sell-to-cover amounts are not disclosed (n/a); “All holders” rows are not split between voluntary and tax-driven selling (n/a).', 'Tax-driven supply ≈0 is an ESTIMATE that assumes SpaceX keeps net-settling RSUs (it withholds shares and pays the tax in cash, per the prospectus). Option exercisers may still “sell to cover” (allowed by the lock-up); that amount is not disclosed.']})}
   ${siPanel()}
+  ${demandPanel()}
   <h3>Employee equity & tax overhang</h3>
   <div class="grid g4" style="margin-bottom:12px">
     <div class="card kpi"><div class="l">RSUs outstanding (31 Mar 2026)</div><div class="v">128.5m + 0.9m B</div><div class="s">+23.8m granted after · none vest at the IPO</div></div>
@@ -528,4 +529,43 @@ function siCharts() {
     {type: 'bar', label: 'Unlocked float (m, calc.)', data: F.map(s => s.float_m), backgroundColor: F.map(s => s.date && s.date <= today ? C.acc : C.g3), yAxisID: 'y'},
     {type: 'line', label: 'Latest SI as % (illustrative)', data: F.map(s => +(L.si / 1e6 / s.float_m * 100).toFixed(2)), borderColor: C.g2, backgroundColor: C.g2, yAxisID: 'y1', tension: .2}]},
     options: {scales: {y: {title: {display: true, text: 'm shares'}}, y1: {position: 'right', grid: {display: false}, ticks: {callback: v => v + '%'}}}}});
+}
+
+/* ---------------- index, ETF & real-money demand (demand.js from build_demand.py) ---------------- */
+function demandPanel() {
+  const M = window.SPCX_DEMAND, head = `<h3 id="demand">Index, ETF & real-money demand <span class="mut">buyers that offset unlock supply · data built ${M ? esc(M.built_sgt) : 'n/a'}</span></h3>`;
+  if (!M) return head + '<div class="card na">Demand data did not load (n/a).</div>';
+  const pill = s => s === 'included' ? '<span class="pill passed">Included</span>' : s === 'announced' ? '<span class="pill upcoming">Announced</span>' : s === 'eligible' ? '<span class="pill upcoming">Eligible – pending</span>' : '<span class="pill na">Not eligible</span>';
+  const idx = M.index.map(x => `<div class="rule"><div class="h"><b>${esc(x.name)}</b> ${pill(x.status)} <span class="mut" style="font-size:12px">${x.date ? esc(dlong(x.date)) : 'date n/a'}</span></div>
+    <div style="font-size:13px;margin:3px 0">${esc(x.status_txt)}</div>
+    ${x.quote ? `<blockquote>${esc(x.quote)}</blockquote>` : `<div class="mut" style="font-size:12.5px;margin:4px 0">${esc(x.noquote || 'No provider announcement found.')}</div>`}
+    <div class="w">${esc(x.src)} · ${ext(x.url, 'open')}${x.live ? ' · ' + esc(x.live) : ''}</div>
+    <div style="font-size:12.5px;margin-top:4px"><b>Passive position:</b> ${esc(x.passive)} ${(x.links || []).map(l => ext(l[1], l[0])).join(' · ')}</div></div>`).join('');
+  const per = Object.keys(M.f13).sort().reverse(), P = per.length ? M.f13[per[0]] : null, asof = per.length ? dlong(per[0]) : 'n/a';
+  const nf = M.nport || [], PS = M.passive || {sh: 0, funds: 0}, nfTot = PS.sh;
+  const frows = nf.map(f => [f.series || f.trust, f.type === 'index' ? 'Index fund/ETF' : 'Active/other', dlong(f.date), fmt(f.sh), mm(f.val / 1e6), fmt(f.pct, 2) + '%', dlong(f.filed), f.url]);
+  const trows = P ? P.top.map((t, i) => [t.name, fmt(t.sh), mm(t.val / 1e6), fmt(t.pct_out, 2) + '%', t.chg == null ? 'n/a' : (t.chg < 0 ? '−' : '+') + fmt(Math.abs(t.chg)), t.pre ? 'Pre-IPO (13G)' : '—', `${dlong(t.filed)} ${t.url}`]) : [];
+  const grows = (M.g13 || []).map(g => [dlong(g.filed), g.form, g.who, g.top_person && g.top_person !== g.who ? g.top_person : '—', g.shares == null ? 'n/a' : fmt(g.shares), g.pct == null ? 'n/a' : fmt(g.pct, 1) + '%', g.event ? dlong(g.event) : 'n/a', g.rule || 'n/a', g.url]);
+  /* illustration */
+  const now = new Date().toISOString().slice(0, 10), rel = D.releases.filter(r => !r.cond && r.pool !== 'Musk' && (r.date || r.sort) >= now && (r.date || r.sort) <= '2026-12-08');
+  const sup = rel.reduce((a, r) => a + r.shares_m, 0), F0 = 638.888888, share = nfTot / 1e6 / F0;
+  const preSh = P ? P.top.filter(t => t.pre).reduce((a, t) => a + t.sh, 0) : 0;
+  const illus = `<div class="card" style="margin:12px 0;border-left:3px solid var(--acc)"><b>Supply vs identified demand</b> <span class="est">illustration</span>
+    <p style="margin:6px 0 0;font-size:13.5px">Releases from today to 8 Dec 2026 add up to at most <b>${fmt(sup, 1)}m shares</b> (${rel.length} tranches, prospectus maximums). The ${PS.funds} index funds/ETFs identified in N-PORT filings held <b>${fmt(nfTot / 1e6, 1)}m shares</b> on 30 Jun 2026, ${fmt(share * 100, 1)}% of the then 638.9m-share float. If those float-weighted index funds keep the same share of the float as it grows, they would absorb about <b>${fmt(share * sup, 1)}m</b> of those ${fmt(sup, 1)}m shares (${fmt(share * 100, 1)}%), mostly at their next float/rebalance dates rather than on unlock day. Not included: QQQ/Nasdaq-100 trackers (holding n/a), index funds whose N-PORT is not public yet or reports a later date, and active buyers (all 30 Jun N-PORT funds together held ${fmt(PS.all_30jun_sh / 1e6, 1)}m shares, but active funds such as Baron include pre-IPO stakes).</p>
+    <p class="mut" style="margin:6px 0 0;font-size:12.5px">13F managers reported ${P ? fmt(P.total_sh / 1e6, 1) + 'm shares as of ' + asof : 'n/a'}, but that total includes pre-IPO stakes (at least ${fmt(preSh / 1e6, 1)}m shares are matched to pre-IPO Schedule 13G holders) that are themselves part of the lock-up supply, so it is not new demand. Illustration only; not a forecast.</p></div>`;
+  return head + illus + `<h4 style="margin:14px 0 6px">Index inclusions <span class="mut">provider wording, quoted</span></h4><div class="card rules">${idx}</div>
+  ${tableBlock({title: 'Index funds and ETFs holding SPCX (SEC N-PORT, largest first)', columns: ['Fund (all share classes)', 'Type (by name)', 'As of', 'Shares', 'Value', '% of fund', 'Filed', 'Filing'], rows: frows}, {id: 'tNP', csvname: 'SPCX fund holdings N-PORT', notes: [
+    `Source: SEC N-PORT-P filings found by EDGAR full-text search for SpaceX’s CUSIP ${M.cusip} (${M.nport_count} fund series with a position; shown: the 30 largest plus the largest index funds). “Type” is assigned from the fund name (index/tracker vs active/other) and is a heuristic. Holdings are as of each report date (mostly 30 Jun 2026), not current. Vanguard N-PORTs are per fund, covering the ETF share class (VTI, VUG, VXF) and mutual-fund classes together.`,
+    'QQQ (Invesco QQQ Trust) is a unit investment trust and files no N-PORT; Invesco’s holdings file/API did not respond (HTTP 503/406), so its SPCX holding is n/a here. Third-party: Morningstar (14 Jul 2026) reported a 1.3% Nasdaq-100 weight at the 7 Jul add.']})}
+  <h4 style="margin:14px 0 6px">Real money: 13F holdings as of 30 Jun 2026 <span class="mut">quarter-end positions, not current holdings</span></h4>
+  <div class="grid g4" style="margin-bottom:12px">
+    ${kpi('13F filers with SPCX · as of ' + asof, P ? fmt(P.filers) : 'n/a', P ? `${fmt(P.long_filers)} with long share positions` : '', M.src.f13)}
+    ${kpi('13F long shares · as of ' + asof, P ? fmt(P.total_sh / 1e6, 1) + 'm' : 'n/a', P ? `${fmt(P.total_sh / 1e6 / D.price.shares_m * 100, 1)}% of 13,573m shares out (calc.) · includes pre-IPO stakes` : '')}
+    ${kpi('13F options · as of ' + asof, P ? fmt(P.calls / 1e6, 1) + 'm calls / ' + fmt(P.puts / 1e6, 1) + 'm puts' : 'n/a', 'underlying shares, excluded from the long total')}
+    ${kpi('Next 13F (quarter to 30 Sep 2026)', 'due 14 Nov 2026', M.f13_next.early_filers != null ? `${fmt(M.f13_next.early_filers)} early filings with SPCX already on EDGAR (not aggregated)` : 'early filings: n/a')}</div>
+  ${tableBlock({title: 'Top 13F holders · as of 30 Jun 2026', columns: ['Manager', 'Shares (30 Jun 2026)', 'Value (30 Jun 2026)', '% of shares out', 'QoQ change', 'Pre-IPO flag', 'Filed · filing'], rows: trows}, {id: 'tF13', csvname: 'SPCX 13F holders 30 Jun 2026', notes: [
+    'Source: SEC Form 13F data set (1 Jun–31 Aug 2026 filings), information-table rows for CUSIP ' + M.cusip + ', period of report 30 Jun 2026. Long share positions only (put/call rows excluded). Where a manager filed a restatement (13F-HR/A), the latest restatement replaces the original; “new holdings” amendments are added. ' + M.src.f13,
+    'All positions are as of 30 Jun 2026 (quarter end); managers may have bought or sold since. SpaceX was private before 11 Jun 2026, so there is no prior-quarter 13F position to compare (change n/a).',
+    '13F holdings include shares bought before the IPO, many still under lock-up. “Pre-IPO flag” is set only where the 13F share count exactly matches a Schedule 13G filed under Rule 13d-1(d) (holders that owned before the stock was registered); other holders are not classified. Flagged: ' + (P ? P.top.filter(t => t.pre).map(t => t.name + ' — ' + t.pre).join('; ') : 'none') + '.']})}
+  ${tableBlock({title: 'Schedule 13G / 13D filed since the IPO (newest first)', columns: ['Filed', 'Form', 'Reporting person', 'Largest reporting entity', 'Shares', '% of Class A', 'Event date', 'Rule', 'Filing'], rows: grows}, {id: 'tG13', csvname: 'SPCX 13G 13D', notes: ['Source: SpaceX’s EDGAR submissions (CIK 1181412). No Schedule 13D was found. All 13Gs so far are under Rule 13d-1(d), i.e. holders that owned the shares before registration.']})}`;
 }
