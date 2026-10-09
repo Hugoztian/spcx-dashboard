@@ -375,6 +375,7 @@ function opsTab() {
   ${aiPanel()}
   <div style="margin-top:16px">
     <div class="card" style="margin-bottom:16px"><h3 style="margin-top:0">Starship test flights <span class="mut">newest first · ${done.length} flown, ${y26.length} in 2026</span></h3><ul class="lt">${ss}</ul></div>
+    ${starIndia()}
     <div class="card"><h3 style="margin-top:0">Major government contracts & missions <span class="mut">newest first</span></h3>
       ${tableBlock({columns: ['Date', 'Customer', 'What', 'Value', 'Source'], rows: O.contracts.map(c => [c.dl || dlong(c.date), c.who, c.what, c.val, c.src + ' ' + c.url])}, {id: 'tCon', wrap: true, notes: [O.gov_note, 'Values are as reported by the sources; contract values are not revenue and are not split by year.']})}</div></div>`;
   aiCharts();
@@ -455,6 +456,36 @@ function valTab() {
   <div class="card"><h3 style="margin-top:0">Wall Street estimates <span class="est">third-party, unverified</span></h3>
     <div class="grid g3" style="margin-bottom:10px">${kpi('Analysts', S.n, esc(S.rating))}${kpi('Avg 12-m target', 'US$' + fmt(S.avg, 2), `US$${S.lo}–${S.hi} · was US$${S.avg_3m_ago} 3 months ago`)}${kpi('Split', '<span style="font-size:15px">' + esc(S.split) + '</span>', '')}</div>
     ${tableBlock({columns: ['Firm', 'Rating', 'Target'], rows: S.actions}, {id: 'tSt', notes: [S.src, S.note, 'See Sources → Bulls / Bears for what individual analysts said.']})}</div></div>`;
+}
+
+/* ---------------- Starlink India status (Operations) ---------------- */
+const STARIN = {
+  asof: '10 Oct 2026',
+  rows: [
+    ['Security clearance (Ministry of Home Affairs and agencies)', 'Under way for all three NGSO satellite licensees (Starlink, Jio Satellite Communications, Eutelsat OneWeb); government says all three are at “broadly the same regulatory stage”. Spectrum assignment can be sought only after it is completed.', '8 Oct 2026', 'Ministry of Communications via PIB (Release ID 2320510) https://www.pib.gov.in/PressReleasePage.aspx?PRID=2320510'],
+    ['Commercial launch', 'n/a: not launched and no launch date announced. SpaceX VP Lauren Dreyer said at India Mobile Congress (7 Oct 2026) that Starlink is ready once approved and has 20 gateway sites in India.', '8 Oct 2026', 'Business Standard https://www.business-standard.com/industry/news/starlink-india-entry-why-elon-musk-satellite-internet-launch-clearance-126100800416_1.html'],
+    ['FDI approval', 'Pending (Starlink Satellite Communications is wholly owned by SpaceX).', '8 Oct 2026', 'Business Standard https://www.business-standard.com/industry/news/starlink-india-entry-why-elon-musk-satellite-internet-launch-clearance-126100800416_1.html'],
+    ['Spectrum charge (DoT)', 'Digital Communications Commission approved 5% of AGR (4% for operators serving rural/remote areas) at its 3 Sep 2026 meeting; awaiting Union Cabinet approval as of 8 Oct 2026. Licence fee of 8% of AGR applies separately.', '8 Sep 2026', 'Moneycontrol https://www.moneycontrol.com/news/telecom/satcom-spectrum-dcc-clears-trai-recommendations-starlink-oneweb-still-await-security-clearance-for-commercial-launch-14025292.html'],
+    ['Trial spectrum', 'Provisional spectrum for trials and security testing received.', 'Sep 2025', 'Business Standard, 8 Oct 2026 https://www.business-standard.com/industry/news/starlink-india-entry-why-elon-musk-satellite-internet-launch-clearance-126100800416_1.html'],
+    ['IN-SPACe authorisation', 'Granted for the Starlink Gen1 constellation, valid until 7 Jul 2030 (or end of Gen1 operational life, if earlier); commercial rollout still needs other approvals.', '8 Jul 2025', 'Times of India, 9 Jul 2025 https://timesofindia.indiatimes.com/india/in-space-grants-5-year-authorisation-to-starlink-for-satellite-services-in-india/articleshow/122345596.cms'],
+    ['DoT GMPCS licence', 'Granted (letter of intent May 2025; application pending since Nov 2022). The licence does not include spectrum.', '6 Jun 2025', 'Business Standard, 6 Jun 2025 https://www.business-standard.com/industry/news/starlink-gets-gmpcs-license-to-offer-satellite-internet-in-india-125060600918_1.html'],
+    ['Spectrum allocation method (TRAI)', 'Administrative assignment, not auction (Telecommunications Act, 2023). TRAI recommended 5 years (extendable by 2), 4% of AGR with a minimum of ₹3,500 per MHz a year, plus ₹500 per urban subscriber a year for NGSO broadband.', '9 May 2025', 'TRAI Press Release No. 36/2025 https://www.trai.gov.in/sites/default/files/2025-05/PR_No.36of2025.pdf']
+  ],
+  dispute: [
+    ['10 Oct 2026 (01:03 SGT)', 'Musk post addressed to “Prime Minister Ambani” asking him to allow Starlink to compete (see the X feed).', 'https://x.com/elonmusk/status/2108604227643719745'],
+    ['9 Oct 2026', 'Reliance Jio presented a proposal at India Mobile Congress for about 1,600 LEO satellites and 23 ground stations of its own (a proposal, not an operating network).', 'https://www.medianama.com/2026/10/223-jio-1600-satellites-starlink-delays/'],
+    ['8 Oct 2026', 'Ministry of Communications (PIB) rejected the discrimination claim; Musk then asked “Is Ambani the real boss of India?”. Jio Platforms MD Akash Ambani declined to comment.', 'https://www.ndtv.com/india-news/starlink-spent-5-years-complying-with-all-laws-in-india-why-no-licence-elon-musk-12157981'],
+    ['7 Oct 2026', 'Musk: “we are being blocked by certain oligarchs in order to maintain their monopolistic chokehold on the Indian people”. He named no company.', 'https://x.com/elonmusk/status/2107854307077034294'],
+    ['12 Mar 2025', 'Jio Platforms agreed with SpaceX to sell Starlink equipment through Jio retail and online stores, subject to SpaceX receiving Indian authorisations. Bharti Airtel signed a similar deal.', 'https://www.ril.com/sites/default/files/2025-03/12032025_MR_JIO_TO_BRING_SPACEX%E2%80%99S_STARLINK_HIGH_SPEED_INTERNET_TO_ITS_CUSTOMERS.pdf'],
+    ['13 Oct 2024', 'Reliance lobbied the telecom minister for an auction of satellite spectrum rather than administrative allocation, which Starlink favoured; the government chose administrative allocation.', 'https://www.reuters.com/business/media-telecom/ambanis-reliance-lobbies-india-minister-satellite-spectrum-new-face-off-with-2024-10-13/']
+  ]
+};
+function starIndia() {
+  const S = STARIN;
+  return `<div class="card" id="starin" style="margin-bottom:16px"><h3 style="margin-top:0">Starlink India <span class="mut">regulatory status as of ${S.asof} · newest first</span></h3>
+  ${tableBlock({columns: ['Item', 'Status', 'Date', 'Source'], rows: S.rows}, {id: 'tStarIn', wrap: true})}
+  <h3>Reliance Jio / Ambani dispute <span class="mut">newest first</span></h3>
+  ${tableBlock({columns: ['Date', 'What happened', 'Source'], rows: S.dispute}, {id: 'tStarInD', wrap: true, notes: ['Status items come from Indian government and regulator releases where available (PIB, TRAI), otherwise from the news reports linked. “n/a” means no source gives a figure or date.']})}</div>`;
 }
 
 /* ---------------- Board of Directors (Insiders) ---------------- */
