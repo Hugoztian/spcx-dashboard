@@ -67,7 +67,7 @@ function wireTables(root) {
     if (tb.dataset.wired) return; tb.dataset.wired = 1;
     const body = tb.tBodies[0]; const orig = [...body.rows];
     const n = document.getElementById(tb.id + '-n'); const total = orig.filter(r => !r.classList.contains('sec') && !r.classList.contains('xdetail')).length;
-    const count = () => { if (n) { const vis = orig.filter(r => !r.classList.contains('sec') && !r.classList.contains('xdetail') && !r.hidden).length; n.textContent = vis === total ? `${total} rows` : `${vis} of ${total} rows`; } };
+    const count = () => { if (n) { const vis = orig.filter(r => !r.classList.contains('sec') && !r.classList.contains('xdetail') && !r.hidden).length; n.textContent = vis === total ? tl(`${total} rows`, `共 ${total} 行`) : tl(`${vis} of ${total} rows`, `显示 ${vis} / 共 ${total} 行`); } };
     count();
     // expandable rows
     orig.filter(r => r.classList.contains('xrow')).forEach(r => r.addEventListener('click', e => { if (e.target.closest('a,[data-tip]')) return; const d = body.querySelector(`tr.xdetail[data-for="${r.dataset.ri}"]`); if (!d) return; d.hidden = !d.hidden; r.classList.toggle('open', !d.hidden); }));
@@ -97,7 +97,7 @@ function filterTable(id, q) {
     const hit = !q || r.innerText.toLowerCase().includes(q); r.hidden = !hit; if (hit) secHit = true; if (!hit) r.classList.remove('open');
   });
   if (sec) sec.hidden = !secHit && !!q;
-  const n = document.getElementById(id + '-n'); if (n) { const d = rows.filter(r => !r.classList.contains('sec') && !r.classList.contains('xdetail')); const v = d.filter(r => !r.hidden).length; n.textContent = v === d.length ? `${d.length} rows` : `${v} of ${d.length} rows`; }
+  const n = document.getElementById(id + '-n'); if (n) { const d = rows.filter(r => !r.classList.contains('sec') && !r.classList.contains('xdetail')); const v = d.filter(r => !r.hidden).length; n.textContent = v === d.length ? tl(`${d.length} rows`, `共 ${d.length} 行`) : tl(`${v} of ${d.length} rows`, `显示 ${v} / 共 ${d.length} 行`); }
 }
 function csv(id) {
   const tb = document.getElementById(id); if (!tb) return;
@@ -145,33 +145,35 @@ function tvFallback(on) {
   const w = $('#tvwrap'), lq = $('#lq'); if (!w || !lq) return;
   w.style.display = on ? 'flex' : 'none'; lq.style.display = on ? 'none' : 'block';
   if (on && !LQ.tv) { LQ.tv = true; const el = $('#tvq'); const P = D.price;
-    tvEmbed(el, 'single-quote', {symbol: TV_SYM, width: '100%', isTransparent: true, colorTheme: tvTheme(), locale: 'en'}, why => {
-      el.style.height = 'auto'; el.innerHTML = `<div class="tvfail" title="${esc(why)}">Live quote unavailable</div><div class="snap"><span class="snapv">$${fmt(P.close, 2)}</span><span class="snaps">Build-time snapshot · close ${esc(dlong(P.close_date))} · not live</span></div>`;
-      const c = $('#tvqcap'); if (c) c.textContent = 'Static snapshot (not live)'; }); }
+    tvEmbed(el, 'single-quote', {symbol: TV_SYM, width: '100%', isTransparent: true, colorTheme: tvTheme(), locale: I18N.tvLocale()}, why => {
+      el.style.height = 'auto'; el.innerHTML = `<div class="tvfail" title="${esc(why)}">${tl('Live quote unavailable', '实时报价不可用')}</div><div class="snap"><span class="snapv">$${fmt(P.close, 2)}</span><span class="snaps">${tl('Build-time snapshot · close', '构建时快照 · 收盘')} ${esc(tl(dlong(P.close_date), I18N.zhTok(dlong(P.close_date))))} · ${tl('not live', '非实时')}</span></div>`;
+      const c = $('#tvqcap'); if (c) c.textContent = tl('Static snapshot (not live)', '静态快照（非实时）'); }); }
 }
 function renderQuote(q) {
   const m = q.main || {}, ref = q.ref_close || {}, reg = q.session === 'regular';
   const box = $('#lq'); if (!box) return; box.classList.toggle('reg', reg); box.classList.toggle('stale', !!q.stale);
-  $('#lq-sl').textContent = reg ? 'Live · regular session' : (q.session === 'closed' ? 'Market closed' : `${q.session_label || q.session} session`) + (q.session === 'overnight' ? ' (8 PM–4 AM ET)' : '');
-  $('#lq-k').textContent = m.kind === 'regular' ? '' : (m.label || '');
+  const SESS = {premarket: '盘前', pre: '盘前', 'pre-market': '盘前', afterhours: '盘后', after: '盘后', 'after-hours': '盘后', post: '盘后', overnight: '夜盘', closed: '休市'};
+  const sessZh = x => SESS[String(x || '').toLowerCase()] || SESS[String(q.session || '').toLowerCase()] || String(x || '');
+  $('#lq-sl').textContent = reg ? tl('Live · regular session', '实时 · 常规交易时段') : (q.session === 'closed' ? tl('Market closed', '休市') : tl(`${q.session_label || q.session} session`, `${sessZh(q.session_label || q.session)}时段`)) + (q.session === 'overnight' ? tl(' (8 PM–4 AM ET)', '（美东 20:00–04:00）') : '');
+  $('#lq-k').textContent = m.kind === 'regular' ? '' : tl(m.label || '', m.kind === 'close' ? '收盘价' : sessZh(m.label || m.kind));
   const px = $('#lq-px'); px.textContent = m.price != null ? usd(m.price) : 'n/a';
   if (LQ.prev != null && m.price != null && m.price !== LQ.prev) { px.classList.remove('up', 'dn'); void px.offsetWidth; px.classList.add(m.price > LQ.prev ? 'up' : 'dn'); }
   LQ.prev = m.price;
   const ch = $('#lq-ch');
-  if (m.change != null) { ch.className = 'lq-ch ' + (m.change >= 0 ? 'pos' : 'neg'); ch.textContent = `${sgn(m.change)} (${sgn(m.pct)}%)${reg ? '' : ' vs close'}`; }
+  if (m.change != null) { ch.className = 'lq-ch ' + (m.change >= 0 ? 'pos' : 'neg'); ch.textContent = `${sgn(m.change)} (${sgn(m.pct)}%)${reg ? '' : tl(' vs close', ' 较收盘')}`; }
   else { ch.className = 'lq-ch mut'; ch.textContent = ''; }
   const pc = (reg ? q.prev_close : ref) || {};
-  let sub = `Prev close ${usd(pc.price)}${pc.date ? ` · ${mdy(pc.date)}` : ''}`;
-  if (!reg && q.ext && m.kind === 'close') sub += ` · ${q.ext.label} ${usd(q.ext.price)} (${sgn(q.ext.pct)}%)`;
-  if (reg && q.bid && q.ask) sub += ` · Bid ${usd(q.bid)} / Ask ${usd(q.ask)}`;
+  let sub = `${tl('Prev close', '前收盘')} ${usd(pc.price)}${pc.date ? ` · ${tl(mdy(pc.date), I18N.zhTok(mdy(pc.date)))}` : ''}`;
+  if (!reg && q.ext && m.kind === 'close') sub += ` · ${tl(q.ext.label, sessZh(q.ext.label))} ${usd(q.ext.price)} (${sgn(q.ext.pct)}%)`;
+  if (reg && q.bid && q.ask) sub += ` · ${tl('Bid', '买价')} ${usd(q.bid)} / ${tl('Ask', '卖价')} ${usd(q.ask)}`;
   $('#lq-sub').textContent = sub;
   const RH = q.source === 'Robinhood public quote';
-  const venue = m.kind === 'regular' ? (RH ? 'Nasdaq last sale via Robinhood' : q.source) : ((q.ext && q.ext.venue) ? `${q.ext.venue} via Robinhood 24-hour feed` : (RH ? 'Robinhood extended-hours feed' : q.source));
-  const fresh = q.source === 'Nasdaq.com quote API' && !/real-time/i.test(q.source_note || '') ? 'may be delayed' : 'real-time';
-  $('#lq-cap').textContent = (m.time ? `as of ${tET(m.time)} ET (${tSG(m.time)} SGT)` : '') + ` · ${venue} · ${fresh}` + (q.stale ? ' · last good update, retrying' : ' · refreshes every 15 s');
+  const venue = m.kind === 'regular' ? (RH ? tl('Nasdaq last sale via Robinhood', 'Nasdaq 最新成交价（经 Robinhood）') : q.source) : ((q.ext && q.ext.venue) ? tl(`${q.ext.venue} via Robinhood 24-hour feed`, `${q.ext.venue}（经 Robinhood 24 小时行情）`) : (RH ? tl('Robinhood extended-hours feed', 'Robinhood 延长时段行情') : q.source));
+  const fresh = q.source === 'Nasdaq.com quote API' && !/real-time/i.test(q.source_note || '') ? tl('may be delayed', '可能有延迟') : tl('real-time', '实时');
+  $('#lq-cap').textContent = (m.time ? tl(`as of ${tET(m.time)} ET (${tSG(m.time)} SGT)`, `截至美东时间 ${tET(m.time)}（新加坡时间 ${tSG(m.time)}）`) : '') + ` · ${venue} · ${fresh}` + (q.stale ? tl(' · last good update, retrying', ' · 最近一次有效更新，正在重试') : tl(' · refreshes every 15 s', ' · 每 15 秒刷新'));
   /* vs-IPO box follows the live regular-session price */
   const rp = q.regular && q.regular.price; if (rp) { const p2 = (rp / D.meta.ipo_price - 1) * 100; const v = $('#ipo-v'); if (v) { v.className = 'v ' + pcls(p2); v.textContent = pct(p2); }
-    const s1 = $('#ipo-s1'); if (s1) s1.textContent = `${usd(rp)} (${reg ? 'live' : 'last regular close'}) vs US$135.00 IPO price (11 Jun 2026)`; }
+    const s1 = $('#ipo-s1'); if (s1) s1.textContent = tl(`${usd(rp)} (${reg ? 'live' : 'last regular close'}) vs US$135.00 IPO price (11 Jun 2026)`, `${usd(rp)}（${reg ? '实时' : '最近常规收盘'}）对比 IPO 价 US$135.00（2026年6月11日）`); }
 }
 async function pollQuote() {
   if (document.visibilityState === 'hidden') return;
@@ -179,7 +181,7 @@ async function pollQuote() {
     const ctl = new AbortController(); const to = setTimeout(() => ctl.abort(), 8000);
     const r = await fetch(QUOTE_API + (QUOTE_API.includes('?') ? '&' : '?') + 't=' + Date.now(), {cache: 'no-store', signal: ctl.signal}); clearTimeout(to);
     const q = await r.json(); if (!q || !q.ok || !q.main) throw new Error('bad quote');
-    LQ.fails = 0; LQ.ok = true; LQ.last = q; tvFallback(false); renderQuote(q); { const e = document.getElementById('lfstat'); if (e) e.textContent = `Last tick $${Number((q.main || {}).price).toFixed(2)} at ${(q.main || {}).time_et || ''} · ${q.session_label || q.session || ''}`; }
+    LQ.fails = 0; LQ.ok = true; LQ.last = q; tvFallback(false); renderQuote(q); { const e = document.getElementById('lfstat'); if (e) e.textContent = tl(`Last tick $${Number((q.main || {}).price).toFixed(2)} at ${(q.main || {}).time_et || ''} · ${q.session_label || q.session || ''}`, `最新报价 $${Number((q.main || {}).price).toFixed(2)}，时间 ${(q.main || {}).time_et || ''} · ${q.session_label || q.session || ''}`); }
   } catch (e) {
     LQ.fails++;
     if (!LQ.ok || LQ.fails >= 4) tvFallback(true);
@@ -207,7 +209,7 @@ function palette() {
   d.scale.border = {display: false}; d.scales.category.grid = {display: false}; d.scales.linear.grid = {color: C.grid, drawTicks: false}; d.scales.linear.ticks = {maxTicksLimit: 6, padding: 8};
 }
 const charts = {}; window.__charts = charts;
-function chart(id, cfg) { const el = document.getElementById(id); if (!el) return null; if (charts[id]) charts[id].destroy(); cfg.options = Object.assign({responsive: true, maintainAspectRatio: false, plugins: {legend: {position: 'bottom'}}}, cfg.options || {}); charts[id] = new Chart(el, cfg); return charts[id]; }
+function chart(id, cfg) { const el = document.getElementById(id); if (!el) return null; if (charts[id]) charts[id].destroy(); cfg.options = Object.assign({responsive: true, maintainAspectRatio: false, plugins: {legend: {position: 'bottom'}}}, cfg.options || {}); charts[id] = new Chart(el, I18N.chartCfg(cfg)); return charts[id]; }
 const ccard = (id, title, sub = '', h = 290) => `<div class="card ccard"><div class="chead"><div class="ct">${esc(title)}</div>${sub ? `<div class="mut" style="font-size:11.5px">${sub}</div>` : ''}</div><div class="chartbox" style="height:${h}px"><canvas id="${id}" role="img" aria-label="${esc(title)}"></canvas></div></div>`;
 const bn = v => v == null ? 'n/a' : (v < 0 ? '−' : '') + 'US$' + fmt(Math.abs(v) / 1000, 2) + 'bn';
 const mm = v => v == null ? 'n/a' : (v < 0 ? '−' : '') + 'US$' + fmt(Math.abs(v), 0) + 'm';
@@ -224,7 +226,8 @@ function relStatus(r, now = new Date()) {
 }
 function nextRelease(now = new Date()) { return D.releases.filter(r => !r.cond && relTime(r) && relTime(r) > now).sort((a, b) => relTime(a) - relTime(b))[0]; }
 function cdText(t) { let s = Math.max(0, Math.floor((t - new Date()) / 1000)); const d = Math.floor(s / 86400); s -= d * 86400; const h = Math.floor(s / 3600); s -= h * 3600; const m = Math.floor(s / 60); s -= m * 60;
-  return `${d}<small>d</small>${String(h).padStart(2, '0')}<small>h</small>${String(m).padStart(2, '0')}<small>m</small>${String(s).padStart(2, '0')}<small>s</small>`; }
+  const u = LANG === 'zh' ? ['天', '时', '分', '秒'] : ['d', 'h', 'm', 's'];
+  return `${d}<small>${u[0]}</small>${String(h).padStart(2, '0')}<small>${u[1]}</small>${String(m).padStart(2, '0')}<small>${u[2]}</small>${String(s).padStart(2, '0')}<small>${u[3]}</small>`; }
 let CDT = null;
 function tickCountdowns() { const n = nextRelease(); $$('[data-cd]').forEach(el => { if (!n) { el.innerHTML = 'n/a'; return; } el.innerHTML = cdText(relTime(n)); }); }
 const pctOut = m => m == null ? 'n/a' : fmt(m / D.price.shares_m * 100, 1) + '%';
@@ -247,6 +250,7 @@ function hero() {
     `<div class="mini"><div class="l">Elon Musk voting power</div><div class="v">≈82.4%</div><div class="s">Class B = 10 votes · locked up until 12 Jun 2027 · <a href="#musk">Musk tab</a></div></div>`,
     `<div class="mini"><div class="l">Cash & securities / debt + leases</div><div class="v">${bn(D.debt.cash_m)} / ${bn(D.debt.items[3][1])}</div><div class="s">30 Jun 2026 · 10-Q</div></div>`,
     `<div class="mini"><div class="l">Next earnings</div><div class="v">Nov 2026</div><div class="s">Q3 2026 date not announced · triggers up to 1.3bn-share release 2 trading days later</div></div>`].join('');
+  try { I18N.apply($('#hero4')); I18N.apply($('#hero2')); } catch (e) { console.error('i18n hero', e); }
   tickCountdowns(); clearInterval(CDT); CDT = setInterval(tickCountdowns, 1000);
   liveQuote();
 }
@@ -275,7 +279,7 @@ function overview() {
   const up = D.releases.filter(r => !r.cond && relStatus(r).k !== 'passed').sort((a, b) => (a.date || a.sort).localeCompare(b.date || b.sort));
   chart('ovRel', {type: 'bar', data: {labels: up.map(r => r.date ? dlong(r.date).replace(' 20', " '") : 'After ' + (r.label.match(/Q\d \d{4}/) || ['TBA'])[0]), datasets: [{label: 'Shares (m)', data: up.map(r => r.shares_m), backgroundColor: up.map(r => r.pool === 'Musk' ? C.g2 : C.acc)}]},
     options: {plugins: {legend: {display: false}, tooltip: {callbacks: {title: i => up[i[0].dataIndex].label, label: c => `Up to ${fmt(c.raw, 1)}m shares (${up[c.dataIndex].pool})`}}}, scales: {y: {type: 'logarithmic', ticks: {callback: v => [50, 100, 300, 1000, 3000, 6000].includes(v) ? fmt(v) : ''}}}}});
-  tvEmbed($('#tvchart'), 'advanced-chart', {autosize: true, symbol: TV_SYM, interval: 'D', range: '6M', timezone: 'Asia/Singapore', theme: tvTheme(), style: '1', locale: 'en',
+  tvEmbed($('#tvchart'), 'advanced-chart', {autosize: true, symbol: TV_SYM, interval: 'D', range: '6M', timezone: 'Asia/Singapore', theme: tvTheme(), style: '1', locale: I18N.tvLocale(),
     backgroundColor: isDark() ? 'rgba(22,22,23,1)' : 'rgba(255,255,255,1)', gridColor: isDark() ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.035)', allow_symbol_change: false, hide_side_toolbar: true, calendar: false, support_host: 'https://www.tradingview.com'},
     why => { $('#tvchart').innerHTML = `<div class="tvfail">Live chart unavailable (${esc(why)}).</div><div class="mut" style="font-size:12px">Snapshot: close US$${fmt(D.price.close, 2)} on ${esc(dlong(D.price.close_date))} · not live</div>`; $('#tvchart').style.height = 'auto'; });
 }
@@ -384,14 +388,14 @@ function muskTab() {
   <div class="grid g2">
     <div class="card"><h3 style="margin-top:0">Recent X posts on SpaceX <span class="mut">newest first · SGT · ${X.posts.length} posts</span></h3>
       <div class="chips" id="xchips">${topics.map((t, i) => `<button class="btn ${i ? '' : 'on'}" data-x="${esc(t)}">${esc(t)}</button>`).join('')}</div>
-      <div id="xlist" style="max-height:900px;overflow:auto">${X.posts.map(p => `<div class="xpost" data-topic="${esc(p.topic)}"><div class="t">${esc(p.text)}</div><div class="m">${esc(dlong(p.sgt))} ${esc(p.sgt.slice(11))} SGT · ${esc(p.kind)} · ${esc(p.topic)}${p.likes != null ? ' · ' + fmt(p.likes) + ' likes' : ''} · <a href="${esc(p.url)}" target="_blank" rel="noopener">open on X</a></div></div>`).join('') || '<div class="na">n/a — X feed not loaded</div>'}</div>
+      <div id="xlist" style="max-height:900px;overflow:auto">${X.posts.map(p => `<div class="xpost" data-topic="${esc(p.topic)}"><div class="t">${esc(p.text)}</div><div class="m notr">${LANG === 'zh' ? `${esc(I18N.zhTok(dlong(p.sgt)))} ${esc(p.sgt.slice(11))} 新加坡时间 · ${esc(({post: '发帖', reply: '回复', quote: '引用', repost: '转发'})[p.kind] || p.kind)} · ${esc(I18N.s(p.topic))}${p.likes != null ? ' · ' + fmt(p.likes) + ' 赞' : ''} · <a href="${esc(p.url)}" target="_blank" rel="noopener">在 X 上打开</a>` : `${esc(dlong(p.sgt))} ${esc(p.sgt.slice(11))} SGT · ${esc(p.kind)} · ${esc(p.topic)}${p.likes != null ? ' · ' + fmt(p.likes) + ' likes' : ''} · <a href="${esc(p.url)}" target="_blank" rel="noopener">open on X</a>`}</div></div>`).join('') || '<div class="na">n/a — X feed not loaded</div>'}</div>
       <ul class="notes"><li>${esc(X.source || '')} · window ${esc(X.window || '')} · fetched ${esc(X.fetched_sgt || 'n/a')}. Text is verbatim (links trimmed); greetings and emoji-only replies are left out. Refresh with build_x.py.</li></ul></div>
     <div><div class="card" style="margin-bottom:16px"><h3 style="margin-top:0">Control & lock-up</h3>${RULESORDER().filter(r => ['vote', 'musk'].includes(r.id)).map(r => `<div class="rule"><b>${esc(r.title)}</b><blockquote>${esc(r.quote)}</blockquote><div class="w">${esc(r.where)}</div></div>`).join('')}
       <div style="font-size:13px">Lock-up status: <span class="pill active">Locked</span> until 12 Jun 2027 (a Saturday; first session Mon 14 Jun) · <span class="cdv" style="font-size:18px" id="muskcd"></span></div></div>
      <div class="card"><h3 style="margin-top:0">Form 4 transactions <span class="mut">only Musk filing, 17 Jun 2026 · all pre-IPO or IPO conversions</span></h3>
       ${tableBlock({columns: ['Date', 'Code', 'Type', 'Shares', 'Price', 'Held after', 'Held by'], rows: mf.map(f => [f.date, f.code, f.type, f.shares, f.price == null ? '—' : f.price, f.after, f.own])}, {id: 'tMF', notes: [M.note, 'Source: ' + 'https://www.sec.gov/Archives/edgar/data/1181412/000162828026044069/xslF345X06/wk-form4_1781740812.xml']})}</div></div></div>`;
   $$('#xchips button').forEach(b => b.onclick = () => { $$('#xchips button').forEach(x => x.classList.toggle('on', x === b)); $$('#xlist .xpost').forEach(p => p.hidden = b.dataset.x !== 'All' && p.dataset.topic !== b.dataset.x); });
-  const t = new Date('2027-06-14T09:30:00-04:00'); const d = Math.ceil((t - new Date()) / 864e5); $('#muskcd').textContent = d > 0 ? `${d} days to go` : 'released';
+  const t = new Date('2027-06-14T09:30:00-04:00'); const d = Math.ceil((t - new Date()) / 864e5); $('#muskcd').textContent = d > 0 ? tl(`${d} days to go`, `还有 ${d} 天`) : tl('released', '已解禁');
 }
 
 /* ---------------- valuation & street ---------------- */
@@ -446,7 +450,7 @@ function sources() {
    <div class="card"><h3>Live price feed</h3><ul class="lst">
     <li><b>Price box:</b> Nasdaq last sale via Robinhood, real-time, refreshed every 15 seconds through ${ext(QUOTE_API, QUOTE_API.replace(/^https?:\/\//, ''))} (Micron's quote relay; Nasdaq.com backup).</li>
     <li><b>Backup:</b> if the real-time feed fails, the box switches to TradingView's delayed quote widget.</li>
-    <li><b>Chart:</b> TradingView advanced chart (NASDAQ:SPCX).</li><li><b>Status:</b> <span id="lfstat">Waiting for the first tick…</span></li></ul></div>
+    <li><b>Chart:</b> TradingView advanced chart (NASDAQ:SPCX).</li><li><b>Status:</b> <span id="lfstat">${tl('Waiting for the first tick…', '等待首个报价…')}</span></li></ul></div>
    <div class="card" style="margin-top:16px"><h3>Latest SEC filings (CIK ${esc(FD.cik || '1181412')}) <span class="mut">newest first</span></h3><div class="mut" style="font-size:12px">Form 4, 144, S-8, 8-K, 10-Q, 424B4, S-1, 13G and Form 3 · data.sec.gov submissions API, fetched ${esc(FD.fetched_sgt)} (status: ${esc(FD.status)}).</div>
     <div class="tblwrap" style="max-height:460px;overflow:auto"><table class="feedt"><thead><tr><th>Form</th><th>Filed</th><th>Report date</th><th>Description / items</th><th>Link</th></tr></thead><tbody>${ft}</tbody></table></div></div>
    <h3>Source documents</h3><div class="card"><ul class="lst">${D.sources.map(([t, u]) => `<li>${esc(t)}${u ? ' — ' + ext(u, u.replace(/^https?:\/\//, '').slice(0, 70)) : ''}</li>`).join('')}</ul>
@@ -466,17 +470,25 @@ function route() {
   $$('#nav a').forEach(a => { const on = a.dataset.t === id; a.classList.toggle('on', on); if (on) a.scrollIntoView({block: 'nearest', inline: 'center'}); });
   $$('main section').forEach(s => s.classList.toggle('on', s.id === 's-' + id));
   const t = TABS.find(t => t[0] === id);
-  if (!done[id]) { try { t[2](); } catch (e) { console.error('render ' + id, e); $('#s-' + id).insertAdjacentHTML('beforeend', `<div class="tvfail">This tab could not render: ${esc(e.message)}</div>`); } done[id] = 1; wireTables($('#s-' + id)); wireXall($('#s-' + id)); tickCountdowns(); }
-  document.title = `${t[1]} · SpaceX (SPCX) Dashboard · © 2026 Hugo Tian`;
+  if (!done[id]) { try { t[2](); } catch (e) { console.error('render ' + id, e); $('#s-' + id).insertAdjacentHTML('beforeend', `<div class="tvfail">This tab could not render: ${esc(e.message)}</div>`); } done[id] = 1; wireTables($('#s-' + id)); wireXall($('#s-' + id)); tickCountdowns(); try { I18N.apply($('#s-' + id)); } catch (e) { console.error('i18n ' + id, e); } }
+  document.title = tl(`${t[1]} · SpaceX (SPCX) Dashboard · © 2026 Hugo Tian`, `${I18N.s(t[1])} · SpaceX (SPCX) 看板 · © 2026 Hugo Tian`);
 }
-function buildNav() { $('#nav').innerHTML = TABS.map(([id, l]) => `<a href="#${id}" data-t="${id}" title="${esc(l)}">${esc(NAVL[id] || l)}</a>`).join(''); $('#main').innerHTML = TABS.map(([id]) => `<section id="s-${id}"></section>`).join(''); }
+function buildNav() { $('#nav').innerHTML = TABS.map(([id, l]) => `<a href="#${id}" data-t="${id}" title="${esc(l)}">${esc(NAVL[id] || l)}</a>`).join(''); $('#main').innerHTML = TABS.map(([id]) => `<section id="s-${id}"></section>`).join(''); I18N.apply($('#nav')); chrome(); }
+function chrome() { /* static header text, language pill */
+  $('.hero h1').innerHTML = tl('SpaceX <span class="tk">$SPCX</span> Dashboard', 'SpaceX <span class="tk">$SPCX</span> 看板'); $('.brand .bn').textContent = tl('Dashboard', '看板');
+  $('.brand').setAttribute('aria-label', tl('SpaceX dashboard home', 'SpaceX 看板首页'));
+  $('#langlbl').innerHTML = LANG === 'zh' ? '<span class="lo">EN</span> / <b>中文</b>' : '<b>EN</b> / <span class="lo">中文</span>';
+  $('#langbtn').title = tl('Language: English · click for 中文', '语言：中文 · 点击切换为 English'); $('#langbtn').setAttribute('aria-label', tl('Switch language to Chinese', '切换语言为英文'));
+  $('#themebtn').title = tl('Theme: follows your system until you pick one', '主题：默认跟随系统，点击可切换'); }
 function applyTheme(rerender) {
   const t = document.documentElement.dataset.theme || 'auto';
-  $('#themelbl').textContent = t === 'auto' ? 'Auto' : t === 'dark' ? 'Dark' : 'Light'; $('#themeic').textContent = t === 'auto' ? '◐' : t === 'dark' ? '☾' : '☀';
+  $('#themelbl').textContent = t === 'auto' ? tl('Auto', '自动') : t === 'dark' ? tl('Dark', '深色') : tl('Light', '浅色'); $('#themeic').textContent = t === 'auto' ? '◐' : t === 'dark' ? '☾' : '☀';
   if (!rerender) return; palette(); Object.keys(charts).forEach(k => { try { charts[k].destroy(); } catch (e) {} delete charts[k]; }); for (const k in done) delete done[k]; buildNav(); hero(); route();
 }
 $('#themebtn').onclick = () => { const cur = document.documentElement.dataset.theme || 'auto'; const nx = cur === 'auto' ? (isDark() ? 'light' : 'dark') : cur === 'dark' ? 'light' : 'auto';
   if (nx === 'auto') { delete document.documentElement.dataset.theme; try { localStorage.removeItem('spcx-theme'); } catch (e) {} } else { document.documentElement.dataset.theme = nx; try { localStorage.setItem('spcx-theme', nx); } catch (e) {} } applyTheme(true); };
+$('#langbtn').onclick = () => { LANG = LANG === 'zh' ? 'en' : 'zh'; const h = document.documentElement; h.dataset.lang = LANG; h.lang = LANG === 'zh' ? 'zh-CN' : 'en';
+  try { localStorage.setItem('spcx-lang', LANG); } catch (e) {} LQ.tv = false; applyTheme(true); };
 if (window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { if (!document.documentElement.dataset.theme) applyTheme(true); });
 $('#foot').innerHTML = `© 2026 Hugo Tian. All rights reserved.`;
 palette(); buildNav(); applyTheme(false); hero(); route(); addEventListener('hashchange', route);

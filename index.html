@@ -10,16 +10,18 @@
 <meta name="color-scheme" content="light dark">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="icon-180.png">
-<script>(function(){try{var t=localStorage.getItem('spcx-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}})();</script>
+<script>(function(){var h=document.documentElement;try{var t=localStorage.getItem('spcx-theme');if(t==='light'||t==='dark')h.dataset.theme=t;}catch(e){}
+var l=null;try{l=localStorage.getItem('spcx-lang');}catch(e){}if(l!=='en'&&l!=='zh'){l=/^zh/i.test(navigator.language||'')?'zh':'en';}h.dataset.lang=l;h.lang=l==='zh'?'zh-CN':'en';
+if(/[?&]collect=1/.test(location.search))window.__I18N_COLLECT=new Set();})();</script>
 <script src="vendor/chart.umd.min.js"></script>
 <script src="vendor/hammer.min.js"></script>
 <script src="vendor/chartjs-plugin-zoom.min.js"></script>
 <script src="vendor/chartjs-plugin-annotation.min.js"></script>
-<script src="data.js?v=1791517374"></script>
-<script src="feed.js?v=1791517374"></script>
-<script src="x_feed.js?v=1791517374"></script>
-<script src="si.js?v=1791517374"></script>
-<script src="demand.js?v=1791517374"></script>
+<script src="data.js?v=1791522005"></script>
+<script src="feed.js?v=1791522005"></script>
+<script src="x_feed.js?v=1791522005"></script>
+<script src="si.js?v=1791522005"></script>
+<script src="demand.js?v=1791522005"></script>
 <style>
 /* Minimal Apple-style system: neutral surfaces, whitespace over lines, one SpaceX blue as the only accent */
 :root{--font:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;
@@ -52,6 +54,10 @@ nav a:hover{opacity:1}
 nav a.on{color:var(--acc);opacity:1;font-weight:600;background:var(--accsoft)}
 .themebtn{flex:none;border:0;background:transparent;color:var(--mut);border-radius:980px;height:30px;padding:0 8px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px}
 .themebtn:hover{color:var(--acc)}
+.hbtns{flex:none;display:flex;align-items:center;gap:2px}.langbtn .tl3{white-space:nowrap}.langbtn .tl3 b{font-weight:600;color:var(--txt)}.langbtn .lo{opacity:.55}
+html[data-lang=zh] body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","Hiragino Sans GB","Noto Sans CJK SC","Noto Sans SC","Microsoft YaHei","Source Han Sans SC",system-ui,sans-serif}
+.zhq{display:block;margin-top:4px;color:var(--mut);font-style:normal}
+html[data-lang=zh] .rule blockquote:before,html[data-lang=zh] .rule blockquote:after{content:none}.rule blockquote .qen:before{content:'“';color:var(--acc);font-weight:700}.rule blockquote .qen:after{content:'”';color:var(--acc);font-weight:700}
 /* hero */
 .hero{max-width:1200px;margin:0 auto;padding:56px 32px 8px}
 .hero h1{font-size:56px;line-height:1.05;font-weight:700;letter-spacing:-.04em;margin:0 0 12px}
@@ -261,7 +267,7 @@ footer .flink{color:var(--mut)}footer .flink:hover{color:var(--acc)}
 </style>
 </head>
 <body>
-<header><div class="bar"><a class="brand" href="#overview" aria-label="SpaceX dashboard home"><span class="wm" role="img" aria-label="SpaceX"></span><span class="bn">Dashboard</span></a><nav id="nav"></nav><button class="themebtn" id="themebtn" title="Theme: follows your system until you pick one"><span id="themeic">◐</span><span class="tl2" id="themelbl">Auto</span></button></div></header>
+<header><div class="bar"><a class="brand" href="#overview" aria-label="SpaceX dashboard home"><span class="wm" role="img" aria-label="SpaceX"></span><span class="bn">Dashboard</span></a><nav id="nav"></nav><div class="hbtns"><button class="themebtn langbtn" id="langbtn" title="Language: English · click for 中文"><span id="langic">文</span><span class="tl3" id="langlbl"><b>EN</b> / <span class="lo">中文</span></span></button><button class="themebtn" id="themebtn" title="Theme: follows your system until you pick one"><span id="themeic">◐</span><span class="tl2" id="themelbl">Auto</span></button></div></div></header>
 <div class="hero"><h1>SpaceX <span class="tk">$SPCX</span> Dashboard</h1>
   <div class="sub" id="updated"></div>
   <div class="h4" id="hero4"></div>
@@ -270,6 +276,8 @@ footer .flink{color:var(--mut)}footer .flink:hover{color:var(--acc)}
 <main id="main"></main>
 <footer id="foot"></footer>
 <div id="tip" role="tooltip"></div>
-<script src="app.js?v=1791517374"></script>
+<script src="zh.js?v=1791522005"></script>
+<script src="i18n_rt.js?v=1791522005"></script>
+<script src="app.js?v=1791522005"></script>
 </body>
 </html>
