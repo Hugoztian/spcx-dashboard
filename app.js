@@ -232,7 +232,7 @@ const pctOut = m => m == null ? 'n/a' : fmt(m / D.price.shares_m * 100, 1) + '%'
 /* ---------------- hero ---------------- */
 function hero() {
   const P = D.price, n = nextRelease();
-  $('#updated').innerHTML = `Company data through <b>${esc(D.meta.quarter)}</b> (quarter ended ${esc(D.meta.period_end)}) · valuation at the US$${fmt(P.close, 2)} close on ${esc(dlong(P.close_date))} · real-time price via Robinhood, chart via TradingView · updated ${esc(D.meta.built_sgt)}`;
+  $('#updated').innerHTML = `© 2026 Hugo Tian. All rights reserved.`;
   const q2 = row(D.is, 'Revenue')[6], q2y = row(D.is, 'Revenue')[4];
   $('#hero4').innerHTML = [
     `<div class="hcard live"><div id="lq" class="lq" aria-live="polite" style="display:none"><div class="lq-top"><span class="lq-sess"><i class="lq-dot"></i><span id="lq-sl">Connecting to live quote…</span></span><span class="lq-sym">SPCX · Nasdaq</span></div>
