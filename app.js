@@ -42,7 +42,7 @@ function fnote(lines, label = 'Notes & sources', raw = false) { lines = (lines |
   return `<details class="fn"><summary>${esc(label)} <span class="fnn">${lines.length}</span></summary><ul class="notes">${lines.map(n => `<li>${raw ? n : linkify(n)}</li>`).join('')}</ul></details>`; }
 function tableBlock(t, o = {}) {
   const id = o.id || ('t' + (++TID)); const cols = t.columns; const qcols = cols.map((c, i) => /^Q[1-4]\s?'?\d{2}/.test(String(c)) ? i : -1).filter(i => i >= 0);
-  const lastQ = qcols.length ? qcols[qcols.length - 1] : -1, prevQ = qcols.length > 1 ? qcols[qcols.length - 2] : -1;
+  const lastQ = o.noLatest ? -1 : qcols.length ? qcols[qcols.length - 1] : -1, prevQ = qcols.length > 1 ? qcols[qcols.length - 2] : -1;
   let h = '';
   if (t.title && !o.notitle) h += `<h3>${esc(t.title)}</h3>`;
   const pre = [...(o.pre || []), ...(t.pre || [])];
@@ -282,6 +282,7 @@ function overview() {
   tvEmbed($('#tvchart'), 'advanced-chart', {autosize: true, symbol: TV_SYM, interval: 'D', range: '6M', timezone: 'Asia/Singapore', theme: tvTheme(), style: '1', locale: I18N.tvLocale(),
     backgroundColor: isDark() ? 'rgba(22,22,23,1)' : 'rgba(255,255,255,1)', gridColor: isDark() ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.035)', allow_symbol_change: false, hide_side_toolbar: true, calendar: false, support_host: 'https://www.tradingview.com'},
     why => { $('#tvchart').innerHTML = `<div class="tvfail">Live chart unavailable (${esc(why)}).</div><div class="mut" style="font-size:12px">Snapshot: close US$${fmt(D.price.close, 2)} on ${esc(dlong(D.price.close_date))} · not live</div>`; $('#tvchart').style.height = 'auto'; });
+  { const h = $('#s-overview h2'); if (h && window.secWeek) h.insertAdjacentHTML('afterend', secWeek()); }
 }
 function mixChart(id) {
   const g = n => row(D.mix, n);
@@ -330,6 +331,7 @@ function ipoTab() {
   ${tableBlock({columns: ['Item', 'Value', 'Exact wording', 'Source'], rows: facts}, {id: 'tEmp', csvname: 'Employee equity', wrap: true})}
   <div class="card" style="margin-top:12px"><h4 style="margin:0 0 6px">Estimate assumptions <span class="est">estimate</span></h4><ul class="lst">${E.assumptions.map(a => `<li>${esc(a)}</li>`).join('')}</ul></div>`;
   siCharts();
+  if (window.secSupply) $('#s-ipo').insertAdjacentHTML('beforeend', secSupply());
 }
 const RULESORDER = () => { const o = ['vote', 'controlled', 'musk', 'pool180', 'earn1', 'price', 'dated', 'earn3', 'd180', 'ext', 'company', 'gs', 'sell2cover', 'tbp', 'quiet']; return o.map(k => D.rules.find(r => r.id === k)).filter(Boolean); };
 
@@ -349,6 +351,7 @@ function finTab() {
   <h3>Company statements on the outlook <span class="mut">Q2 call, 4 Aug 2026</span></h3><ul class="lst">${D.guidance.map(g => `<li>${esc(g)}</li>`).join('')}</ul>`;
   chart('fRev', {data: {labels: D.cols, datasets: [{type: 'bar', label: 'Revenue', data: row(D.is, 'Revenue'), backgroundColor: C.acc}, {type: 'bar', label: 'Adj. EBITDA', data: row(D.is, 'Adjusted EBITDA (non-GAAP, company-defined)'), backgroundColor: C.g3}, {type: 'bar', label: 'Net income (loss)', data: row(D.is, 'Net income (loss)'), backgroundColor: C.g2}]}, options: {plugins: {tooltip: {callbacks: {label: c => `${c.dataset.label}: ${mm(c.raw)}`}}}}});
   chart('fCf', {type: 'bar', data: {labels: D.cols, datasets: [{label: 'Operating cash flow', data: row(D.cf, 'Net cash from operating activities'), backgroundColor: C.g3}, {label: 'Capex', data: row(D.cf, 'Purchases of PP&E (capex)'), backgroundColor: C.g2}, {label: 'FCF (calc.)', data: fcf, backgroundColor: C.acc}]}, options: {plugins: {tooltip: {callbacks: {label: c => `${c.dataset.label}: ${mm(c.raw)}`}}}}});
+  if (window.secSegFin) { $('#s-fin h2').insertAdjacentHTML('afterend', secSegFin()); secSegCharts(); }
 }
 
 /* ---------------- business: segments, Starlink, compute ---------------- */
@@ -363,6 +366,7 @@ function bizTab() {
   chart('bGw', {type: 'bar', data: {labels: D.compute.labels, datasets: [{label: 'GW', data: D.compute.gw, backgroundColor: D.compute.gw.map((_, i) => i === 3 ? C.g3 : C.acc)}]}, options: {plugins: {legend: {display: false}}}});
   const cx = row(D.cf, 'Purchases of PP&E (capex)').slice(3).map(v => -v);
   chart('bCapex', {type: 'bar', data: {labels: D.cols.slice(3), datasets: [{label: 'Capex', data: cx, backgroundColor: C.acc}]}, options: {plugins: {legend: {display: false}, tooltip: {callbacks: {label: c => mm(c.raw)}}}}});
+  if (window.secStarlink) $('#s-biz').insertAdjacentHTML('beforeend', secStarlink());
 }
 
 /* ---------------- operations ---------------- */
@@ -379,6 +383,8 @@ function opsTab() {
     <div class="card"><h3 style="margin-top:0">Major government contracts & missions <span class="mut">newest first</span></h3>
       ${tableBlock({columns: ['Date', 'Customer', 'What', 'Value', 'Source'], rows: O.contracts.map(c => [c.dl || dlong(c.date), c.who, c.what, c.val, c.src + ' ' + c.url])}, {id: 'tCon', wrap: true, notes: [O.gov_note, 'Values are as reported by the sources; contract values are not revenue and are not split by year.']})}</div></div>`;
   aiCharts();
+  if (window.secLaunch) { const g = $('#s-ops .grid.g4'); if (g) { g.insertAdjacentHTML('afterend', secLaunch()); secLaunchCharts(); } }
+  if (window.secAIScore) { const a = document.getElementById('aic'); if (a) a.insertAdjacentHTML('afterend', secAIScore()); }
 }
 
 /* ---------------- AI compute: GPUs & data centres (Operations) ---------------- */
@@ -445,6 +451,7 @@ function muskTab() {
       ${tableBlock({columns: ['Date', 'Code', 'Type', 'Shares', 'Price', 'Held after', 'Held by'], rows: mf.map(f => [f.date, f.code, f.type, f.shares, f.price == null ? '—' : f.price, f.after, f.own])}, {id: 'tMF', notes: [M.note, 'Source: ' + 'https://www.sec.gov/Archives/edgar/data/1181412/000162828026044069/xslF345X06/wk-form4_1781740812.xml']})}</div></div></div>`;
   $$('#xchips button').forEach(b => b.onclick = () => { $$('#xchips button').forEach(x => x.classList.toggle('on', x === b)); $$('#xlist .xpost').forEach(p => p.hidden = b.dataset.x !== 'All' && p.dataset.topic !== b.dataset.x); });
   const t = new Date('2027-06-14T09:30:00-04:00'); const d = Math.ceil((t - new Date()) / 864e5); $('#muskcd').textContent = d > 0 ? tl(`${d} days to go`, `还有 ${d} 天`) : tl('released', '已解禁');
+  if (window.secPromises) $('#s-musk').insertAdjacentHTML('beforeend', secPromises());
 }
 
 /* ---------------- valuation & street ---------------- */
