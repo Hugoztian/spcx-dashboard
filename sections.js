@@ -26,8 +26,10 @@ const pct = (a, b) => { if (!b) return 'n/a'; const v = a / b * 100; return (v <
 const m = v => (v < 0 ? '−' : '') + Math.abs(v).toLocaleString('en-US');
 
 window.SPCX_SEC = {
-  asof: '15 Oct 2026',
+  asof: '16 Oct 2026',
   week: [
+    ['16 Oct 2026', 'Elon on X', 'Star Mind computer co-engineered by SpaceX and Nvidia "far better than almost anyone expects" and will reach volume production next year (01:48 SGT).', 'https://x.com/elonmusk/status/2110789964430786745'],
+    ['15 Oct 2026', 'Elon on X', 'Reply: unless a major world war, SpaceX probably gets to >$100T in <10 years (10:52 SGT).', 'https://x.com/elonmusk/status/2110564479742120079'],
     ['15 Oct 2026', 'Elon on X', 'Reply to Mykhailo Fedorov: Starshield is owned and controlled by the US government, which sets any speed or usage limits; Starlink is a commercial service limited to civilian or defensive use (03:00 SGT).', 'https://x.com/elonmusk/status/2110445577184133456'],
     ['14 Oct 2026', 'Ukraine', 'Ukraine says an unannounced 160 km/h speed limit on Starshield terminals disrupted drone and front-line missions; Fedorov said connectivity up to 160 km/h was being restored that evening. SpaceX did not comment.', 'BBC, 14 Oct 2026 https://www.bbc.com/news/articles/c8wy9veedgygo'],
     ['14 Oct 2026', 'Regulatory', 'FAA notice of intent for an environmental impact statement on raising Starbase to up to 456 Starship launches and 912 landings a year (now 25 and 50); Phase 1 up to 100 launches. Comments close 30 Nov; scoping meetings 17 to 19 Nov. Starts a review; approves nothing.', 'Federal Register, 14 Oct 2026 https://www.federalregister.gov/documents/2026/10/14/2026-20963/notice-of-intent-to-prepare-a-programmatic-environmental-impact-statement-peis-open-public-scoping'],
