@@ -26,8 +26,10 @@ const pct = (a, b) => { if (!b) return 'n/a'; const v = a / b * 100; return (v <
 const m = v => (v < 0 ? '−' : '') + Math.abs(v).toLocaleString('en-US');
 
 window.SPCX_SEC = {
-  asof: '16 Oct 2026',
+  asof: '19 Oct 2026',
   week: [
+    ['16 Oct 2026', 'Earnings', 'SpaceX sets Q3 2026 results after the close on Tue 20 Oct 2026; webcast 3:30 p.m. CT / 4:30 p.m. ET (04:30 SGT Wed 21 Oct). Second full trading day after that unlocks up to 1.3bn Class A (28% of the 180-day pool) on Thu 22 Oct.', 'IR release, 16 Oct 2026 https://ir.spacex.com/updates/releases-details/2026/SpaceX-to-Post-Third-Quarter-2026-Results-and-Host-Webcast-on-October-20-2026-2026-QssQGye3im/default.aspx'],
+    ['16 Oct 2026', 'Starlink', 'Southwest Airlines commits to fleetwide Starlink by fall 2027, aiming to be first major US airline to finish rollout; Elon: "Southwest Airlines going all-in with @Starlink!" (00:42 SGT 17 Oct). About 47 aircraft connected as of mid-Oct.', 'Southwest PR, 15 Oct 2026 https://investors.southwest.com/news-events/press-releases/detail/1946/more-to-love-from-rapid-rewards-southwest-airlines-expands-rewards-redemption-and-member-benefits · AirlineGeeks, 17 Oct 2026 https://airlinegeeks.com/2026/10/17/southwest-gives-update-on-starlink-rollout/ · https://x.com/elonmusk/status/2111135753732301178'],
     ['16 Oct 2026', 'Elon on X', 'Star Mind computer co-engineered by SpaceX and Nvidia "far better than almost anyone expects" and will reach volume production next year (01:48 SGT).', 'https://x.com/elonmusk/status/2110789964430786745'],
     ['15 Oct 2026', 'Elon on X', 'Reply: unless a major world war, SpaceX probably gets to >$100T in <10 years (10:52 SGT).', 'https://x.com/elonmusk/status/2110564479742120079'],
     ['15 Oct 2026', 'Elon on X', 'Reply to Mykhailo Fedorov: Starshield is owned and controlled by the US government, which sets any speed or usage limits; Starlink is a commercial service limited to civilian or defensive use (03:00 SGT).', 'https://x.com/elonmusk/status/2110445577184133456'],
@@ -43,10 +45,13 @@ window.SPCX_SEC = {
     ['7 Oct 2026', 'Operations', 'Ship 40 arrived at the Port of Brownsville aboard the heavy-lift vessel Forte, 75 days after its Indian Ocean splashdown: the first flown Starship to return to Texas.', 'Corpus Christi Caller-Times, 9 Oct 2026 https://www.caller.com/story/news/local/texas/2026/10/09/spacex-starship-ship-40-recovered-starbase-port/92167239007/']
   ],
   next: [
-    ['8 Nov 2026', 'Starship Flight 15, NET (unofficial FAA planning; not a SpaceX date)'],
+    ['Dec 2026', 'Starship Flight 16 aimed (NSF 18 Oct; possibly first from LC-39A; B23/S43 likely)'],
+    ['8 Nov 2026', 'Starship Flight 15, NET (CADENA; goal catch booster and Ship; B22/S42; not a SpaceX date)'],
     ['30 Oct 2026', 'Russell December reconstitution rank day'],
     ['26 Oct 2026', 'FINRA short interest for settlement 15 Oct 2026'],
-    ['24 Oct 2026', 'Day-135 lock-up tranche, up to 328.4m shares (a Saturday; first session Mon 26 Oct)']
+    ['24 Oct 2026', 'Day-135 lock-up tranche, up to 328.4m shares (a Saturday; first session Mon 26 Oct)'],
+    ['22 Oct 2026', 'Q3 lock-up tranche: up to 1.3bn Class A (28% of 180-day pool; 2nd full trading day after Q3 results)'],
+    ['20 Oct 2026', 'Q3 2026 results after the close; webcast 3:30 p.m. CT / 4:30 p.m. ET']
   ],
   /* 1) Starlink */
   countries: [
@@ -231,7 +236,7 @@ window.secSupply = function () {
   const rows = [...R, ...S.supply].sort((a, b) => b[0].localeCompare(a[0])).map(r => r.slice(1));
   const si = (window.SPCX_SI || {}).hist || [], L = si[0];
   return card('supply', 'Supply calendar', `lock-ups, employee shares, index dates and short interest · from ${S.asof} · latest date first`,
-    `<div class="grid g4" style="margin-bottom:12px">${L ? kpi('Short interest', (L.si / 1e6).toFixed(1) + 'm', `settlement ${dlong(L.settle)} · ${L.pct_float}% of float · ${L.dtc} days to cover`, U.finra) : ''}${kpi('Next lock-up', '24 Oct 2026', 'up to 328.4m shares · first session Mon 26 Oct', U.p424)}${kpi('Largest release', '12 Jun 2027', 'Elon Musk, up to 6.4bn shares', U.p424)}${kpi('Next index event', '30 Oct 2026', 'Russell rank day', U.russell)}</div>` +
-    tableBlock({columns: ['Date', 'Type', 'What', 'Shares (m, max)', 'Source'], rows}, {id: 'tSupply', wrap: true, notes: ['Lock-up rows repeat the prospectus schedule; dates tied to earnings are TBA until the company sets them. Index events show when funds trade, not whether SPCX weights change.', 'Employee RSU vesting by date is not disclosed (n/a).']}));
+    `<div class="grid g4" style="margin-bottom:12px">${L ? kpi('Short interest', (L.si / 1e6).toFixed(1) + 'm', `settlement ${dlong(L.settle)} · ${L.pct_float}% of float · ${L.dtc} days to cover`, U.finra) : ''}${kpi('Next lock-up', '22 Oct 2026', 'up to 1.3bn Class A · 2nd full trading day after Q3 on 20 Oct', U.p424)}${kpi('Largest release', '12 Jun 2027', 'Elon Musk, up to 6.4bn shares', U.p424)}${kpi('Next index event', '30 Oct 2026', 'Russell rank day', U.russell)}</div>` +
+    tableBlock({columns: ['Date', 'Type', 'What', 'Shares (m, max)', 'Source'], rows}, {id: 'tSupply', wrap: true, notes: ['Lock-up rows repeat the prospectus schedule; Q3 early release is dated 22 Oct 2026 (results 20 Oct). Index events show when funds trade, not whether SPCX weights change.', 'Employee RSU vesting by date is not disclosed (n/a).']}));
 };
 })();
