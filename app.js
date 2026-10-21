@@ -536,7 +536,7 @@ function insTab() {
 function riskTab() {
   $('#s-risks').innerHTML = `<h2>Risks & News <span class="mut">Risk factors from the prospectus and 10-Q · news newest first</span></h2>
   <div class="grid g2"><div class="xscope">${xallBtns()}${D.risks.map(([h, b], i) => details(esc(h), esc(b), '', i < 2)).join('')}</div>
-  <div class="card"><h3 style="margin-top:0">Recent news & filings</h3>${D.news.map(([d, k, t]) => `<div class="cat"><div class="when">${esc(dlong(d))}</div><div style="flex:1"><span class="pill other">${esc(k)}</span> ${esc(t)}</div></div>`).join('')}<div class="mut" style="font-size:11.5px;margin-top:8px">Source: Chief's analysis (news feed with links in its workbook) and SEC EDGAR.</div></div></div>`;
+  <div class="card"><h3 style="margin-top:0">Recent news & filings</h3>${D.news.map(([d, k, t, u]) => `<div class="cat"><div class="when">${esc(dlong(d))}</div><div style="flex:1"><span class="pill other">${esc(k)}</span> ${esc(t)}${u ? ` <a href="${esc(u)}" target="_blank" rel="noopener">Source</a>` : ''}</div></div>`).join('')}<div class="mut" style="font-size:11.5px;margin-top:8px">Source: Chief's analysis (news feed with links in its workbook) and SEC EDGAR.</div></div></div>`;
 }
 
 /* ---------------- sources & live feed (bulls / bears) ---------------- */
