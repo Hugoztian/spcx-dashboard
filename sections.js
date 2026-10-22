@@ -14,14 +14,19 @@ const U = {
   spx: 'https://press.spglobal.com/2026-06-04-S-P-Dow-Jones-Indices-Consultation-on-Treatment-of-MegaCap-Companies-Results',
   nexus: 'https://spacenexus.us/promises/starship-mars'
 };
-/* segment data: [Space, Connectivity, AI] revenue / income from operations / Segment Adjusted EBITDA, US$m */
-const PER = ['Q2 2026', 'Q1 2026', 'Q2 2025', 'Q1 2025', 'FY2025', 'FY2024', 'FY2023'];
+/* segment data: [Space, Connectivity, SI] revenue / income from operations / Segment Adjusted EBITDA, US$m */
+const PER = ['Q3 2026', 'Q2 2026', 'Q1 2026', 'Q3 2025', 'Q2 2025', 'Q1 2025', 'FY2025', 'FY2024', 'FY2023'];
+const Q8K = 'https://www.sec.gov/Archives/edgar/data/1181412/000162828026066482/spaceexplorationtechnologi.htm';
+// Q3 2026 and Q3 2025: Q3 2026 8-K (20 Oct 2026). Segment "AI" renamed "SI" (Super Intelligence) in the 8-K.
 const SEG = {
-  Space:        {rev: [962, 619, 746, 865, 4086, 3796, 3557],   op: [-542, -662, -369, -70, -657, 21, -1],         eb: [-205, -351, -93, 224, 653, 1154, 997]},
-  Connectivity: {rev: [4291, 3257, 2588, 2475, 11387, 7599, 3869], op: [1656, 1188, 923, 1033, 4423, 2006, 469],     eb: [2597, 2087, 1583, 1617, 7168, 3849, 1602]},
-  AI:           {rev: [2561, 818, 737, 727, 3201, 2620, 2961],  op: [-1257, -2469, -1524, -936, -6355, -1561, -3973], eb: [1146, -609, -276, -111, -1237, 347, 1222]}
+  Space:        {rev: [1767, 962, 619, 1666, 746, 865, 4086, 3796, 3557],    op: [-7, -542, -662, 259, -369, -70, -657, 21, -1],          eb: [357, -205, -351, 674, -93, 224, 653, 1154, 997],      cx: [1606, 1174, 1052, 1113, null, null, null, null, null]},
+  Connectivity: {rev: [5248, 4291, 3257, 3097, 2588, 2475, 11387, 7599, 3869], op: [2367, 1656, 1188, 1190, 923, 1033, 4423, 2006, 469],    eb: [3499, 2597, 2087, 1923, 1583, 1617, 7168, 3849, 1602], cx: [1543, 1367, 1332, 1007, null, null, null, null, null]},
+  SI:           {rev: [7560, 2561, 818, 813, 737, 727, 3201, 2620, 2961],    op: [431, -1257, -2469, -1722, -1524, -936, -6355, -1561, -3973], eb: [4953, 1146, -609, -428, -276, -111, -1237, 347, 1222], cx: [16444, 15828, 7723, 4760, null, null, null, null, null]}
 };
-const CAPEX = [18369, 10107, 2825, 4140, 20737, 11163, 4415], OCF = [2419, 1047, -376, 727, 6785, 5776, 4520];
+const SEGNAME = {Space: 'Space', Connectivity: 'Connectivity', SI: 'Super Intelligence (SI, formerly AI)'};
+// OCF Q3 = nine-month (8-K) minus H1 (10-Q), calculated: 13,097 − 3,466 = 9,631; 4,120 − 351 = 3,769
+const CAPEX = [19593, 18369, 10107, 6880, 2825, 4140, 20737, 11163, 4415], OCF = [9631, 2419, 1047, 3769, -376, 727, 6785, 5776, 4520];
+const OCFCALC = [true, false, false, true, false, false, false, false, false];
 const pct = (a, b) => { if (!b) return 'n/a'; const v = a / b * 100; return (v < -0.05 ? '−' + Math.abs(v).toFixed(1) : Math.abs(v).toFixed(1)) + '%'; };
 const m = v => (v < 0 ? '−' : '') + Math.abs(v).toLocaleString('en-US');
 
@@ -101,7 +106,7 @@ window.SPCX_SEC = {
     ['18 Aug 2026', 'SpaceX said the ship had reached sheltered waters at Christmas Island after about 24 days under tow', 'https://www.caller.com/story/news/local/texas/2026/10/09/spacex-starship-ship-40-recovered-starbase-port/92167239007/'],
     ['24 Jul 2026', 'Flight 13: first intact Starship ocean splashdown (Indian Ocean); the ship stayed afloat', 'https://www.spacex.com/launches/starship-flight-13']
   ],
-  /* 5) Elon promise tracker (non-AI rows; AI rows come from ai.js) */
+  /* 5) Elon promise tracker (non-AI rows; SI rows come from ai.js) */
   promises: [
     ['20 Aug 2026', '“Looks like we will probably catch the ship with the tower in a few months … First reflight of the ship will be either end of this year or early next.”', 'Ship catch; first ship reflight', 'Late 2026 / early 2027', 'No ship catch or reflight yet (14 Oct 2026)', 'Pending', 'https://x.com/elonmusk/status/2090305535937851863'],
     ['25 Jul 2026', '“Unless we discover problems after mission data review, SpaceX will attempt to catch the ship with the tower on next flight”', 'Ship catch on Flight 14', '28 Sep 2026 (Flight 14)', 'Flight 14 splashed down in the Pacific; no catch attempted (catch reported off before the flight)', 'Behind', 'https://x.com/elonmusk/status/2080876967839031712'],
@@ -152,7 +157,7 @@ window.secStarlink = function () {
     ['  Enterprise & government, incl. Starlink Mobile (US$m)', ...ent.map(m)],
     ['  Consumer share (calc.)', ...con.map((v, i) => pct(v, tot[i]))],
     ['  Aviation / maritime / government, each', ...qs.map(() => 'n/a')],
-    ['Connectivity Segment Adj. EBITDA margin (calc.)', ...SEG.Connectivity.eb.map((v, i) => pct(v, SEG.Connectivity.rev[i]))]
+    ['Connectivity Segment Adj. EBITDA margin (calc.)', ...qs.map(q => { const i = PER.indexOf(q); return pct(SEG.Connectivity.eb[i], SEG.Connectivity.rev[i]); })]
   ];
   return card('starue', 'Starlink unit economics', 'filings · newest first',
     `<div class="grid g4" style="margin-bottom:12px">${kpi('Subscribers', '12.0m', 'Q2 2026 · 10.3m at Q1 2026', U.q10)}${kpi('ARPU', 'US$66/mo', 'Q2 2026 · US$85 a year earlier (−22.4%)', U.q10)}${kpi('Countries & markets', '167', 'Q2 2026 10-Q · 164 at 31 Mar 2026', U.q10)}${kpi('India', 'Pending', 'Security clearance and spectrum pending · 8 Oct 2026', U.pib)}</div>` +
@@ -179,55 +184,68 @@ window.secLaunchCharts = function () {
 
 window.secAIScore = function () {
   const A = window.SPCX_AI; if (!A) return '';
-  const gw = A.fleet_mw / 1000, perGw = (A.ann_si / 1000 / gw).toFixed(1);
+  const gw = 1.7, perGw = (A.ann_si / 1000 / gw).toFixed(1);
   const rows = [
     ['GPUs online, end-2026', '780,000 (CEO, 25 Sep 2026)', '1.22m with two more 220k GB300 tranches (Oct and Nov), 1.44m “if we get lucky” (CEO, 25 Sep 2026)', 'Evercore ISI (28 Sep 2026): two or three tranches', 'Pending', 'https://x.com/elonmusk/status/2103329761690865846'],
-    ['Compute, end-2026 (GW)', '1.4 GW nameplate (30 Jun 2026, 10-Q)', '>2 GW (company, Q2 call 4 Aug 2026)', '2.1 consensus (Evercore) · 2.4 Goldman (6 Oct) · 2.7 Evercore', 'Pending', U.q10],
-    ['Colossus 2 at 1.5 GW by Apr 2026', '1.0 GW company-wide nameplate at 31 Mar 2026; 1.4 GW at 30 Jun 2026 (not like-for-like)', '1.5 GW (CEO, 17 Jan 2026)', 'n/a', 'Behind', 'https://x.com/elonmusk/status/2012500968571637891'],
+    ['Compute, end-2026 (GW)', '1.7 GW nameplate (30 Sep 2026, Q3 8-K); 1.4 GW at 30 Jun', '>2 GW (company, Q2 call 4 Aug 2026)', '2.1 consensus (Evercore) · 2.4 Goldman (6 Oct) · 2.7 Evercore', 'Pending', U.q10],
+    ['Colossus 2 at 1.5 GW by Apr 2026', '1.0 GW company-wide nameplate at 31 Mar 2026; 1.4 GW at 30 Jun; 1.7 GW at 30 Sep 2026 (8-K; not like-for-like)', '1.5 GW (CEO, 17 Jan 2026)', 'n/a', 'Behind', 'https://x.com/elonmusk/status/2012500968571637891'],
     ['Colossus II next phase', 'CEO, 25 Sep 2026: 440k GB300 at Colossus 2', '+220k GB300, >400 MW (prospectus, no date)', 'n/a', 'Met (on count, per CEO post)', U.p424],
-    ['Compute, end-2027 (GW)', '1.4 GW', '5 to 10 GW ambition (management, as reported by Evercore)', '5.9 consensus (Evercore) · 7.0 Goldman', 'Pending', 'https://www.insidermonkey.com/news/spacex-is-about-to-spend-53-billion-on-ai-evercore-sees-an-83-billion-payoff-1848693/'],
-    ['Orbital AI compute', '0 GW', 'First satellites as early as 2028 (prospectus); 100 GW/year launched in 3 to 4 years (CEO, 23 Jan 2026)', '0.16 GW in 2028 · 2.7 GW in 2030 (Morgan Stanley)', 'Pending', 'https://x.com/elonmusk/status/2014416914550841727']
+    ['Compute, end-2027 (GW)', '1.7 GW (30 Sep 2026, 8-K)', '5 to 10 GW ambition (management, as reported by Evercore)', '5.9 consensus (Evercore) · 7.0 Goldman', 'Pending', 'https://www.insidermonkey.com/news/spacex-is-about-to-spend-53-billion-on-ai-evercore-sees-an-83-billion-payoff-1848693/'],
+    ['Orbital SI compute', '0 GW', 'First satellites as early as 2028 (prospectus); 100 GW/year launched in 3 to 4 years (CEO, 23 Jan 2026)', '0.16 GW in 2028 · 2.7 GW in 2030 (Morgan Stanley)', 'Pending', 'https://x.com/elonmusk/status/2014416914550841727']
   ];
   const rv = [
-    ['Reported: AI Solutions & Infrastructure revenue, Q2 2026 annualised', 'US$8.8bn', `US$${perGw}bn per GW (calc.: US$8.8bn ÷ ${gw.toFixed(2)} GW nameplate)`, U.q10],
-    ['Estimate: revenue capacity at 100% utilisation, base case (this dashboard)', 'US$59.3bn', `US$${(59.3 / gw).toFixed(1)}bn per GW (calc.; range US$31.9–78.7bn)`, 'See the AI compute panel'],
-    ['Goldman Sachs (6 Oct 2026): AI segment revenue FY2026 ÷ year-end GW', 'US$27.3bn ÷ 2.4 GW', `US$${(27.3 / 2.4).toFixed(1)}bn per GW (calc.; whole AI segment incl. X ads)`, 'https://www.thestreet.com/investing/stocks/spacex-stock-goldman-raises-price-target-q3-earnings'],
+    ['Reported: SI Solutions & Infrastructure revenue, Q3 2026 annualised (incl. Cursor from 14 Aug)', 'US$28.1bn', `US$${perGw}bn per GW (calc.: US$7,022m × 4 ÷ 1.7 GW nameplate at 30 Sep 2026)`, Q8K],
+    ['Reported, prior quarter: SI S&I revenue, Q2 2026 annualised', 'US$8.8bn', `US$${(8.776 / 1.4).toFixed(1)}bn per GW (calc.: ÷ 1.4 GW at 30 Jun 2026)`, U.q10],
+    ['Estimate: revenue capacity at 100% utilisation at 1.7 GW, base case (this dashboard)', `US$${A.act_rev[1]}bn`, `US$${(A.act_rev[1] / gw).toFixed(1)}bn per GW (calc.; range US$${A.act_rev[0]}–${A.act_rev[2]}bn)`, 'See the SI compute panel'],
+    ['Goldman Sachs (6 Oct 2026): SI segment revenue FY2026 ÷ year-end GW', 'US$27.3bn ÷ 2.4 GW', `US$${(27.3 / 2.4).toFixed(1)}bn per GW (calc.; whole SI segment incl. X ads)`, 'https://www.thestreet.com/investing/stocks/spacex-stock-goldman-raises-price-target-q3-earnings'],
     ['Goldman Sachs (6 Oct 2026): FY2027 ÷ year-end GW', 'US$90.4bn ÷ 7.0 GW', `US$${(90.4 / 7).toFixed(1)}bn per GW (calc.)`, 'https://www.thestreet.com/investing/stocks/spacex-stock-goldman-raises-price-target-q3-earnings'],
     ['TD Cowen (29 Sep 2026): leasing revenue FY2026 ÷ end-2026 GW', 'US$14bn ÷ 2.1 GW', `US$${(14 / 2.1).toFixed(1)}bn per GW (calc.)`, 'https://finance.biggo.com/news/ba8b9013-80e9-49b2-bbc5-19a8a496960d'],
     ['TD Cowen (29 Sep 2026): FY2027 ÷ end-2027 GW', 'US$66bn ÷ 6.0 GW', `US$${(66 / 6).toFixed(1)}bn per GW (calc.)`, 'https://finance.biggo.com/news/ba8b9013-80e9-49b2-bbc5-19a8a496960d']
   ];
   const n = k => rows.filter(r => r[4].startsWith(k)).length;
-  return card('aiscore', 'AI compute scorecard', `targets vs actual · scored ${S.asof}`,
+  return card('aiscore', 'SI compute scorecard', `targets vs actual · scored ${S.asof}`,
     `<div class="grid g3" style="margin-bottom:12px">${kpi('Met', String(n('Met')), 'of ' + rows.length + ' targets')}${kpi('Behind', String(n('Behind')), 'deadline passed or not on track')}${kpi('Pending', String(n('Pending')), 'deadline still ahead')}</div>` +
     tableBlock({columns: ['Target', 'Actual so far', 'Elon / company target', 'Street (third-party, dated)', 'Score', 'Source'], rows}, {id: 'tAiSc', wrap: true, notes: ['Met = done by the deadline · Behind = deadline passed without it, or not on track on the latest data · Pending = deadline still ahead. Street figures are third-party estimates with their dates.']}) +
     sh('Revenue per GW: reported vs estimates') + tableBlock({columns: ['Basis', 'Inputs', 'Revenue per GW', 'Source'], rows: rv}, {id: 'tAiRg', wrap: true, notes: ['Street ratios divide full-year revenue by year-end capacity, so they are rough and not like-for-like with a quarter annualised.']}));
 };
 
 window.secSegFin = function () {
-  const rows = [];
+  const rows = [], mn = v => v == null ? 'n/a' : m(v);
   for (const [k, s] of Object.entries(SEG)) {
-    rows.push({section: k});
+    rows.push({section: SEGNAME[k]});
     rows.push(['Revenue', ...s.rev.map(m)]);
     rows.push(['Income (loss) from operations', ...s.op.map(m)]);
     rows.push(['Operating margin (calc.)', ...s.op.map((v, i) => pct(v, s.rev[i]))]);
     rows.push(['Segment Adjusted EBITDA (non-GAAP)', ...s.eb.map(m)]);
     rows.push(['Segment Adj. EBITDA margin (calc.)', ...s.eb.map((v, i) => pct(v, s.rev[i]))]);
+    rows.push(['Segment capex', ...s.cx.map(mn)]);
   }
   rows.push({section: 'Company'});
   rows.push(['Capex (purchases of PP&E)', ...CAPEX.map(m)]);
-  rows.push(['Operating cash flow', ...OCF.map(m)]);
+  rows.push(['Operating cash flow', ...OCF.map((v, i) => m(v) + (OCFCALC[i] ? ' (calc.)' : ''))]);
   rows.push(['Free cash flow (calc.)', ...OCF.map((v, i) => m(v - CAPEX[i]))]);
-  rows.push(['Capex by segment', ...PER.map(() => 'n/a')]);
-  return card('segfin', 'Segment financials', 'US$m · 10-Q and 424(b)(4) · newest first',
-    `<div class="grid g2" style="margin-bottom:12px">${ccard('sfM', 'Segment Adj. EBITDA margin by quarter (calc.)', '10-Q; Q1 = H1 − Q2')}${ccard('sfC', 'Capex vs operating cash flow by quarter (US$m)', '10-Q / 424(b)(4)')}</div>` +
-    tableBlock({columns: ['US$m', ...PER], rows}, {id: 'tSegF', noLatest: true, notes: ['Segments: Space = launch (launch services plus launch & development); Connectivity = Starlink; AI = xAI, Grok and X.', 'Q1 2025 and Q1 2026 = six-month figures minus Q2 (calculated); they reconcile to the reported totals. Q3 and Q4 2025 were not disclosed separately (n/a).', 'Segment Adjusted EBITDA is the company’s non-GAAP measure (income from operations + D&A + share-based compensation + restructuring + impairment). The company does not report capex by segment.', 'Sources: Q2 2026 10-Q ' + U.q10 + ' · 424(b)(4) ' + U.p424]}));
+  return card('segfin', 'Segment financials', 'US$m · Q3 2026 8-K, 10-Q and 424(b)(4) · newest first',
+    `<div class="grid g2" style="margin-bottom:12px">${ccard('sfM', 'Segment Adj. EBITDA margin by quarter (calc.)', 'Q3 2026 8-K; 10-Q; Q1 = H1 − Q2')}${ccard('sfC', 'Capex vs operating cash flow by quarter (US$m)', 'Q3 2026 8-K; 10-Q; 424(b)(4)')}</div>` +
+    `<div class="grid g2" style="margin-bottom:12px">${ccard('sfR', 'Segment revenue by quarter (US$m)', 'Q3 2026 8-K; 10-Q')}${ccard('sfX', 'Segment capex by quarter (US$m)', 'Q3 2026 8-K; Q1 2026 calc.; earlier quarters not disclosed')}</div>` +
+    tableBlock({columns: ['US$m', ...PER], rows}, {id: 'tSegF', noLatest: true, notes: [
+      'Segments: Space = launch (launch services plus launch & development); Connectivity = Starlink; Super Intelligence (SI) = the segment previously reported as AI (xAI, Grok, X, and Cursor from 14 Aug 2026).',
+      'Q3 2026 and Q3 2025 are as reported in the Q3 2026 8-K (earnings release, 20 Oct 2026); the Q3 2026 10-Q had not been filed when this was built (21 Oct 2026). Q4 2025 was not disclosed separately (n/a).',
+      'Q1 2025 and Q1 2026 = six-month figures minus Q2 (calculated); they reconcile to the reported totals. Q1 2026 segment capex = nine-month minus Q2 and Q3 (calculated). Segment capex before Q3 2025 was not disclosed (n/a).',
+      'Operating cash flow for Q3 2026 and Q3 2025 = nine-month figure in the 8-K minus the six-month figure in the 10-Q (calculated): US$13,097m − US$3,466m and US$4,120m − US$351m.',
+      'Q3 2026 SI income from operations includes US$1,217m of share-based compensation related to the Cursor acquisition (excluded from Segment Adjusted EBITDA).',
+      'Segment Adjusted EBITDA is the company’s non-GAAP measure (income from operations + D&A + share-based compensation, incl. acquisition-related awards, + acquisition-related costs + restructuring + impairment).',
+      'Sources: Q3 2026 8-K, 20 Oct 2026 ' + Q8K + ' · Q2 2026 10-Q ' + U.q10 + ' · 424(b)(4) ' + U.p424]}));
 };
 window.secSegCharts = function () {
-  const q = [3, 2, 1, 0], L = q.map(i => PER[i]);
-  const ds = (k, c) => ({type: 'line', label: k, data: q.map(i => +(SEG[k].eb[i] / SEG[k].rev[i] * 100).toFixed(1)), borderColor: c, backgroundColor: c, tension: .25});
-  chart('sfM', {type: 'line', data: {labels: L, datasets: [ds('Connectivity', C.acc), ds('Space', C.g3), ds('AI', '#888')]}, options: {scales: {y: {ticks: {callback: v => v + '%'}}}}});
+  const q = [5, 4, 3, 2, 1, 0], L = q.map(i => PER[i]), cols = {Connectivity: C.acc, Space: C.g3, SI: '#888'};
+  const ds = k => ({type: 'line', label: SEGNAME[k], data: q.map(i => +(SEG[k].eb[i] / SEG[k].rev[i] * 100).toFixed(1)), borderColor: cols[k], backgroundColor: cols[k], tension: .25});
+  chart('sfM', {type: 'line', data: {labels: L, datasets: ['Connectivity', 'Space', 'SI'].map(ds)}, options: {scales: {y: {ticks: {callback: v => v + '%'}}}}});
   chart('sfC', {type: 'bar', data: {labels: L, datasets: [{label: 'Operating cash flow', data: q.map(i => OCF[i]), backgroundColor: C.g3}, {label: 'Capex', data: q.map(i => CAPEX[i]), backgroundColor: C.acc}]}});
+  chart('sfR', {type: 'bar', data: {labels: L, datasets: ['Space', 'Connectivity', 'SI'].map(k => ({label: SEGNAME[k], data: q.map(i => SEG[k].rev[i]), backgroundColor: cols[k]}))}, options: {scales: {x: {stacked: true}, y: {stacked: true}}}});
+  const qx = [2, 1, 0];
+  chart('sfX', {type: 'bar', data: {labels: qx.map(i => PER[i]), datasets: ['Space', 'Connectivity', 'SI'].map(k => ({label: SEGNAME[k], data: qx.map(i => SEG[k].cx[i]), backgroundColor: cols[k]}))}, options: {scales: {x: {stacked: true}, y: {stacked: true}}}});
 };
+
 
 window.secPromises = function () {
   const A = window.SPCX_AI;
@@ -236,7 +254,7 @@ window.secPromises = function () {
   const n = k => all.filter(r => r[5].startsWith(k)).length;
   return card('promise', 'Elon promise tracker', `dated claims scored ${S.asof} · newest first`,
     `<div class="grid g3" style="margin-bottom:12px">${kpi('Met', String(n('Met')), 'of ' + all.length + ' claims')}${kpi('Behind', String(n('Behind')), 'missed or off track')}${kpi('Pending', String(n('Pending')), 'deadline still ahead')}</div>` +
-    tableBlock({columns: ['Said', 'Claim (verbatim)', 'Target', 'Deadline', 'Where it stands', 'Score', 'Source'], rows: all}, {id: 'tProm', wrap: true, notes: ['Quotes are verbatim from X posts or the prospectus (company statements are marked). AI rows come from the AI compute panel.', 'Third-party cross-check for the Starship and Mars rows: SpaceNexus promise tracker (verified 26 Sep 2026) ' + U.nexus]}));
+    tableBlock({columns: ['Said', 'Claim (verbatim)', 'Target', 'Deadline', 'Where it stands', 'Score', 'Source'], rows: all}, {id: 'tProm', wrap: true, notes: ['Quotes are verbatim from X posts or the prospectus (company statements are marked). SI rows come from the SI compute panel.', 'Third-party cross-check for the Starship and Mars rows: SpaceNexus promise tracker (verified 26 Sep 2026) ' + U.nexus]}));
 };
 
 window.secSupply = function () {

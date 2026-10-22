@@ -244,12 +244,12 @@ function hero() {
     `<div class="hcard"><div class="l">Next lock-up release ${info('Lock-up', 'Countdown to the next dated release in the 424(b)(4) prospectus schedule, measured to the 9:30 ET open of the first trading session on or after the release date.')}</div>
        <div class="cdv" data-cd="1">—</div><div class="ch" style="color:var(--acc)">${n ? 'Up to ' + fmt(n.shares_m, 1) + 'm shares' : 'n/a'}</div><div class="s">${n ? esc(n.label) + ' · ' + pctOut(n.shares_m) + ' of shares outstanding (calc.)' : ''}</div><div class="asof"><a href="#ipo">Full IPO & lock-up calendar →</a></div></div>`,
     `<div class="hcard"><div class="l">Market cap</div><div class="v">US$${fmt(P.mcap_m / 1e6, 2)}tn</div><div class="ch mut">EV US$${fmt(P.ev_m / 1e6, 2)}tn</div><div class="s">${fmt(P.shares_m)}m Class A+B shares × US$${fmt(P.close, 2)} (calculated)</div><div class="asof">Close ${esc(dlong(P.close_date))}</div></div>`,
-    `<div class="hcard"><div class="l">Q2 2026 revenue</div><div class="v">${bn(q2)}</div><div class="ch pos">${pct((q2 / q2y - 1) * 100, 0)} YoY</div><div class="s">Net loss ${mm(row(D.is, 'Net income (loss)')[6])} · adj. EBITDA ${bn(row(D.is, 'Adjusted EBITDA (non-GAAP, company-defined)')[6])}</div><div class="asof">10-Q · quarter ended 30 Jun 2026</div></div>`].join('');
+    `<div class="hcard"><div class="l">Q3 2026 revenue</div><div class="v">${bn(14575)}</div><div class="ch pos">${pct((14575 / 5576 - 1) * 100, 0)} YoY</div><div class="s">Net income ${mm(4404)} · adj. EBITDA ${bn(8809)}</div><div class="asof">8-K, 20 Oct 2026 · quarter ended 30 Sep 2026</div></div>`].join('');
   $('#hero2').innerHTML = [
     `<div class="mini"><div class="l">SPCX vs IPO price</div><div class="v ${pcls((P.close / 135 - 1) * 100)}" id="ipo-v">${pct((P.close / 135 - 1) * 100)}</div><div class="s" id="ipo-s1">US$${fmt(P.close, 2)} close ${esc(dlong(P.close_date))} vs US$135.00 IPO (11 Jun 2026)</div></div>`,
-    `<div class="mini"><div class="l">Elon Musk voting power</div><div class="v">≈82.4%</div><div class="s">Class B = 10 votes · locked up until 12 Jun 2027 · <a href="#musk">Musk tab</a></div></div>`,
+    `<div class="mini"><div class="l">Elon Musk voting power</div><div class="v">≈84.4%</div><div class="s">424(b)(4) ownership table · Class B = 10 votes · locked up until 12 Jun 2027 · <a href="#musk">Musk tab</a></div></div>`,
     `<div class="mini"><div class="l">Cash & securities / debt + leases</div><div class="v">${bn(D.debt.cash_m)} / ${bn(D.debt.items[3][1])}</div><div class="s">30 Jun 2026 · 10-Q</div></div>`,
-    `<div class="mini"><div class="l">Next earnings</div><div class="v">20 Oct 2026</div><div class="s">Q3 after the close · webcast 3:30 p.m. CT / 4:30 p.m. ET · unlocks up to 1.3bn Class A on 22 Oct</div></div>`].join('');
+    `<div class="mini"><div class="l">Next earnings</div><div class="v">n/a</div><div class="s">Q4 2026 date not announced · Q3 reported 20 Oct 2026 · up to 1.3bn Class A unlock on 22 Oct</div></div>`].join('');
   try { I18N.apply($('#hero4')); I18N.apply($('#hero2')); } catch (e) { console.error('i18n hero', e); }
   tickCountdowns(); clearInterval(CDT); CDT = setInterval(tickCountdowns, 1000);
   liveQuote();
@@ -260,16 +260,17 @@ function overview() {
   const P = D.price, S = D.street;
   const keyRows = [
     ['Share price / market cap / EV', `US$${fmt(P.close, 2)} / US$${fmt(P.mcap_m)}m / US$${fmt(P.ev_m)}m`, `Close ${dlong(P.close_date)}`],
-    ['Q2 2026 revenue / net loss / adj. EBITDA', `${mm(7814)} (+92% y/y) / ${mm(-541)} / ${mm(3538)}`, 'Q2 2026 (10-Q, 8-K)'],
-    ['H1 2026 capex / free cash flow (calc.)', `${mm(28476)} / ${mm(-25010)}`, 'H1 2026'],
+    ['Q3 2026 revenue / net income / adj. EBITDA', `${mm(14575)} (+161% y/y) / ${mm(4404)} / ${mm(8809)}`, 'Q3 2026 (8-K, 20 Oct 2026)'],
+    ['9M 2026 capex / free cash flow (calc.)', `${mm(48069)} / ${mm(13097 - 48069)}`, '9M 2026 (8-K)'],
+    ['SI nameplate compute', '1.7 GW (1.4 GW at 30 Jun)', '30 Sep 2026 (8-K)'],
     ['Cash & securities vs debt + leases', `${mm(D.debt.cash_m)} vs ${mm(39512)}`, '30 Jun 2026'],
-    ['Starlink subscribers / ARPU', '12.0m / US$66 per month', 'Q2 2026'],
+    ['Starlink consumer subscribers / ARPU', '13.6m / US$69 per month', 'Q3 2026 (8-K)'],
     ['EV / LTM revenue · P/E', `${P.ev_rev_ltm}x · not meaningful (LTM net loss ${mm(P.ltm_ni_m)})`, `Close ${dlong(P.close_date)}`],
     ['Analysts (MarketBeat, third-party)', `${S.rating} · avg target US$${fmt(S.avg, 2)} (US$${S.lo}–${S.hi})`, '8 Oct 2026'],
     ['Next lock-up release', nextRelease() ? `${nextRelease().label}: up to ${fmt(nextRelease().shares_m, 1)}m shares` : 'n/a', '424(b)(4)'],
-    ['Elon Musk', '≈82.4% of votes; 6.42bn shares beneficially owned; locked until 12 Jun 2027', '424(b)(4) · 13G']];
+    ['Elon Musk', '≈84.4% of votes; 6.42bn shares beneficially owned; locked until 12 Jun 2027', '424(b)(4) · 13G']];
   $('#s-overview').innerHTML = `<h2>Overview</h2>
-  <p class="lead">SpaceX listed on Nasdaq on <b>11 Jun 2026</b> at US$135. It now reports three segments: <b>Space</b> (launch), <b>Connectivity</b> (Starlink) and <b>AI</b> (xAI, Grok and X). Revenue is growing fast, Starlink makes the profits, and AI capex is driving large cash outflows.</p>
+  <p class="lead">SpaceX listed on Nasdaq on <b>11 Jun 2026</b> at US$135. It now reports three segments: <b>Space</b> (launch), <b>Connectivity</b> (Starlink) and <b>SI</b> (xAI, Grok and X). Revenue is growing fast, Starlink makes the profits, and SI capex is driving large cash outflows.</p>
   <div class="grid g2" style="margin-bottom:16px">
     <div class="card"><h3>Key numbers (with dates)</h3>${tableBlock({columns: ['Metric', 'Value', 'As of'], rows: keyRows}, {id: 'tKey', csvname: 'Key numbers', wrap: true, cls: 'keyt'})}</div>
     <div class="card"><h3>Key takeaways</h3><ul class="lst">${D.takeaways.map(t => `<li>${esc(t)}</li>`).join('')}</ul><div class="mut" style="font-size:11.5px;margin-top:8px">Source: SEC filings via ${esc('Chief\'s analysis, data as at 9 Oct 2026')}.</div></div></div>
@@ -286,7 +287,7 @@ function overview() {
 }
 function mixChart(id) {
   const g = n => row(D.mix, n);
-  chart(id, {type: 'bar', data: {labels: D.cols, datasets: [{label: 'Space', data: g('Space revenue'), backgroundColor: C.g3}, {label: 'Connectivity (Starlink)', data: g('Connectivity revenue'), backgroundColor: C.acc}, {label: 'AI (xAI / X)', data: g('AI revenue'), backgroundColor: C.g2}]},
+  chart(id, {type: 'bar', data: {labels: D.cols, datasets: [{label: 'Space', data: g('Space revenue'), backgroundColor: C.g3}, {label: 'Connectivity (Starlink)', data: g('Connectivity revenue'), backgroundColor: C.acc}, {label: 'SI (xAI / X)', data: g('SI revenue'), backgroundColor: C.g2}]},
     options: {scales: {x: {stacked: true}, y: {stacked: true}}, plugins: {legend: {position: 'bottom'}, tooltip: {callbacks: {label: c => `${c.dataset.label}: ${mm(c.raw)}`}}}}});
 }
 
@@ -352,21 +353,23 @@ function finTab() {
   chart('fRev', {data: {labels: D.cols, datasets: [{type: 'bar', label: 'Revenue', data: row(D.is, 'Revenue'), backgroundColor: C.acc}, {type: 'bar', label: 'Adj. EBITDA', data: row(D.is, 'Adjusted EBITDA (non-GAAP, company-defined)'), backgroundColor: C.g3}, {type: 'bar', label: 'Net income (loss)', data: row(D.is, 'Net income (loss)'), backgroundColor: C.g2}]}, options: {plugins: {tooltip: {callbacks: {label: c => `${c.dataset.label}: ${mm(c.raw)}`}}}}});
   chart('fCf', {type: 'bar', data: {labels: D.cols, datasets: [{label: 'Operating cash flow', data: row(D.cf, 'Net cash from operating activities'), backgroundColor: C.g3}, {label: 'Capex', data: row(D.cf, 'Purchases of PP&E (capex)'), backgroundColor: C.g2}, {label: 'FCF (calc.)', data: fcf, backgroundColor: C.acc}]}, options: {plugins: {tooltip: {callbacks: {label: c => `${c.dataset.label}: ${mm(c.raw)}`}}}}});
   if (window.secSegFin) { $('#s-fin h2').insertAdjacentHTML('afterend', secSegFin()); secSegCharts(); }
+  if (window.secFinancing) { const sf = document.getElementById('segfin'); if (sf) sf.insertAdjacentHTML('afterend', secFinancing()); }
+  if (window.callCo) { const a = document.getElementById('financing'); if (a) a.insertAdjacentHTML('afterend', callCo()); }
 }
 
 /* ---------------- business: segments, Starlink, compute ---------------- */
 function bizTab() {
-  $('#s-biz').innerHTML = `<h2>Segments & Starlink <span class="mut">Space · Connectivity · AI</span></h2>
+  $('#s-biz').innerHTML = `<h2>Segments & Starlink <span class="mut">Space · Connectivity · SI · Starlink detail and its Q3 call notes are under Operations → Connectivity</span></h2>
   <div class="grid g2" style="margin-bottom:16px">${ccard('bMix', 'Revenue by segment (US$m)')}${ccard('bSubs', 'Starlink subscribers (m) & ARPU (US$/month)', 'ARPU only where stated')}</div>
-  <div class="grid g2" style="margin-bottom:16px">${ccard('bGw', 'AI nameplate compute (GW)', 'End-2026 = ">2 GW" guidance')}${ccard('bCapex', 'Quarterly capex (US$m)', 'Q3/Q4 2026 guided "very similar" to Q2 — not shown as actuals')}</div>
-  ${tableBlock({title: 'Revenue mix (US$m)', columns: ['US$m', ...D.cols], rows: D.mix}, {id: 'tMix', notes: ['Starlink Mobile (direct-to-cell) revenue sits inside Enterprise & government and is not disclosed separately; there is no consumer/enterprise/mobile/government four-way split, and launch revenue is not split commercial vs NASA/DoD.', 'Customer A (all segments) = 18.3% and Customer B (AI) = 19.5% of Q2 2026 revenue (10-Q).', D.subs.note, D.compute.note]})}`;
+  <div class="grid g2" style="margin-bottom:16px">${ccard('bGw', 'SI nameplate compute (GW)', 'End-2026 = ">2 GW" guidance')}${ccard('bCapex', 'Quarterly capex (US$m)', 'Q3/Q4 2026 guided "very similar" to Q2 — not shown as actuals')}</div>
+  ${tableBlock({title: 'Revenue mix (US$m)', columns: ['US$m', ...D.cols], rows: D.mix}, {id: 'tMix', notes: ['Starlink Mobile (direct-to-cell) revenue sits inside Enterprise & government and is not disclosed separately; there is no consumer/enterprise/mobile/government four-way split, and launch revenue is not split commercial vs NASA/DoD.', 'Customer A (all segments) = 18.3% and Customer B (SI) = 19.5% of Q2 2026 revenue (10-Q).', D.subs.note, D.compute.note]})}`;
   mixChart('bMix');
   chart('bSubs', {data: {labels: D.subs.labels, datasets: [{type: 'bar', label: 'Subscribers (m)', data: D.subs.subs_m, backgroundColor: C.acc, yAxisID: 'y'}, {type: 'line', label: 'ARPU (US$/mo)', data: D.subs.arpu, borderColor: C.g2, backgroundColor: C.g2, pointRadius: 5, spanGaps: false, yAxisID: 'y1'}]},
     options: {scales: {y1: {position: 'right', grid: {drawOnChartArea: false}, min: 0}}}});
   chart('bGw', {type: 'bar', data: {labels: D.compute.labels, datasets: [{label: 'GW', data: D.compute.gw, backgroundColor: D.compute.gw.map((_, i) => i === 3 ? C.g3 : C.acc)}]}, options: {plugins: {legend: {display: false}}}});
   const cx = row(D.cf, 'Purchases of PP&E (capex)').slice(3).map(v => -v);
   chart('bCapex', {type: 'bar', data: {labels: D.cols.slice(3), datasets: [{label: 'Capex', data: cx, backgroundColor: C.acc}]}, options: {plugins: {legend: {display: false}, tooltip: {callbacks: {label: c => mm(c.raw)}}}}});
-  if (window.secStarlink) $('#s-biz').insertAdjacentHTML('beforeend', secStarlink());
+  if (window.secGovt) $('#s-biz').insertAdjacentHTML('beforeend', secGovt());
 }
 
 /* ---------------- operations ---------------- */
@@ -385,14 +388,40 @@ function opsTab() {
   aiCharts();
   if (window.secLaunch) { const g = $('#s-ops .grid.g4'); if (g) { g.insertAdjacentHTML('afterend', secLaunch()); secLaunchCharts(); } }
   if (window.secAIScore) { const a = document.getElementById('aic'); if (a) a.insertAdjacentHTML('afterend', secAIScore()); }
+  if (window.secSI) { const a = document.getElementById('aiscore'); if (a) a.insertAdjacentHTML('afterend', secSI()); }
+  if (window.callSI) { const a = document.getElementById('sicard'); if (a) a.insertAdjacentHTML('afterend', callSI()); }
+  if (window.secStarship) { const a = document.getElementById('launchc'); if (a) a.insertAdjacentHTML('afterend', secStarship()); }
+  if (window.callSpace) { const a = document.getElementById('starshipsc'); if (a) a.insertAdjacentHTML('afterend', callSpace()); }
+  opsSubtabs();
+}
+/* Operations sub-tabs: one pane per sector; selection kept in the hash (#ops/si, #ops/conn, #ops/space) */
+const OPSUB = [['si', 'Super Intelligence'], ['conn', 'Connectivity'], ['space', 'Space']];
+function opsSubtabs() {
+  const sec = $('#s-ops'), h2 = sec.querySelector('h2'), kids = [...sec.children].filter(e => e !== h2);
+  sec.querySelector('h2 .mut').textContent = 'Super Intelligence · Connectivity · Space';
+  h2.insertAdjacentHTML('afterend', `<div class="segc" role="tablist">${OPSUB.map(([k, l]) => `<button role="tab" data-k="${k}">${esc(l)}</button>`).join('')}</div>` +
+    OPSUB.map(([k]) => `<div class="opane" id="op-${k}"></div>`).join(''));
+  const P = k => $('#op-' + k), isSI = e => ['aic', 'aiscore', 'sicard', 'callsi'].includes(e.id);
+  kids.forEach(e => (isSI(e) ? P('si') : P('space')).appendChild(e));
+  P('si').insertAdjacentHTML('afterbegin', `<div class="card pbk" id="payback" style="margin:0 0 16px"><div class="mut" style="font-size:13px">Payback on new compute</div><div class="pbv">under 1 year</div><div class="mut" style="font-size:13px">Pricing tracking slightly above the high end of ~US$30–50 per watt · Bret Johnsen (CFO), Q3 2026 call, 20 Oct 2026 · <a href="https://youtu.be/-RRKOP_JMdI?t=2228" target="_blank" rel="noopener">Benzinga replay 37:08 ↗</a></div></div>`);
+  if (window.secStarlink) P('conn').insertAdjacentHTML('beforeend', secStarlink());
+  if (window.callConn) P('conn').insertAdjacentHTML('beforeend', callConn());
+  sec.querySelectorAll('.segc button').forEach(b => b.onclick = () => { location.hash = 'ops/' + b.dataset.k; });
+  opsShow();
+}
+function opsShow() {
+  if (!$('#op-si')) return; let k = location.hash.split('/')[1]; if (!OPSUB.some(o => o[0] === k)) k = 'si';
+  $$('#s-ops .segc button').forEach(b => { b.classList.toggle('on', b.dataset.k === k); b.setAttribute('aria-selected', b.dataset.k === k); });
+  $$('#s-ops .opane').forEach(p => p.style.display = p.id === 'op-' + k ? '' : 'none');
+  Object.values(charts).forEach(c => { try { c.resize(); } catch (e) {} });
 }
 
-/* ---------------- AI compute: GPUs & data centres (Operations) ---------------- */
+/* ---------------- SI compute: GPUs & data centres (Operations) ---------------- */
 function aiPanel() {
   const A = window.SPCX_AI; if (!A) return '';
   const est = '<span class="est">estimate · illustration, not guidance</span>', tp = '<span class="est">third-party</span>';
   const b = v => typeof v === 'number' ? 'US$' + fmt(v, 1) + 'bn' : v;
-  return `<div class="card" id="aic" style="margin:16px 0"><h3 style="margin-top:0">AI compute: GPUs &amp; data centres <span class="mut">newest first · as of ${esc(A.asof)}</span></h3>
+  return `<div class="card" id="aic" style="margin:16px 0"><h3 style="margin-top:0">SI compute: GPUs &amp; data centres <span class="mut">newest first · as of ${esc(A.asof)}</span></h3>
   <div class="grid g4" style="margin-bottom:12px">${A.kpis.map(k => kpi(k[0], esc(k[1]), esc(k[2]), k[3])).join('')}</div>
   <h3>GPUs by type <span class="mut">filings first, then company statements</span></h3>
   ${tableBlock({columns: ['As of', 'Site', 'GPU type', 'Count', 'Power (MW)', 'Basis', 'Source'], rows: A.gpus}, {id: 'tAiG', wrap: true, notes: ['CEO posts on X are company statements but are not filings. Post dates are in SGT. Counts the filings give as “approximately” are shown with ~.']})}
@@ -400,7 +429,7 @@ function aiPanel() {
   ${tableBlock({columns: ['Site', 'Location', 'What', 'Status', 'Basis', 'Source'], rows: A.sites}, {id: 'tAiS', wrap: true})}
   <h3>Power: online, under construction, planned</h3>
   ${tableBlock({columns: ['Date', 'Status', 'Capacity', 'What', 'Basis', 'Source'], rows: A.power}, {id: 'tAiP', wrap: true, notes: ['Nameplate compute draw = GPUs installed × their all-in power draw. It is not actual consumption or utilisation and excludes cooling, power-distribution losses and facility overhead (10-Q definition).', 'MW for future GB300 tranches = 220,000 × 2.0 kW (the per-GPU figure implied by the 424B4: 220 MW for 110,000 GB300). Calculated, not company-stated.']})}
-  <div class="grid g2" style="margin:12px 0">${ccard('aiGw', 'Compute capacity: actual vs forecasts (GW)', 'Actual = nameplate compute draw (filings). Elon = 1.5 GW in Apr 2026. Company = >2 GW end-2026 guidance, shown as 2.0. Street = low and high of named analysts (third-party).', 290)}${ccard('aiCap', 'Revenue capacity at 100% utilisation (US$bn, base case)', 'Estimate, not guidance. Bars: capacity × base GPU-hour price × 8,760 h. Line: Street revenue forecast for the same period (third-party).', 290)}</div>
+  <div style="margin:12px 0;display:grid;gap:12px">${ccard('aiGw', 'Compute capacity: actual vs forecasts (GW)', 'Actual = nameplate compute draw (filings; 1.7 GW at 30 Sep 2026, Q3 2026 8-K). Elon = 1.5 GW in Apr 2026. Company = >2 GW end-2026 guidance, shown as 2.0. Street = low and high of named analysts (third-party).', 290)}${ccard('aiCap', 'Revenue capacity at 100% utilisation (US$bn, base case)', 'Estimate, not guidance. Bars in GW, by target date: capacity × base GPU-hour price × 8,760 h (accent = actual 1.7 GW at 30 Sep 2026, 8-K). GPU counts converted to GW at 2.0 kW per GB300 on top of the 25 Sep fleet (≈1.41 GW, calc.). Red triangles: Street revenue forecast for the same year (third-party, labelled US$bn); black diamond: reported SI S&I Q3 2026 × 4.', 380)}</div>
   <h3>Elon’s forecasts vs actual <span class="mut">verbatim quotes · newest first</span></h3>
   ${tableBlock({columns: ['Said (SGT)', 'Elon said (verbatim)', 'Target', 'Deadline', 'Actual so far', 'Status', 'Source'], rows: A.forecasts}, {id: 'tAiF', wrap: true, notes: ['Only figures he stated are shown; nothing is converted into a number he did not say. “Actual” comes from filings or later company statements; n/a where nothing is disclosed.']})}
   <h3>Company targets in filings and guidance</h3>
@@ -408,11 +437,11 @@ function aiPanel() {
   <h3>Elon vs the Street <span class="mut">side by side</span> ${tp}</h3>
   ${tableBlock({columns: ['Metric', 'Actual today', 'Elon / company forecast', 'Street low', 'Street average', 'Street high', 'Deadline'], rows: A.sbs}, {id: 'tAiX', wrap: true, notes: ['Street figures are third-party analyst forecasts as reported in the news; see the table below for each note, its date and link. No full consensus range was available, so low and high are the lowest and highest named analyst figures; n/a where no Street figure exists.']})}
   <h3>Street forecasts <span class="mut">named analysts, newest first</span> ${tp}</h3>
-  ${tableBlock({columns: ['Analyst', 'Date', 'Metric', '2026', '2027', '2028', 'Note', 'Source'], rows: A.street}, {id: 'tAiSt', wrap: true, notes: ['Dates are when the note was published or reported. Analyst metrics differ (AI segment vs leasing only; year-end vs average capacity), so figures are not strictly comparable.']})}
+  ${tableBlock({columns: ['Analyst', 'Date', 'Metric', '2026', '2027', '2028', 'Note', 'Source'], rows: A.street}, {id: 'tAiSt', wrap: true, notes: ['Dates are when the note was published or reported. Analyst metrics differ (SI segment vs leasing only; year-end vs average capacity), so figures are not strictly comparable.']})}
   <h3>Revenue capacity at 100% utilisation ${est}</h3>
   <p class="mut" style="font-size:13px;margin:4px 0 8px">Formula: GPU count × rental price per GPU-hour × 8,760 hours. For capacity given in MW: MW ÷ all-in kW per GPU × price × 8,760. Market prices are third-party, dated rental rates; low = spot, base = reserved, high = on-demand. Real revenue would be lower (utilisation, internal Grok training, discounts, contract pricing).</p>
   ${tableBlock({columns: ['GPU', 'Low $/GPU-h', 'Base $/GPU-h', 'High $/GPU-h', 'All-in kW per GPU', 'Low US$m per MW-yr', 'Base US$m per MW-yr', 'High US$m per MW-yr', 'Price source'], rows: A.prices}, {id: 'tAiPr', wrap: true, notes: [...A.price_notes, 'kW per GPU: H100, GB200 and GB300 are implied by the 424B4 cluster figures (130 MW / 100k H100; 210 MW / 110k GB200; 220 MW / 110k GB300). H200: assumed equal to H100 (no filing figure).', ...A.ref.map(r => `${r[0]}: ${r[1]} per GPU-hour. ${r[2]}. ${r[3]}`)]})}
-  ${tableBlock({columns: ['GPU', 'Count (CEO, 25 Sep 2026)', 'Low US$bn', 'Base US$bn', 'High US$bn'], rows: A.calc}, {id: 'tAiCa', notes: [`The 25 Sep 2026 fleet at the per-GPU kW above is about ${fmt(A.fleet_mw)} MW (calculated), close to the 1.4 GW nameplate in the 10-Q at 30 Jun 2026.`, `AI Solutions & Infrastructure revenue Q2 2026: US$2,194m × 4 = US$${fmt(A.ann_si)}m annualised, ${A.mon[1]}% of base-case capacity (${A.mon[2]}% on the high case, ${A.mon[0]}% on the low case). Whole AI segment Q2 2026: US$2,561m × 4 = US$${fmt(A.ann_ai)}m, which also includes X advertising and subscriptions.`, `Reported revenue per MW: US$${fmt(A.ann_si)}m ÷ 1,400 MW ≈ US$${A.si_per_mw}m per MW-year, against US$${A.gb300_mw[0]}m–${A.gb300_mw[2]}m per MW-year for GB300 at market rental rates (US$${A.gb300_mw[1]}m base).`]})}
+  ${tableBlock({columns: ['GPU', 'Count (CEO, 25 Sep 2026)', 'Low US$bn', 'Base US$bn', 'High US$bn'], rows: A.calc}, {id: 'tAiCa', notes: [`The 25 Sep 2026 fleet at the per-GPU kW above is about ${fmt(A.fleet_mw)} MW (calculated), between the 1.4 GW nameplate at 30 Jun 2026 (10-Q) and 1.7 GW at 30 Sep 2026 (8-K). For 1.7 GW, the extra ${A.act_extra_mw} MW is valued at GB300 rates (assumption): US$${A.act_rev[1]}bn base (US$${A.act_rev[0]}–${A.act_rev[2]}bn).`, `SI Solutions & Infrastructure revenue Q3 2026 (8-K): US$7,022m × 4 = US$${fmt(A.ann_si)}m annualised, ${A.mon[1]}% of base-case capacity at 1.7 GW (${A.mon[2]}% on the high case, ${A.mon[0]}% on the low case). Includes Cursor from 14 Aug 2026 (US$608m in the quarter), so not all of it is compute rental. Whole SI segment Q3 2026: US$7,560m × 4 = US$${fmt(A.ann_ai)}m, which also includes X advertising.`, `Reported revenue per MW: US$${fmt(A.ann_si)}m ÷ 1,700 MW ≈ US$${A.si_per_mw}m per MW-year, against US$${A.gb300_mw[0]}m–${A.gb300_mw[2]}m per MW-year for GB300 at market rental rates (US$${A.gb300_mw[1]}m base).`]})}
   <h3>Same calculation on Elon’s and the Street’s capacity forecasts ${est}</h3>
   ${tableBlock({columns: ['Scenario', 'Whose forecast', 'Capacity', 'Low US$bn', 'Base US$bn', 'High US$bn', 'Street revenue forecast', 'Street ÷ base capacity %'], rows: A.cap}, {id: 'tAiFc', wrap: true, notes: ['MW-based rows use GB300 economics (2.0 kW per GPU; low/base/high GB300 rental prices). The 50m H100-equivalent row uses H100 prices. The orbital row is one year of launches at today’s terrestrial GB300 prices; no orbital rental price exists (n/a).', 'Street revenue is for the full year while capacity is year-end (or 2028 average for Morgan Stanley), so the % is a rough implied monetisation, not a utilisation rate. TD Cowen’s figures are compute leasing only.']})}
   </div>`;
@@ -426,11 +455,30 @@ function aiCharts() {
     {label: 'Street low', data: G.street_lo, borderColor: C.g2, backgroundColor: C.g2, spanGaps: true, borderDash: [4, 4], pointRadius: 4},
     {label: 'Street high', data: G.street_hi, borderColor: C.g3, backgroundColor: C.g3, spanGaps: true, borderDash: [4, 4], pointRadius: 4}]},
     options: {scales: {y: {beginAtZero: true, title: {display: true, text: 'GW'}}}}});
-  const rows = A.cap.filter(r => !/H100|orbit/.test(r[0]));
-  chart('aiCap', {data: {labels: rows.map(r => r[2]), datasets: [
-    {type: 'bar', label: 'Capacity revenue at 100% (base)', data: rows.map(r => r[4]), backgroundColor: C.acc},
-    {type: 'line', label: 'Street revenue forecast', data: rows.map(r => ({'Fleet today': A.ann_si / 1000})[r[0]] ?? (r[6] === 'n/a' ? null : parseFloat(String(r[6]).replace(/.*US\$|bn.*/g, '')))), borderColor: C.dn, backgroundColor: C.dn, showLine: false, pointRadius: 6}]},
-    options: {scales: {y: {beginAtZero: true, title: {display: true, text: 'US$bn'}}}}});
+  // bars in GW, chronological by target date; GPU counts converted at 2.0 kW per GB300 (calc.)
+  const cr = k => A.cap.find(r => r[0] === k), fgw = A.fleet_mw / 1000;
+  const sv = r => r[6] === 'n/a' ? null : parseFloat(String(r[6]).replace(/.*US\$|bn.*/g, ''));
+  const B = [
+    ['Actual (8-K), 30 Sep 2026', 1.7, cr('Actual, 30 Sep 2026'), 'rep'],
+    ['Elon (25 Sep), Nov 2026', fgw + 0.88, cr('+2 tranches of 220k GB300')],
+    ['Elon “if lucky” (25 Sep), late Dec 2026', fgw + 1.32, cr('+3 tranches of 220k GB300')],
+    ['Company guidance, end-2026', 2.0, cr('>2 GW end-2026')],
+    ['Street low (TD Cowen 29 Sep), end-2026', 2.1, cr('End-2026, Street low/avg')],
+    ['Street (Goldman 6 Oct), end-2026', 2.4, cr('End-2026, Goldman')],
+    ['Street high (Evercore 28 Sep), end-2026', 2.7, cr('End-2026, Evercore high')],
+    ['Street consensus (per Evercore 28 Sep), end-2027', 5.9, cr('End-2027, consensus')],
+    ['Street (TD Cowen 29 Sep), end-2027', 6.0, cr('End-2027, TD Cowen')],
+    ['Street high (Goldman 6 Oct), end-2027', 7.0, cr('End-2027, Goldman')],
+    ['Street (Morgan Stanley 7 Jul), 2028 average', 6.1, cr('2028 average, Morgan Stanley')],
+    ['Street high (Goldman 6 Oct), end-2028', 10.6, cr('End-2028, Goldman')]];
+  const valLbl = {id: 'valLbl', afterDatasetsDraw(c) { const x = c.ctx; x.save(); x.font = '600 11px -apple-system,system-ui,sans-serif'; x.textAlign = 'center';
+    c.data.datasets.forEach((d, di) => { if (d.type !== 'line') return; c.getDatasetMeta(di).data.forEach((pt, i) => { const v = d.data[i]; if (v == null) return; const t = 'US$' + v + 'bn', w = x.measureText(t).width + 8; x.fillStyle = 'rgba(255,255,255,.92)'; x.fillRect(pt.x - w / 2, pt.y - 29, w, 16); x.fillStyle = d.borderColor; x.fillText(t, pt.x, pt.y - 17); }); }); x.restore(); }};
+  chart('aiCap', {data: {labels: B.map(b => [b[0], fmt(b[1], 1) + ' GW']), datasets: [
+    {type: 'bar', label: 'Capacity revenue at 100% (base, estimate)', data: B.map(b => b[2][4]), backgroundColor: B.map(b => b[3] ? C.acc : C.g3), order: 2},
+    {type: 'line', label: 'Reported SI S&I run-rate (Q3 2026 × 4)', data: B.map(b => b[3] ? sv(b[2]) : null), borderColor: '#111', backgroundColor: '#111', showLine: false, pointRadius: 9, pointStyle: 'rectRot', order: 0},
+    {type: 'line', label: 'Street revenue forecast, same year (third-party)', data: B.map(b => b[3] ? null : sv(b[2])), borderColor: C.dn, backgroundColor: C.dn, showLine: false, pointRadius: 9, pointHoverRadius: 11, pointStyle: 'triangle', borderWidth: 2, order: 1}]},
+    plugins: [valLbl],
+    options: {layout: {padding: {top: 18}}, scales: {x: {ticks: {autoSkip: false, maxRotation: 60, minRotation: 40, font: {size: 10}}}, y: {beginAtZero: true, title: {display: true, text: 'US$bn a year'}}}}});
 }
 
 /* ---------------- Elon Musk ---------------- */
@@ -451,6 +499,7 @@ function muskTab() {
       ${tableBlock({columns: ['Date', 'Code', 'Type', 'Shares', 'Price', 'Held after', 'Held by'], rows: mf.map(f => [f.date, f.code, f.type, f.shares, f.price == null ? '—' : f.price, f.after, f.own])}, {id: 'tMF', notes: [M.note, 'Source: ' + 'https://www.sec.gov/Archives/edgar/data/1181412/000162828026044069/xslF345X06/wk-form4_1781740812.xml']})}</div></div></div>`;
   $$('#xchips button').forEach(b => b.onclick = () => { $$('#xchips button').forEach(x => x.classList.toggle('on', x === b)); $$('#xlist .xpost').forEach(p => p.hidden = b.dataset.x !== 'All' && p.dataset.topic !== b.dataset.x); });
   const t = new Date('2027-06-14T09:30:00-04:00'); const d = Math.ceil((t - new Date()) / 864e5); $('#muskcd').textContent = d > 0 ? tl(`${d} days to go`, `还有 ${d} 天`) : tl('released', '已解禁');
+  if (window.secMerger) $('#s-musk').insertAdjacentHTML('beforeend', secMerger());
   if (window.secPromises) $('#s-musk').insertAdjacentHTML('beforeend', secPromises());
 }
 
@@ -530,6 +579,7 @@ function insTab() {
   <h3>${CATL.other}</h3>${tbl('other', 'tOth')}
   <h3>Disclosed trading plans <span class="mut">10-Q Item 5</span></h3>
   ${tableBlock({columns: ['Adopted', 'Who', 'Plan', 'Up to (shares)', 'Expires'], rows: [['2026-06-23', 'Gwynne Shotwell (President & COO)', 'Rule 10b5-1 sales', 585605, '2027-06-30'], ['2026-06-16', 'Bret Johnsen (CFO)', 'Rule 10b5-1 sales; no sales before 2027', 919497, '2027-06-17'], ['2026-06-12', 'Valor entities (director A. Gracias)', 'Rule 10b5-1 in-kind distribution to fund partners (not a sale)', 225857490, '2027-09-30']]}, {id: 'tPlans', notes: ['Source: Form 10-Q for Q2 2026, Part II Item 5.']})}`;
+  if (window.secGovern) { const h = $('#s-ins h2'); if (h) h.insertAdjacentHTML('afterend', secGovern()); }
 }
 
 /* ---------------- risks & news ---------------- */
@@ -537,6 +587,7 @@ function riskTab() {
   $('#s-risks').innerHTML = `<h2>Risks & News <span class="mut">Risk factors from the prospectus and 10-Q · news newest first</span></h2>
   <div class="grid g2"><div class="xscope">${xallBtns()}${D.risks.map(([h, b], i) => details(esc(h), esc(b), '', i < 2)).join('')}</div>
   <div class="card"><h3 style="margin-top:0">Recent news & filings</h3>${D.news.map(([d, k, t, u]) => `<div class="cat"><div class="when">${esc(dlong(d))}</div><div style="flex:1"><span class="pill other">${esc(k)}</span> ${esc(t)}${u ? ` <a href="${esc(u)}" target="_blank" rel="noopener">Source</a>` : ''}</div></div>`).join('')}<div class="mut" style="font-size:11.5px;margin-top:8px">Source: Chief's analysis (news feed with links in its workbook) and SEC EDGAR.</div></div></div>`;
+  if (window.secReg) { const h = $('#s-risks h2'); if (h) h.insertAdjacentHTML('afterend', secReg()); }
 }
 
 /* ---------------- sources & live feed (bulls / bears) ---------------- */
@@ -574,6 +625,7 @@ const done = {};
 function route() {
   let id = (location.hash || '#overview').slice(1).split('/')[0]; if (!TABS.some(t => t[0] === id)) id = 'overview';
   if (id === 'sources' && done.sources) srcShow(location.hash.split('/')[1] || 'feed');
+  if (id === 'ops' && done.ops) opsShow();
   $$('#nav a').forEach(a => { const on = a.dataset.t === id; a.classList.toggle('on', on); if (on) a.scrollIntoView({block: 'nearest', inline: 'center'}); });
   $$('main section').forEach(s => s.classList.toggle('on', s.id === 's-' + id));
   const t = TABS.find(t => t[0] === id);

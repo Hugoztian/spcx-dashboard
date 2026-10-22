@@ -17,13 +17,13 @@ if(/[?&]collect=1/.test(location.search))window.__I18N_COLLECT=new Set();})();</
 <script src="vendor/hammer.min.js"></script>
 <script src="vendor/chartjs-plugin-zoom.min.js"></script>
 <script src="vendor/chartjs-plugin-annotation.min.js"></script>
-<script src="data.js?v=1792540964"></script>
-<script src="feed.js?v=1792540964"></script>
-<script src="x_feed.js?v=1792540964"></script>
-<script src="si.js?v=1792540964"></script>
-<script src="demand.js?v=1792540964"></script>
-<script src="ai.js?v=1792540964"></script>
-<script src="board.js?v=1792540964"></script>
+<script src="data.js?v=1792713226"></script>
+<script src="feed.js?v=1792713226"></script>
+<script src="x_feed.js?v=1792713226"></script>
+<script src="si.js?v=1792713226"></script>
+<script src="demand.js?v=1792713226"></script>
+<script src="ai.js?v=1792713226"></script>
+<script src="board.js?v=1792713226"></script>
 <style>
 /* Minimal Apple-style system: neutral surfaces, whitespace over lines, one SpaceX blue as the only accent */
 :root{--font:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;
@@ -176,7 +176,7 @@ td:first-child,th:first-child{text-align:left;position:sticky;left:0;background:
 th:first-child{z-index:3}
 tr:hover td{background:var(--rowhover)}
 tr.sec td{background:var(--panel)!important;color:var(--mut2);font-weight:600;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding-top:22px;border-bottom:1px solid var(--line)}
-td.wrap,.wrapt td{white-space:normal;text-align:left;min-width:160px;max-width:520px}#aic .wrapt td{min-width:74px}#aic #tAiF td:nth-child(2),#aic #tAiC td:nth-child(2),#aic #tAiS td:nth-child(3){min-width:280px}#aic .wrapt td:last-child{min-width:64px}#board .wrapt td{min-width:84px}#board .tblwrap{max-height:none}#starin .tblwrap{max-height:none}#wk .tblwrap,#starue .tblwrap,#launchc .tblwrap,#aiscore .tblwrap,#segfin .tblwrap,#promise .tblwrap,#supply .tblwrap{max-height:none}#board .wrapt td:nth-last-child(2){min-width:200px}
+td.wrap,.wrapt td{white-space:normal;text-align:left;min-width:160px;max-width:520px}#aic .wrapt td{min-width:74px}#aic #tAiF td:nth-child(2),#aic #tAiC td:nth-child(2),#aic #tAiS td:nth-child(3){min-width:280px}#aic .wrapt td:last-child{min-width:64px}#board .wrapt td{min-width:84px}#board .tblwrap{max-height:none}#starin .tblwrap{max-height:none}#wk .tblwrap,#starue .tblwrap,#launchc .tblwrap,#aiscore .tblwrap,#segfin .tblwrap,#promise .tblwrap,#supply .tblwrap,#merger .tblwrap,#sicard .tblwrap,#financing .tblwrap,#govt .tblwrap,#regcal .tblwrap,#starshipsc .tblwrap,#govern .tblwrap,#callsi .tblwrap,#callconn .tblwrap,#callspace .tblwrap,#callco .tblwrap{max-height:none}#board .wrapt td:nth-last-child(2){min-width:200px}
 table th.code,table td.code{width:1%;white-space:nowrap;min-width:0}
 table th.dt,table td.dt{white-space:nowrap!important}
 table.keyt td:first-child,table.keyt th:first-child{min-width:150px;max-width:220px}table.keyt td{min-width:90px}
@@ -266,6 +266,8 @@ footer .flink{color:var(--mut)}footer .flink:hover{color:var(--acc)}
 .xpost{padding:12px 0;border-bottom:1px solid var(--line)}.xpost:last-child{border-bottom:0}.xpost .t{font-size:14px;line-height:1.5;white-space:pre-line}.xpost .m{font-size:11.5px;color:var(--mut2);margin-top:4px}
 .est{display:inline-block;font-size:10.5px;font-weight:600;padding:0 6px;border-radius:99px;background:color-mix(in srgb,var(--warn) 14%,transparent);color:var(--warn);vertical-align:middle}
 .ok{color:var(--pos)}.bad{color:var(--neg)}
+.segc{display:inline-flex;gap:2px;padding:2px;margin:4px 0 16px;border-radius:9px;background:var(--line,rgba(127,127,127,.15))}.segc button{border:0;background:transparent;color:inherit;font:inherit;font-size:13px;padding:6px 14px;border-radius:7px;cursor:pointer}.segc button.on{background:var(--card,#fff);box-shadow:0 1px 3px rgba(0,0,0,.12);font-weight:600}
+.pbk{border-left:3px solid var(--acc,#0a84ff)}.pbk .pbv{font-size:40px;font-weight:700;letter-spacing:-.02em;line-height:1.15;margin:4px 0 6px;color:var(--acc,#0a84ff)}
 </style>
 </head>
 <body>
@@ -278,9 +280,11 @@ footer .flink{color:var(--mut)}footer .flink:hover{color:var(--acc)}
 <main id="main"></main>
 <footer id="foot"></footer>
 <div id="tip" role="tooltip"></div>
-<script src="zh.js?v=1792540964"></script>
-<script src="i18n_rt.js?v=1792540964"></script>
-<script src="sections.js?v=1792540964"></script>
-<script src="app.js?v=1792540964"></script>
+<script src="zh.js?v=1792713226"></script>
+<script src="i18n_rt.js?v=1792713226"></script>
+<script src="sections.js?v=1792713226"></script>
+<script src="specifics.js?v=1792713226"></script>
+<script src="callq3.js?v=1792713226"></script>
+<script src="app.js?v=1792713226"></script>
 </body>
 </html>
