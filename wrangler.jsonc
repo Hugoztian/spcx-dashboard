@@ -1,0 +1,14 @@
+// Cloudflare Worker "spcx-quote": SPCX dashboard's own live quote API (GET /api/quote, worker.js) + static dashboard files (repo root).
+// Separate from micron-dashboard. Deployed by Cloudflare Git import of Hugoztian/spcx-dashboard (push to main auto-deploys).
+{
+  "name": "spcx-quote",
+  "main": "worker.js",
+  "compatibility_date": "2025-06-01",
+  "assets": {
+    "directory": ".",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*"]
+  },
+  "workers_dev": true,
+  "observability": { "enabled": true }
+}
