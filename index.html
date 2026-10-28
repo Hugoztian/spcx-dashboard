@@ -11,19 +11,18 @@
 <link rel="icon" type="image/png" sizes="64x64" href="favicon.png?v=2">
 <link rel="apple-touch-icon" href="icon-180.png?v=2">
 <script>(function(){var h=document.documentElement;try{var t=localStorage.getItem('spcx-theme');if(t==='light'||t==='dark')h.dataset.theme=t;}catch(e){}
-var l=null;try{l=localStorage.getItem('spcx-lang');}catch(e){}if(l!=='en'&&l!=='zh'){l=/^zh/i.test(navigator.language||'')?'zh':'en';}h.dataset.lang=l;h.lang=l==='zh'?'zh-CN':'en';
-if(/[?&]collect=1/.test(location.search))window.__I18N_COLLECT=new Set();})();</script>
+})();</script>
 <script src="vendor/chart.umd.min.js"></script>
 <script src="vendor/hammer.min.js"></script>
 <script src="vendor/chartjs-plugin-zoom.min.js"></script>
 <script src="vendor/chartjs-plugin-annotation.min.js"></script>
-<script src="data.js?v=1793060000"></script>
-<script src="feed.js?v=1793060000"></script>
-<script src="x_feed.js?v=1793060000"></script>
-<script src="si.js?v=1793060000"></script>
-<script src="demand.js?v=1793060000"></script>
-<script src="ai.js?v=1793060000"></script>
-<script src="board.js?v=1793060000"></script>
+<script src="data.js?v=1793145888"></script>
+<script src="feed.js?v=1793145888"></script>
+<script src="x_feed.js?v=1793145888"></script>
+<script src="si.js?v=1793145888"></script>
+<script src="demand.js?v=1793145888"></script>
+<script src="ai.js?v=1793145888"></script>
+<script src="board.js?v=1793145888"></script>
 <style>
 /* Minimal Apple-style system: neutral surfaces, whitespace over lines, one SpaceX blue as the only accent */
 :root{--font:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;
@@ -56,10 +55,8 @@ nav a:hover{opacity:1}
 nav a.on{color:var(--acc);opacity:1;font-weight:600;background:var(--accsoft)}
 .themebtn{flex:none;border:0;background:transparent;color:var(--mut);border-radius:980px;height:30px;padding:0 8px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px}
 .themebtn:hover{color:var(--acc)}
-.hbtns{flex:none;display:flex;align-items:center;gap:2px}.langbtn .tl3{white-space:nowrap}.langbtn{gap:5px}.langbtn .lopt{display:flex;align-items:center;gap:4px;opacity:.4;filter:grayscale(.8);transition:opacity .2s,filter .2s;color:var(--mut)}.langbtn .lopt.on{opacity:1;filter:none;color:var(--txt,inherit);font-weight:500}.langbtn .fsl{opacity:.5;font-size:12px;color:var(--mut)}.langbtn .flag{width:16px;height:16px;border-radius:50%;display:block;object-fit:cover;box-shadow:0 0 0 1px rgba(127,127,127,.25)}.langbtn .tl3 b{font-weight:600;color:var(--txt)}.langbtn .lo{opacity:.55}
-html[data-lang=zh] body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","Hiragino Sans GB","Noto Sans CJK SC","Noto Sans SC","Microsoft YaHei","Source Han Sans SC",system-ui,sans-serif}
-.zhq{display:block;margin-top:4px;color:var(--mut);font-style:normal}
-html[data-lang=zh] .rule blockquote:before,html[data-lang=zh] .rule blockquote:after{content:none}.rule blockquote .qen:before{content:'“';color:var(--acc);font-weight:700}.rule blockquote .qen:after{content:'”';color:var(--acc);font-weight:700}
+.hbtns{flex:none;display:flex;align-items:center;gap:2px}
+.rule blockquote .qen:before{content:'“';color:var(--acc);font-weight:700}.rule blockquote .qen:after{content:'”';color:var(--acc);font-weight:700}
 /* hero */
 .hero{max-width:1200px;margin:0 auto;padding:56px 32px 8px}
 .hero h1{font-size:56px;line-height:1.05;font-weight:700;letter-spacing:-.04em;margin:0 0 12px}
@@ -268,10 +265,11 @@ footer .flink{color:var(--mut)}footer .flink:hover{color:var(--acc)}
 .ok{color:var(--pos)}.bad{color:var(--neg)}
 .segc{display:inline-flex;gap:2px;padding:2px;margin:4px 0 16px;border-radius:9px;background:var(--line,rgba(127,127,127,.15))}.segc button{border:0;background:transparent;color:inherit;font:inherit;font-size:13px;padding:6px 14px;border-radius:7px;cursor:pointer}.segc button.on{background:var(--card,#fff);box-shadow:0 1px 3px rgba(0,0,0,.12);font-weight:600}
 .pbk{border-left:3px solid var(--acc,#0a84ff)}.pbk .pbv{font-size:40px;font-weight:700;letter-spacing:-.02em;line-height:1.15;margin:4px 0 6px;color:var(--acc,#0a84ff)}
+.vlist{list-style:none;margin:0;padding:0}.vlist>li{padding:12px 0;border-top:1px solid var(--line,rgba(127,127,127,.18))}.vlist>li:first-child{border-top:0}.vpts{list-style:none;margin:0;padding:0}.vpts li{display:flex;gap:8px;align-items:baseline;padding:3px 0;font-size:14px}.vts{font-variant-numeric:tabular-nums;font-size:12px;padding:1px 7px;border-radius:6px;background:var(--line,rgba(127,127,127,.12));text-decoration:none;white-space:nowrap}.vk{font-size:11px;white-space:nowrap;opacity:.7;min-width:58px}.vk-company{color:var(--acc,#0a84ff);opacity:1}
 </style>
 </head>
 <body>
-<header><div class="bar"><a class="brand" href="#overview" aria-label="SpaceX dashboard home"><img class="mlogo" src="spacex-seal.png?v=1" alt="SpaceX" width="28" height="28"><span class="bn">Dashboard</span></a><nav id="nav"></nav><div class="hbtns"><button class="themebtn langbtn" id="langbtn" title="Language"><span class="lopt" id="flag-en"><img class="flag" src="flag-us.svg" alt="" width="16" height="16">EN</span><span class="fsl">/</span><span class="lopt" id="flag-zh"><img class="flag" src="flag-cn.svg" alt="" width="16" height="16">中文</span></button><button class="themebtn" id="themebtn" title="Theme: follows your system until you pick one"><span id="themeic">◐</span><span class="tl2" id="themelbl">Auto</span></button></div></div></header>
+<header><div class="bar"><a class="brand" href="#overview" aria-label="SpaceX dashboard home"><img class="mlogo" src="spacex-seal.png?v=1" alt="SpaceX" width="28" height="28"><span class="bn">Dashboard</span></a><nav id="nav"></nav><div class="hbtns"><button class="themebtn" id="themebtn" title="Theme: follows your system until you pick one"><span id="themeic">◐</span><span class="tl2" id="themelbl">Auto</span></button></div></div></header>
 <div class="hero"><h1>SpaceX <span class="tk">$SPCX</span> Dashboard</h1>
   <div class="sub" id="updated"></div>
   <div class="h4" id="hero4"></div>
@@ -280,11 +278,10 @@ footer .flink{color:var(--mut)}footer .flink:hover{color:var(--acc)}
 <main id="main"></main>
 <footer id="foot"></footer>
 <div id="tip" role="tooltip"></div>
-<script src="zh.js?v=1793060000"></script>
-<script src="i18n_rt.js?v=1793060000"></script>
-<script src="sections.js?v=1793060000"></script>
-<script src="specifics.js?v=1793060000"></script>
-<script src="callq3.js?v=1793060000"></script>
-<script src="app.js?v=1793060000"></script>
+<script src="sections.js?v=1793145888"></script>
+<script src="specifics.js?v=1793145888"></script>
+<script src="callq3.js?v=1793145888"></script>
+<script src="videos.js?v=1793145888"></script>
+<script src="app.js?v=1793145888"></script>
 </body>
 </html>
