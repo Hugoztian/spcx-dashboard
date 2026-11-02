@@ -772,5 +772,19 @@ function demandPanel() {
     'Source: SEC Form 13F data set (1 Jun–31 Aug 2026 filings), information-table rows for CUSIP ' + M.cusip + ', period of report 30 Jun 2026. Long share positions only (put/call rows excluded). Where a manager filed a restatement (13F-HR/A), the latest restatement replaces the original; “new holdings” amendments are added. ' + M.src.f13,
     'All positions are as of 30 Jun 2026 (quarter end); managers may have bought or sold since. SpaceX was private before 11 Jun 2026, so there is no prior-quarter 13F position to compare (change n/a).',
     '13F holdings include shares bought before the IPO, many still under lock-up. “Pre-IPO flag” is set only where the 13F share count exactly matches a Schedule 13G filed under Rule 13d-1(d) (holders that owned before the stock was registered); other holders are not classified. Flagged: ' + (P ? P.top.filter(t => t.pre).map(t => t.name + ' — ' + t.pre).join('; ') : 'none') + '.']})}
-  ${tableBlock({title: 'Schedule 13G / 13D filed since the IPO (newest first)', columns: ['Filed', 'Form', 'Reporting person', 'Largest reporting entity', 'Shares', '% of Class A', 'Event date', 'Rule', 'Filing'], rows: grows}, {id: 'tG13', csvname: 'SPCX 13G 13D', notes: ['Source: SpaceX’s EDGAR submissions (CIK 1181412). No Schedule 13D was found. All 13Gs so far are under Rule 13d-1(d), i.e. holders that owned the shares before registration.']})}`;
+  ${tableBlock({title: 'Schedule 13G / 13D filed since the IPO (newest first)', columns: ['Filed', 'Form', 'Reporting person', 'Largest reporting entity', 'Shares', '% of Class A', 'Event date', 'Rule', 'Filing'], rows: grows}, {id: 'tG13', csvname: 'SPCX 13G 13D', notes: ['Source: SpaceX’s EDGAR submissions (CIK 1181412). No Schedule 13D was found. All 13Gs so far are under Rule 13d-1(d), i.e. holders that owned the shares before registration.']})}
+  ${lawmakersBlock()}`;
 }
+
+function lawmakersBlock() {
+  const L = window.LAWMAKERS; if (!L) return '';
+  const head = `<h4 style="margin:14px 0 6px">Lawmakers: U.S. Congress SPCX disclosures · as of ${esc(L.asof)} <span class="mut">STOCK Act trade reports, not 13F</span></h4>
+  <p class="mut" style="margin:0 0 6px;font-size:12.5px">Members of Congress do not file 13F. They report trades in Periodic Transaction Reports (up to 45 days after the trade) and holdings in annual reports, with value <b>ranges</b> only, not share counts. There is no prior-quarter position to compare (SpaceX was private before 11 Jun 2026); “change” below is each disclosed buy or sell. Current holdings are not disclosed until annual reports (due May 2027).</p>`;
+  if (!L.rows.length) return head + `<div class="card"><b>N/A</b> — ${esc(L.na_reason || 'no disclosed positions')}</div>`;
+  const nb = L.rows.filter(r => /Buy/.test(r.type)).length, ns = L.rows.length - nb, mem = new Set(L.rows.map(r => r.name)).size;
+  const rows = L.rows.map(r => [r.name, r.ch + ' · ' + r.party, r.owner, r.type, r.amt, dlong(r.traded), dlong(r.filed) + (r.url ? ' ' + r.url : '')]);
+  return head + tableBlock({title: `SPCX trades disclosed by members of Congress (${mem} members, ${L.window})`, columns: ['Member', 'Chamber · party', 'Owner', 'Transaction', 'Amount (range)', 'Traded', 'Disclosed'], rows}, {id: 'tLaw', csvname: 'SPCX Congress trades', notes: [
+    `${mem} House members; ${nb} buy rows, ${ns} partial sell. No Senate SPCX trades found (Senate eFD is not covered by most aggregators; not independently verified). Net direction since IPO: buying. Amounts are statutory ranges; totals are not calculable.`,
+    'Sources (as-of): ' + L.sources.map(s => `${s[0]} — ${s[2]} ${s[1]}`).join('; ') + '. Built ' + L.built_sgt + '.']});
+}
+
