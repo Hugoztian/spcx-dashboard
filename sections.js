@@ -136,11 +136,12 @@ const S = window.SPCX_SEC;
 const card = (id, title, sub, body) => `<div class="card" id="${id}" style="margin:16px 0"><h3 style="margin-top:0">${esc(title)} <span class="mut">${esc(sub)}</span></h3>${body}</div>`;
 const sh = s => `<h3>${esc(s)}</h3>`;
 
+/* Overview "What's new this week": rendered from D.whatsNewThisWeek (data.js). The Mon–Sat daily scan overwrites that array in build_data.py and drops older items. */
 window.secWeek = function () {
-  const src = t => { const i = t.lastIndexOf('https://'); const lab = i > 0 ? t.slice(0, i).trim() : ''; const u = i >= 0 ? t.slice(i) : ''; return (lab ? esc(lab) + ' ' : '') + (u ? ext(u) : ''); };
-  const li = S.week.map(r => `<li><span class="mut" style="font-size:12px">${esc(r[0])} · ${esc(r[1])}</span><br>${esc(r[2])} <span style="font-size:12px">${src(r[3])}</span></li>`).join('');
+  const W = (window.SPCX_DATA && window.SPCX_DATA.whatsNewThisWeek) || [];
+  const li = W.map(r => `<li><span class="mut" style="font-size:12px">${esc(r.date)}</span><br><b>${esc(r.headline)}</b>${r.detail ? ' ' + esc(r.detail) : ''}${r.url ? ' <span style="font-size:12px">' + ext(r.url) + '</span>' : ''}</li>`).join('');
   const nx = S.next.map(r => `<li><b>${esc(r[0])}</b> · ${esc(r[1])}</li>`).join('');
-  return card('wk', 'What changed this week', `${S.asof} · last 7 days · newest first`,
+  return card('wk', "What's new this week", `${(window.SPCX_DATA && window.SPCX_DATA.whatsNewWeek) || ''} · newest first`,
     `<div class="grid g2"><div><ul class="lst">${li}</ul></div><div><h3 style="margin-top:0">Coming up</h3><ul class="lst">${nx}</ul></div></div>`);
 };
 
