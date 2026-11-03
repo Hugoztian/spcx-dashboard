@@ -423,17 +423,16 @@ function opsTab() {
   opsSubtabs();
 }
 /* Operations sub-tabs: one pane per sector; selection kept in the hash (#ops/si, #ops/conn, #ops/space, #ops/capex) */
-const OPSUB = [['si', 'Super Intelligence'], ['conn', 'Connectivity'], ['space', 'Space'], ['capex', 'CapEx']];
+const OPSUB = [['si', 'Super Intelligence'], ['conn', 'Connectivity'], ['space', 'Space']];
 function opsSubtabs() {
   const sec = $('#s-ops'), h2 = sec.querySelector('h2'), kids = [...sec.children].filter(e => e !== h2);
-  sec.querySelector('h2 .mut').textContent = 'Super Intelligence · Connectivity · Space · CapEx';
+  sec.querySelector('h2 .mut').textContent = 'Super Intelligence · Connectivity · Space';
   h2.insertAdjacentHTML('afterend', `<div class="segc" role="tablist">${OPSUB.map(([k, l]) => `<button role="tab" data-k="${k}">${esc(l)}</button>`).join('')}</div>` +
     OPSUB.map(([k]) => `<div class="opane" id="op-${k}"></div>`).join(''));
   const P = k => $('#op-' + k), isSI = e => ['aic', 'aiscore', 'sicard', 'callsi'].includes(e.id);
   kids.forEach(e => (isSI(e) ? P('si') : P('space')).appendChild(e));
   P('si').insertAdjacentHTML('afterbegin', `<div class="card pbk" id="payback" style="margin:0 0 16px"><div class="mut" style="font-size:13px">Payback on new compute</div><div class="pbv">under 1 year</div><div class="mut" style="font-size:13px">Pricing tracking slightly above the high end of ~US$30–50 per watt · Bret Johnsen (CFO), Q3 2026 call, 20 Oct 2026 · <a href="https://youtu.be/-RRKOP_JMdI?t=2228" target="_blank" rel="noopener">Benzinga replay 37:08 ↗</a></div></div>`);
   if (window.secStarlink) P('conn').insertAdjacentHTML('beforeend', secStarlink());
-  if (window.capexPanel) P('capex').insertAdjacentHTML('beforeend', capexPanel());
   if (window.callConn) P('conn').insertAdjacentHTML('beforeend', callConn());
   sec.querySelectorAll('.segc button').forEach(b => b.onclick = () => { location.hash = 'ops/' + b.dataset.k; });
   opsShow();
