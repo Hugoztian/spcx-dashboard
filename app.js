@@ -422,7 +422,7 @@ function opsTab() {
   if (window.callSpace) { const a = document.getElementById('starshipsc'); if (a) a.insertAdjacentHTML('afterend', callSpace()); }
   opsSubtabs();
 }
-/* Operations sub-tabs: one pane per sector; selection kept in the hash (#ops/si, #ops/conn, #ops/space, #ops/capex) */
+/* Operations sub-tabs: one pane per sector; selection kept in the hash (#ops/si, #ops/conn, #ops/space) */
 const OPSUB = [['si', 'Super Intelligence'], ['conn', 'Connectivity'], ['space', 'Space']];
 function opsSubtabs() {
   const sec = $('#s-ops'), h2 = sec.querySelector('h2'), kids = [...sec.children].filter(e => e !== h2);
