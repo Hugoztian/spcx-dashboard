@@ -295,7 +295,7 @@ function overview() {
     ['Analysts (MarketBeat, third-party)', `${S.rating} · avg target US$${fmt(S.avg, 2)} (US$${S.lo}–${S.hi})`, '8 Oct 2026'],
     ['Next lock-up release', nextRelease() ? `${nextRelease().label}: up to ${fmt(nextRelease().shares_m, 1)}m shares` : 'n/a', '424(b)(4)'],
     ['Elon Musk', '≈84.4% of votes; 6.42bn shares beneficially owned; locked until 12 Jun 2027', '424(b)(4) · 13G']];
-  $('#s-overview').innerHTML = `<h2>Overview</h2>
+  $('#s-overview').innerHTML = `<p class="mut" id="lastupd" style="margin:0 0 6px">Last updated: <b>${esc(D.meta.built_sgt)}</b></p><h2>Overview</h2>
   <p class="lead">SpaceX listed on Nasdaq on <b>11 Jun 2026</b> at US$135. It now reports three segments: <b>Space</b> (launch), <b>Connectivity</b> (Starlink) and <b>SI</b> (xAI, Grok and X). Revenue is growing fast, Starlink makes the profits, and SI capex is driving large cash outflows.</p>
   <div class="grid g2" style="margin-bottom:16px">
     <div class="card"><h3>Key numbers (with dates)</h3>${tableBlock({columns: ['Metric', 'Value', 'As of'], rows: keyRows}, {id: 'tKey', csvname: 'Key numbers', wrap: true, cls: 'keyt'})}</div>
@@ -426,7 +426,7 @@ function opsTab() {
 const OPSUB = [['si', 'Super Intelligence'], ['conn', 'Connectivity'], ['space', 'Space']];
 function opsSubtabs() {
   const sec = $('#s-ops'), h2 = sec.querySelector('h2'), kids = [...sec.children].filter(e => e !== h2);
-  sec.querySelector('h2 .mut').textContent = 'Super Intelligence · Connectivity · Space';
+  sec.querySelector('h2 .mut').textContent = 'Super Intelligence · Connectivity · Space · CapEx';
   h2.insertAdjacentHTML('afterend', `<div class="segc" role="tablist">${OPSUB.map(([k, l]) => `<button role="tab" data-k="${k}">${esc(l)}</button>`).join('')}</div>` +
     OPSUB.map(([k]) => `<div class="opane" id="op-${k}"></div>`).join(''));
   const P = k => $('#op-' + k), isSI = e => ['aic', 'aiscore', 'sicard', 'callsi'].includes(e.id);
