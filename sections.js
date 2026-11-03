@@ -141,14 +141,14 @@ window.secWeek = function () {
   const W = (window.SPCX_DATA && window.SPCX_DATA.whatsNewThisWeek) || [];
   const now = Date.now(), MS = 864e5;
   const li = W.map(r => { const t = Date.parse(r.date + 'T23:59:59+08:00'), fresh = now - t < 2 * MS;
-    return `<li style="color:${fresh ? '#1d4ed8' : '#888'}"><span style="font-size:12px">${esc(r.date)}${fresh ? ' · last 48h' : ''}</span><br><b style="color:${fresh ? '#1d4ed8' : '#666'}">${esc(r.headline)}</b>${r.detail ? ' ' + esc(r.detail) : ''}${r.url ? ' <span style="font-size:12px">' + ext(r.url) + '</span>' : ''}</li>`; }).join('');
+    return `<li class="${fresh ? 'new48' : 'old48'}">${fresh ? '<span class="b48">48h</span> ' : ''}<span style="font-size:12px">${esc(r.date)}</span><br><b>${esc(r.headline)}</b>${r.detail ? ' ' + esc(r.detail) : ''}${r.url ? ' <span style="font-size:12px">' + ext(r.url) + '</span>' : ''}</li>`; }).join('');
   const MO = {Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
   const endOf = s => { const m = String(s).match(/^(?:(\d{1,2}) )?([A-Z][a-z]{2}) (\d{4})/); if (!m) return null;
     const y = +m[3], mo = MO[m[2]]; return m[1] ? Date.UTC(y, mo, +m[1], 16) : Date.UTC(y, mo + 1, 1, 16); };
   const nx = S.next.filter(r => { const e = endOf(r[0]); return e && e > now; }).sort((a, b) => endOf(a[0]) - endOf(b[0]))
     .map(r => `<li><b>${esc(r[0])}</b> · ${esc(r[1])}</li>`).join('') || '<li class="mut">No dated upcoming catalysts on file.</li>';
-  return card('wk', "What's new this week", `${(window.SPCX_DATA && window.SPCX_DATA.whatsNewWeek) || ''} · newest first · blue = last 48h`,
-    `<div class="grid g2"><div><ul class="lst">${li}</ul></div><div><h3 style="margin-top:0">Coming up <span class="mut">future catalysts, soonest first</span></h3><ul class="lst">${nx}</ul></div></div>`);
+  return card('wk', "What's new this week", `${(window.SPCX_DATA && window.SPCX_DATA.whatsNewWeek) || ''} · newest first · bold = last 48h`,
+    `<div class="grid g2 wkacc"><div><ul class="lst">${li}</ul></div><div><h3 style="margin-top:0">Coming up <span class="mut">future catalysts, soonest first</span></h3><ul class="lst">${nx}</ul></div></div>`);
 };
 
 window.secStarlink = function () {
