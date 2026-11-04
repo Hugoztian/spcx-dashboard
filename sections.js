@@ -58,13 +58,18 @@ window.SPCX_SEC = {
     ['7 Oct 2026', 'Operations', 'Ship 40 arrived at the Port of Brownsville aboard the heavy-lift vessel Forte, 75 days after its Indian Ocean splashdown: the first flown Starship to return to Texas.', 'Corpus Christi Caller-Times, 9 Oct 2026 https://www.caller.com/story/news/local/texas/2026/10/09/spacex-starship-ship-40-recovered-starbase-port/92167239007/']
   ],
   next: [
+    ['21 Dec 2026', 'Nasdaq-100 annual reconstitution effective (open)'],
+    ['14 Dec 2026', 'Russell US reconstitution effective (open; after the close on 11 Dec)'],
+    ['11 Dec 2026', 'Nasdaq-100 reconstitution expected to be announced after the close'],
     ['Dec 2026', 'Starship Flight 16 aimed (NSF 18 Oct; possibly first from LC-39A; B23/S43 likely)'],
-    ['8 Nov 2026', 'Starship Flight 15, NET (CADENA; goal catch booster and Ship; B22/S42; not a SpaceX date)'],
-    ['30 Oct 2026', 'Russell December reconstitution rank day'],
-    ['26 Oct 2026', 'FINRA short interest for settlement 15 Oct 2026'],
-    ['24 Oct 2026', 'Day-135 lock-up tranche, up to 328.4m shares (a Saturday; first session Mon 26 Oct)'],
-    ['22 Oct 2026', 'Q3 lock-up tranche: up to 1.3bn Class A (28% of 180-day pool; 2nd full trading day after Q3 results)'],
-    ['20 Oct 2026', 'Q3 2026 results after the close; webcast 3:30 p.m. CT / 4:30 p.m. ET']
+    ['Dec 2026', 'Shotwell gift shares (initial tranche of 2m+ pledged) due to be distributed to children\'s Trump accounts; watch for a Form 4 gift filing'],
+    ['1 Dec 2026', 'MSCI November 2026 index review effective'],
+    ['24 Nov 2026', 'FINRA short interest for settlement 13 Nov 2026'],
+    ['13 Nov 2026', 'Russell preliminary additions and deletions published'],
+    ['12 Nov 2026', 'Starship Flight 15, NET per FAA planning slide (moved from 8 Nov; goal catch booster and Ship; B22/S42; not a SpaceX date)'],
+    ['11 Nov 2026', 'MSCI November review announced'],
+    ['10 Nov 2026', 'FINRA short interest for settlement 30 Oct 2026'],
+    ['7 Nov 2026', 'Falcon 9 USSF-432 from Vandenberg, NET 08:46 SGT (6 Nov 4:46 p.m. PT)']
   ],
   /* 1) Starlink */
   countries: [
