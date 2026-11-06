@@ -651,26 +651,30 @@ function sources() {
     <div class="tblwrap" style="max-height:460px;overflow:auto"><table class="feedt"><thead><tr><th>Form</th><th>Filed</th><th>Report date</th><th>Description / items</th><th>Link</th></tr></thead><tbody>${ft}</tbody></table></div></div>
    <h3>Source documents</h3><div class="card"><ul class="lst">${D.sources.map(([t, u]) => `<li>${esc(t)}${u ? ' — ' + ext(u, u.replace(/^https?:\/\//, '').slice(0, 70)) : ''}</li>`).join('')}</ul>
    <ul class="notes"><li>Built ${esc(D.meta.built_sgt)} by build_data.py; SEC feed by build_feed.py; X posts by build_x.py. Unavailable figures are shown as n/a; estimates are labelled.</li></ul></div></div>`;
-  $$('#srcsub button').forEach(b => b.onclick = () => { location.replace('#sources/' + b.dataset.v); srcShow(b.dataset.v); });
+  $$('#srcsub button').forEach(b => b.onclick = () => { location.replace('#own/' + b.dataset.v); srcShow(b.dataset.v); });
   srcShow(location.hash.split('/')[1] || 'feed');
 }
 
 /* ---------------- router & theme ---------------- */
-const TABS = [['overview', 'Overview', overview], ['ipo', 'IPO & Lock-up', ipoTab], ['fin', 'Financials', finTab], ['biz', 'Segments & Starlink', bizTab], ['ops', 'Operations', opsTab],
-  ['musk', 'Elon Musk', muskTab], ['val', 'Valuation & Street', valTab], ['ins', 'Insiders', insTab], ['risks', 'Risks & News', riskTab], ['sources', 'Sources & Live feed', sources]];
-const NAVL = {overview: 'Overview', ipo: 'IPO & Lock-up', fin: 'Financials', biz: 'Segments', ops: 'Operations', musk: 'Elon Musk', val: 'Valuation', ins: 'Insiders', risks: 'Risks & News', sources: 'Sources & Live feed'};
+const TABS = [['overview', 'Overview', [['overview', overview]]], ['ipo', 'IPO & Lock-up', [['ipo', ipoTab]]], ['fin', 'Financials & Valuation', [['fin', finTab], ['val', valTab]]],
+  ['ops', 'Operations & Segments', [['biz', bizTab], ['ops', opsTab]]], ['musk', 'Elon & News', [['musk', muskTab], ['risks', riskTab]]], ['own', 'Ownership & Sources', [['ins', insTab], ['sources', sources]]]];
+const NAVL = {overview: 'Overview', ipo: 'IPO & Lock-up', fin: 'Financials & Valuation', ops: 'Operations', musk: 'Elon & News', own: 'Ownership & Sources'};
+const OLDTAB = {val: 'fin', biz: 'ops', risks: 'musk', ins: 'own', sources: 'own'}; /* old hash ids -> merged tab (+ scroll to block) */
 const done = {};
 function route() {
-  let id = (location.hash || '#overview').slice(1).split('/')[0]; if (!TABS.some(t => t[0] === id)) id = 'overview';
-  if (id === 'sources' && done.sources) srcShow(location.hash.split('/')[1] || 'feed');
+  let id = (location.hash || '#overview').slice(1).split('/')[0], jump = null;
+  if (OLDTAB[id]) { jump = id; id = OLDTAB[id]; }
+  if (!TABS.some(t => t[0] === id)) id = 'overview';
+  if (id === 'own' && done.own && (jump === 'sources' || location.hash.split('/')[1])) srcShow(location.hash.split('/')[1] || 'feed');
   if (id === 'ops' && done.ops) opsShow();
   $$('#nav a').forEach(a => { const on = a.dataset.t === id; a.classList.toggle('on', on); if (on) a.scrollIntoView({block: 'nearest', inline: 'center'}); });
-  $$('main section').forEach(s => s.classList.toggle('on', s.id === 's-' + id));
+  $$('main > section').forEach(s => s.classList.toggle('on', s.id === 't-' + id));
   const t = TABS.find(t => t[0] === id);
-  if (!done[id]) { try { t[2](); } catch (e) { console.error('render ' + id, e); $('#s-' + id).insertAdjacentHTML('beforeend', `<div class="tvfail">This tab could not render: ${esc(e.message)}</div>`); } done[id] = 1; wireTables($('#s-' + id)); wireXall($('#s-' + id)); tickCountdowns(); }
+  if (!done[id]) { t[2].forEach(([sid, fn]) => { try { fn(); } catch (e) { console.error('render ' + sid, e); $('#s-' + sid).insertAdjacentHTML('beforeend', `<div class="tvfail">This block could not render: ${esc(e.message)}</div>`); } }); done[id] = 1; wireTables($('#t-' + id)); wireXall($('#t-' + id)); tickCountdowns(); }
+  if (jump) { const el = $('#s-' + jump); if (el) setTimeout(() => el.scrollIntoView({block: 'start'}), 50); }
   document.title = `${t[1]} · SpaceX (SPCX) Dashboard · © 2026 Hugo Tian`;
 }
-function buildNav() { $('#nav').innerHTML = TABS.map(([id, l]) => `<a href="#${id}" data-t="${id}" title="${esc(l)}">${esc(NAVL[id] || l)}</a>`).join(''); $('#main').innerHTML = TABS.map(([id]) => `<section id="s-${id}"></section>`).join(''); chrome(); }
+function buildNav() { $('#nav').innerHTML = TABS.map(([id, l]) => `<a href="#${id}" data-t="${id}" title="${esc(l)}">${esc(NAVL[id] || l)}</a>`).join(''); $('#main').innerHTML = TABS.map(([id, , subs]) => `<section id="t-${id}">${subs.map(([sid], i) => `<div id="s-${sid}" class="tsub"${i ? ' style="margin-top:28px;padding-top:18px;border-top:1px solid var(--line, rgba(127,127,127,.25))"' : ''}></div>`).join('')}</section>`).join(''); chrome(); }
 function chrome() { /* static header text */
   $('.hero h1').innerHTML = 'SpaceX <span class="tk">$SPCX</span> Dashboard'; $('.brand .bn').textContent = 'Dashboard';
   $('.brand').setAttribute('aria-label', 'SpaceX dashboard home');
