@@ -67,10 +67,10 @@ window.SPCX_SEC = {
     ['1 Dec 2026', 'MSCI November 2026 index review effective'],
     ['24 Nov 2026', 'FINRA short interest for settlement 13 Nov 2026'],
     ['13 Nov 2026', 'Russell preliminary additions and deletions published'],
-    ['13 Nov 2026', 'Starship Flight 15, target per SpaceX VP Kiko Dontchev at UP.Summit 5 Nov (was NET 12 Nov FAA planning; goal catch booster and Ship; B22/S42; not yet a SpaceX mission-page date)'],
+    ['13 Nov 2026', 'Starship Flight 15, target per SpaceX VP Kiko Dontchev at UP.Summit 5 Nov (Musk 6 Nov: attempt catch of both booster and Ship; B22/S42; not yet a SpaceX mission-page date)'],
     ['11 Nov 2026', 'MSCI November review announced'],
     ['10 Nov 2026', 'FINRA short interest for settlement 30 Oct 2026'],
-    ['7 Nov 2026', 'Falcon 9 USSF-432 from Vandenberg, NET 08:46 SGT (6 Nov 4:46 p.m. PT)']
+    ['7 Nov 2026', 'Falcon 9 USSF-432 from Vandenberg, targeting ~08:48 SGT (00:48 UTC; Fri window moved to Sat; B1095-8 → OCISLY)']
   ],
   /* 1) Starlink */
   countries: [
