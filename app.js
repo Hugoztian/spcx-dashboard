@@ -263,6 +263,7 @@ const pctOut = m => m == null ? 'n/a' : fmt(m / D.price.shares_m * 100, 1) + '%'
 function hero() {
   const P = D.price, n = nextRelease();
   $('#updated').innerHTML = `© 2026 Hugo Tian. All rights reserved.`;
+  $('#lastupd').innerHTML = `Last updated: <b>${esc(D.meta.built_sgt)}</b>`;
   const q2 = row(D.is, 'Revenue')[6], q2y = row(D.is, 'Revenue')[4];
   $('#hero4').innerHTML = [
     `<div class="hcard live"><div id="lq" class="lq" aria-live="polite" style="display:none"><div class="lq-top"><span class="lq-sess"><i class="lq-dot"></i><span id="lq-sl">Connecting to live quote…</span></span><span class="lq-sym">SPCX · Nasdaq</span></div>
@@ -295,21 +296,24 @@ function overview() {
     ['Analysts (MarketBeat, third-party)', `${S.rating} · avg target US$${fmt(S.avg, 2)} (US$${S.lo}–${S.hi})`, '8 Oct 2026'],
     ['Next lock-up release', nextRelease() ? `${nextRelease().label}: up to ${fmt(nextRelease().shares_m, 1)}m shares` : 'n/a', '424(b)(4)'],
     ['Elon Musk', '≈84.4% of votes; 6.42bn shares beneficially owned; locked until 12 Jun 2027', '424(b)(4) · 13G']];
-  $('#s-overview').innerHTML = `<p class="mut" id="lastupd" style="margin:0 0 6px">Last updated: <b>${esc(D.meta.built_sgt)}</b></p><h2>Overview</h2>
+  $('#s-overview').innerHTML = `<h2>Overview</h2>
   <p class="lead">SpaceX listed on Nasdaq on <b>11 Jun 2026</b> at US$135. It now reports three segments: <b>Space</b> (launch), <b>Connectivity</b> (Starlink) and <b>SI</b> (xAI, Grok and X). Revenue is growing fast, Starlink makes the profits, and SI capex is driving large cash outflows.</p>
   <div class="grid g2" style="margin-bottom:16px">
     <div class="card"><h3>Key numbers (with dates)</h3>${tableBlock({columns: ['Metric', 'Value', 'As of'], rows: keyRows}, {id: 'tKey', csvname: 'Key numbers', wrap: true, cls: 'keyt'})}</div>
     <div class="card"><h3>Key takeaways</h3><ul class="lst">${D.takeaways.map(t => `<li>${esc(t)}</li>`).join('')}</ul><div class="mut" style="font-size:11.5px;margin-top:8px">Source: SEC filings via ${esc('Chief\'s analysis, data as at 9 Oct 2026')}.</div></div></div>
-  <div class="grid g2" style="margin-bottom:16px">${ccard('ovMix', 'Revenue by segment (US$m)', '424(b)(4) · 10-Q')}${ccard('ovRel', 'Upcoming lock-up releases (m shares)', '424(b)(4) schedule · dated tranches')}</div>
-  <div class="card"><h3 style="margin-top:0">SPCX live chart <span class="mut" style="font-size:12px;font-weight:400">${TV_SYM} · TradingView</span></h3><div class="tvchart" id="tvchart"></div></div>`;
+  <div class="grid g2" style="margin-bottom:16px">${ccard('ovMix', 'Revenue by segment (US$m)', '424(b)(4) · 10-Q')}${ccard('ovRel', 'Upcoming lock-up releases (m shares)', '424(b)(4) schedule · dated tranches')}</div>`;
   mixChart('ovMix');
   const up = D.releases.filter(r => !r.cond && relStatus(r).k !== 'passed').sort((a, b) => (a.date || a.sort).localeCompare(b.date || b.sort));
   chart('ovRel', {type: 'bar', data: {labels: up.map(r => r.date ? dlong(r.date).replace(' 20', " '") : 'After ' + (r.label.match(/Q\d \d{4}/) || ['TBA'])[0]), datasets: [{label: 'Shares (m)', data: up.map(r => r.shares_m), backgroundColor: up.map(r => r.pool === 'Musk' ? C.g2 : C.acc)}]},
     options: {plugins: {legend: {display: false}, tooltip: {callbacks: {title: i => up[i[0].dataIndex].label, label: c => `Up to ${fmt(c.raw, 1)}m shares (${up[c.dataIndex].pool})`}}}, scales: {y: {type: 'logarithmic', ticks: {callback: v => [50, 100, 300, 1000, 3000, 6000].includes(v) ? fmt(v) : ''}}}}});
+  { const h = $('#s-overview h2'); if (h && window.secWeek) h.insertAdjacentHTML('afterend', secWeek()); }
+}
+function liveChart() { /* full TradingView chart: bottom of Financials & Valuation (moved off Overview, 9 Nov 2026); rendered lazily when that tab is first shown */
+  const s = $('#s-chart'); if (!s) return;
+  s.innerHTML = `<h2>SPCX live price chart <span class="mut">${TV_SYM} · TradingView</span></h2><div class="card"><div class="tvchart" id="tvchart"></div></div>`;
   tvEmbed($('#tvchart'), 'advanced-chart', {autosize: true, symbol: TV_SYM, interval: 'D', range: '6M', timezone: 'Asia/Singapore', theme: tvTheme(), style: '1', locale: 'en',
     backgroundColor: isDark() ? 'rgba(22,22,23,1)' : 'rgba(255,255,255,1)', gridColor: isDark() ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.035)', allow_symbol_change: false, hide_side_toolbar: true, calendar: false, support_host: 'https://www.tradingview.com'},
     why => { $('#tvchart').innerHTML = `<div class="tvfail">Live chart unavailable (${esc(why)}).</div><div class="mut" style="font-size:12px">Snapshot: close US$${fmt(D.price.close, 2)} on ${esc(dlong(D.price.close_date))} · not live</div>`; $('#tvchart').style.height = 'auto'; });
-  { const h = $('#s-overview h2'); if (h && window.secWeek) h.insertAdjacentHTML('afterend', secWeek()); }
 }
 function mixChart(id) {
   const g = n => row(D.mix, n);
@@ -656,10 +660,10 @@ function sources() {
 }
 
 /* ---------------- router & theme ---------------- */
-const TABS = [['overview', 'Overview', [['overview', overview]]], ['ipo', 'IPO & Lock-up', [['ipo', ipoTab]]], ['fin', 'Financials & Valuation', [['fin', finTab], ['val', valTab]]],
+const TABS = [['overview', 'Overview', [['overview', overview]]], ['ipo', 'IPO & Lock-up', [['ipo', ipoTab]]], ['fin', 'Financials & Valuation', [['fin', finTab], ['val', valTab], ['chart', liveChart]]],
   ['ops', 'Operations & Segments', [['biz', bizTab], ['ops', opsTab]]], ['musk', 'Elon & News', [['musk', muskTab], ['risks', riskTab]]], ['own', 'Ownership & Sources', [['ins', insTab], ['sources', sources]]]];
 const NAVL = {overview: 'Overview', ipo: 'IPO & Lock-up', fin: 'Financials & Valuation', ops: 'Operations', musk: 'Elon & News', own: 'Ownership & Sources'};
-const OLDTAB = {val: 'fin', biz: 'ops', risks: 'musk', ins: 'own', sources: 'own'}; /* old hash ids -> merged tab (+ scroll to block) */
+const OLDTAB = {val: 'fin', biz: 'ops', risks: 'musk', ins: 'own', sources: 'own', chart: 'fin', tvchart: 'fin', livechart: 'fin', 'live-chart': 'fin', price: 'fin'}; /* chart ids: live chart moved Overview -> bottom of Financials & Valuation */ /* old hash ids -> merged tab (+ scroll to block) */
 const done = {};
 function route() {
   let id = (location.hash || '#overview').slice(1).split('/')[0], jump = null;
@@ -671,7 +675,7 @@ function route() {
   $$('main > section').forEach(s => s.classList.toggle('on', s.id === 't-' + id));
   const t = TABS.find(t => t[0] === id);
   if (!done[id]) { t[2].forEach(([sid, fn]) => { try { fn(); } catch (e) { console.error('render ' + sid, e); $('#s-' + sid).insertAdjacentHTML('beforeend', `<div class="tvfail">This block could not render: ${esc(e.message)}</div>`); } }); done[id] = 1; wireTables($('#t-' + id)); wireXall($('#t-' + id)); tickCountdowns(); }
-  if (jump) { const el = $('#s-' + jump); if (el) setTimeout(() => el.scrollIntoView({block: 'start'}), 50); }
+  if (jump) { const el = $('#s-' + jump) || $('#s-chart'); if (el) setTimeout(() => el.scrollIntoView({block: 'start'}), 50); }
   document.title = `${t[1]} · SpaceX (SPCX) Dashboard · © 2026 Hugo Tian`;
 }
 function buildNav() { $('#nav').innerHTML = TABS.map(([id, l]) => `<a href="#${id}" data-t="${id}" title="${esc(l)}">${esc(NAVL[id] || l)}</a>`).join(''); $('#main').innerHTML = TABS.map(([id, , subs]) => `<section id="t-${id}">${subs.map(([sid], i) => `<div id="s-${sid}" class="tsub"${i ? ' style="margin-top:28px;padding-top:18px;border-top:1px solid var(--line, rgba(127,127,127,.25))"' : ''}></div>`).join('')}</section>`).join(''); chrome(); }
