@@ -58,6 +58,8 @@ window.SPCX_SEC = {
     ['7 Oct 2026', 'Operations', 'Ship 40 arrived at the Port of Brownsville aboard the heavy-lift vessel Forte, 75 days after its Indian Ocean splashdown: the first flown Starship to return to Texas.', 'Corpus Christi Caller-Times, 9 Oct 2026 https://www.caller.com/story/news/local/texas/2026/10/09/spacex-starship-ship-40-recovered-starbase-port/92167239007/']
   ],
   next: [
+    ['9 Dec 2026', 'Starbase City Commission public hearing on SpaceX gas-fired power plant and super-compute facility tax abatement and development agreement (est. US$24bn initial phases)'],
+    ['10 Nov 2026', 'Falcon 9 USSF-627 from Vandenberg SLC-4E; window opens 10:03 SGT (backup window later) per ad-hoc-news report; outcome not yet confirmed'],
     ['21 Dec 2026', 'Nasdaq-100 annual reconstitution effective (open)'],
     ['14 Dec 2026', 'Russell US reconstitution effective (open; after the close on 11 Dec)'],
     ['11 Dec 2026', 'Nasdaq-100 reconstitution expected to be announced after the close'],
@@ -67,7 +69,7 @@ window.SPCX_SEC = {
     ['1 Dec 2026', 'MSCI November 2026 index review effective'],
     ['24 Nov 2026', 'FINRA short interest for settlement 13 Nov 2026'],
     ['13 Nov 2026', 'Russell preliminary additions and deletions published'],
-    ['13 Nov 2026', 'Starship Flight 15, target per SpaceX VP Kiko Dontchev at UP.Summit 5 Nov (Musk 6 Nov: attempt catch of both booster and Ship; B22/S42; not yet a SpaceX mission-page date)'],
+    ['13 Nov 2026', 'Starship Flight 15 as soon as Fri 13 Nov, window opens 4:45 p.m. CT (06:45 SGT 14 Nov), pending regulatory approval per SpaceX mission page; first attempt to catch both booster and Ship; 26 Starlink V3 satellites'],
     ['11 Nov 2026', 'MSCI November review announced'],
     ['10 Nov 2026', 'FINRA short interest for settlement 30 Oct 2026'],
     ['7 Nov 2026', 'Falcon 9 USSF-432 from Vandenberg, targeting ~08:48 SGT (00:48 UTC; Fri window moved to Sat; B1095-8 → OCISLY)']
