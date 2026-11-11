@@ -59,7 +59,8 @@ window.SPCX_SEC = {
   ],
   next: [
     ['9 Dec 2026', 'Starbase City Commission public hearing on SpaceX gas-fired power plant and super-compute facility tax abatement and development agreement (est. US$24bn initial phases)'],
-    ['10 Nov 2026', 'Falcon 9 USSF-627 from Vandenberg SLC-4E; window opens 10:03 SGT (backup window later) per ad-hoc-news report; outcome not yet confirmed'],
+    ['12 Nov 2026', 'Falcon 9 USSF-627 from Vandenberg SLC-4E; window opens 10:35 SGT (6:35 p.m. PT 11 Nov), backup 10:21 SGT 13 Nov (SpaceX mission page)'],
+    ['8 Dec 2026', 'Lock-up: 180-day expiry, up to 797.6m Class A shares become eligible to sell (424(b)(4) schedule; first session to trade them per trackers may be 9 Dec)'],
     ['21 Dec 2026', 'Nasdaq-100 annual reconstitution effective (open)'],
     ['14 Dec 2026', 'Russell US reconstitution effective (open; after the close on 11 Dec)'],
     ['11 Dec 2026', 'Nasdaq-100 reconstitution expected to be announced after the close'],
