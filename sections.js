@@ -59,7 +59,7 @@ window.SPCX_SEC = {
   ],
   next: [
     ['9 Dec 2026', 'Starbase City Commission public hearing on SpaceX gas-fired power plant and super-compute facility tax abatement and development agreement (est. US$24bn initial phases)'],
-    ['12 Nov 2026', 'Falcon 9 USSF-627 from Vandenberg SLC-4E; window opens 10:35 SGT (6:35 p.m. PT 11 Nov), backup 10:21 SGT 13 Nov (SpaceX mission page)'],
+    ['12 Nov 2026', 'Falcon 9 USSF-627 from Vandenberg SLC-4E; window opens 12:36 SGT (8:36 p.m. PT 11 Nov, four hours), backup 10:21 SGT 13 Nov (SpaceX mission page)'],
     ['8 Dec 2026', 'Lock-up: 180-day expiry, up to 797.6m Class A shares become eligible to sell (424(b)(4) schedule; first session to trade them per trackers may be 9 Dec)'],
     ['21 Dec 2026', 'Nasdaq-100 annual reconstitution effective (open)'],
     ['14 Dec 2026', 'Russell US reconstitution effective (open; after the close on 11 Dec)'],
@@ -70,10 +70,11 @@ window.SPCX_SEC = {
     ['1 Dec 2026', 'MSCI November 2026 index review effective'],
     ['24 Nov 2026', 'FINRA short interest for settlement 13 Nov 2026'],
     ['13 Nov 2026', 'Russell preliminary additions and deletions published'],
-    ['13 Nov 2026', 'Starship Flight 15 as soon as Fri 13 Nov, window opens 4:45 p.m. CT (06:45 SGT 14 Nov), pending regulatory approval per SpaceX mission page; first attempt to catch both booster and Ship; 26 Starlink V3 satellites'],
-    ['11 Nov 2026', 'MSCI November review announced'],
-    ['10 Nov 2026', 'FINRA short interest for settlement 30 Oct 2026'],
-    ['7 Nov 2026', 'Falcon 9 USSF-432 from Vandenberg, targeting ~08:48 SGT (00:48 UTC; Fri window moved to Sat; B1095-8 → OCISLY)']
+    ['17 Nov 2026', 'FAA virtual scoping meetings (17–19 Nov) on the Starbase Starship programmatic EIS (up to 100, later 456, launches a year); comments close 7 Dec'],
+    ['1 Dec 2026', 'FCC comments and petitions to deny due on SpaceX’s Grain 800 MHz licence transfer (WT Docket 26-313); oppositions due 8 Dec'],
+    ['7 Dec 2026', 'FAA public comment period closes on the Starbase Starship programmatic EIS'],
+    ['8 Dec 2026', 'FCC oppositions due on SpaceX’s Grain 800 MHz licence transfer (WT Docket 26-313)'],
+    ['14 Nov 2026', 'Starship Flight 15 as soon as Fri 13 Nov US time, window opens 4:45 p.m. CT (06:45 SGT 14 Nov), pending regulatory approval per SpaceX mission page; first attempt to catch both booster and Ship; 26 Starlink V3 satellites']
   ],
   /* 1) Starlink */
   countries: [
