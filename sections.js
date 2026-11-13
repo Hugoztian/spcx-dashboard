@@ -59,14 +59,13 @@ window.SPCX_SEC = {
   ],
   next: [
     ['9 Dec 2026', 'Starbase City Commission public hearing on SpaceX gas-fired power plant and super-compute facility tax abatement and development agreement (est. US$24bn initial phases)'],
-    ['12 Nov 2026', 'Falcon 9 USSF-627 from Vandenberg SLC-4E; window opens 12:36 SGT (8:36 p.m. PT 11 Nov, four hours), backup 10:21 SGT 13 Nov (SpaceX mission page)'],
     ['8 Dec 2026', 'Lock-up: 180-day expiry, up to 797.6m Class A shares become eligible to sell (424(b)(4) schedule; first session to trade them per trackers may be 9 Dec)'],
     ['21 Dec 2026', 'Nasdaq-100 annual reconstitution effective (open)'],
     ['14 Dec 2026', 'Russell US reconstitution effective (open; after the close on 11 Dec)'],
     ['11 Dec 2026', 'Nasdaq-100 reconstitution expected to be announced after the close'],
     ['Dec 2026', 'Starship Flight 16 aimed (NSF 18 Oct; possibly first from LC-39A; B23/S43 likely)'],
     ['Dec 2026', 'Shotwell gift shares (initial tranche of 2m+ pledged) due to be distributed to children\'s Trump accounts; watch for a Form 4 gift filing'],
-    ['9 Dec 2026', 'Cochise County Planning & Zoning hearing on SpaceX Arizona AI campus special-use request (Willcox area; up to ~6 GW)'],
+    ['9 Dec 2026', 'Cochise County Planning & Zoning hearing on SpaceX Arizona AI campus special-use request (Willcox area; up to ~6 GW; SpaceX puts the campus at roughly US$50bn, 12 Nov)'],
     ['1 Dec 2026', 'MSCI November 2026 index review effective'],
     ['24 Nov 2026', 'FINRA short interest for settlement 13 Nov 2026'],
     ['13 Nov 2026', 'Russell preliminary additions and deletions published'],
@@ -74,7 +73,7 @@ window.SPCX_SEC = {
     ['1 Dec 2026', 'FCC comments and petitions to deny due on SpaceX’s Grain 800 MHz licence transfer (WT Docket 26-313); oppositions due 8 Dec'],
     ['7 Dec 2026', 'FAA public comment period closes on the Starbase Starship programmatic EIS'],
     ['8 Dec 2026', 'FCC oppositions due on SpaceX’s Grain 800 MHz licence transfer (WT Docket 26-313)'],
-    ['14 Nov 2026', 'Starship Flight 15 as soon as Fri 13 Nov US time, window opens 4:45 p.m. CT (06:45 SGT 14 Nov), pending regulatory approval per SpaceX mission page; first attempt to catch both booster and Ship; 26 Starlink V3 satellites']
+    ['14 Nov 2026', 'Starship Flight 15 as soon as Fri 13 Nov US time, window opens 4:45 p.m. CT (06:45 SGT 14 Nov), pending regulatory approval per SpaceX mission page (unchanged at 13 Nov morning scan; no FAA licence listed yet); first attempt to catch both booster and Ship; 26 Starlink V3 satellites']
   ],
   /* 1) Starlink */
   countries: [
