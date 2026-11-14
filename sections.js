@@ -73,7 +73,8 @@ window.SPCX_SEC = {
     ['1 Dec 2026', 'FCC comments and petitions to deny due on SpaceX’s Grain 800 MHz licence transfer (WT Docket 26-313); oppositions due 8 Dec'],
     ['7 Dec 2026', 'FAA public comment period closes on the Starbase Starship programmatic EIS'],
     ['8 Dec 2026', 'FCC oppositions due on SpaceX’s Grain 800 MHz licence transfer (WT Docket 26-313)'],
-    ['14 Nov 2026', 'Starship Flight 15 as soon as Fri 13 Nov US time, window opens 4:45 p.m. CT (06:45 SGT 14 Nov), pending regulatory approval per SpaceX mission page (unchanged at 13 Nov morning scan; no FAA licence listed yet); first attempt to catch both booster and Ship; 26 Starlink V3 satellites']
+    ['15 Nov 2026', 'Starship Flight 15 Ship 42 tower catch attempt ~05:17 SGT Sun 15 Nov (~3:17 p.m. CT 14 Nov), only if systems are healthy; Gulf splashdown contingency. Launched 06:47 SGT 14 Nov; booster catch was aborted (Gulf splashdown)'],
+    ['Dec 2026', 'Possible SpaceX–Tesla merger announcement “as soon as December” (Bloomberg, 12 Nov; unconfirmed, could slip to early 2027)']
   ],
   /* 1) Starlink */
   countries: [
