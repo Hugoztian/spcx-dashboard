@@ -110,7 +110,7 @@ window.secReg = () => card('regcal', 'Regulatory calendar', 'FAA · spectrum · 
 /* 6) Starship flight scorecard — Operations tab */
 window.secStarship = () => {
   const F = [
-    ['15', 'NET 8 Nov 2026', 'B22 / S42', 'First attempt to catch both booster and ship at the tower', 'Upcoming', 'Musk: “more likely than not” to succeed', L.sp15],
+    ['15', '13–14 Nov 2026', 'B22 / S42', 'First attempt to catch both booster and ship at the tower; deploy 26 Starlink V3; 14 orbits', 'Partial', 'First-ever Ship tower catch from orbit (~05:20 SGT 15 Nov) and all 26 V3 satellites deployed; booster boostback ended early on low fuel mass, catch aborted and booster lost over the Gulf', 'https://www.spacex.com/launches/starship-flight-15/'],
     ['14', '28 Sep 2026', 'B21 / S41', 'First orbit; deploy 26 Starlink V3; 6 orbits; deorbit burn', 'Met mostly', 'Orbit and all 26 deployed; one Raptor shut down early; flight cut to about 3 h; controlled splashdowns', L.f14],
     ['13', '24 Jul 2026', 'B20 / S40', 'Deploy Starlink V3; ship splashdown', 'Partial', 'First V3 deploy; ship splashed down and survived tip-over; booster lost (10 of 13 landing engines lit)', L.wiki],
     ['12', '22 May 2026', 'B19 / S39', 'Block 3 debut; Pad 2; payload deploy; relight', 'Partial', 'Ship reached SECO, deployed 22 payloads, relight skipped; booster lost', L.wiki],
@@ -127,7 +127,7 @@ window.secStarship = () => {
     ['1', '20 Apr 2023', 'B7 / S24', 'Clear the pad; stage separation', 'Failed', 'Lost before separation', L.wiki]];
   const n = k => F.filter(r => r[4].startsWith(k)).length;
   return card('starshipsc', 'Starship flight scorecard', 'goals vs outcome · newest first',
-    `<div class="grid g4" style="margin-bottom:12px">${kpi('Flights', '14', 'to 28 Sep 2026', L.wiki)}${kpi('Met', String(n('Met')), 'main goals achieved')}${kpi('Partial', String(n('Partial')), 'some goals missed')}${kpi('Failed', String(n('Failed')), 'vehicle lost before main goals')}</div>` +
+    `<div class="grid g4" style="margin-bottom:12px">${kpi('Flights', '15', 'to 14 Nov 2026', L.wiki)}${kpi('Met', String(n('Met')), 'main goals achieved')}${kpi('Partial', String(n('Partial')), 'some goals missed')}${kpi('Failed', String(n('Failed')), 'vehicle lost before main goals')}</div>` +
     T(['Flight', 'Date', 'Booster / ship', 'Main goals', 'Score', 'Outcome', 'Source'], F.map(r => [r[0], r[1], r[2], r[3], r[4], r[5], r[6]]), 'tStarship',
       ['Scores are this dashboard’s judgement against each flight’s published goals, not SpaceX’s. Outcome summaries from SpaceX flight pages and the Wikipedia launch list (accessed 21 Oct 2026). Ship tower catch: not yet attempted.']));
 };

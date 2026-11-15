@@ -73,7 +73,8 @@ window.SPCX_SEC = {
     ['1 Dec 2026', 'FCC comments and petitions to deny due on SpaceX’s Grain 800 MHz licence transfer (WT Docket 26-313); oppositions due 8 Dec'],
     ['7 Dec 2026', 'FAA public comment period closes on the Starbase Starship programmatic EIS'],
     ['8 Dec 2026', 'FCC oppositions due on SpaceX’s Grain 800 MHz licence transfer (WT Docket 26-313)'],
-    ['15 Nov 2026', 'Starship Flight 15 Ship 42 tower catch attempt ~05:17 SGT Sun 15 Nov (~3:17 p.m. CT 14 Nov), only if systems are healthy; Gulf splashdown contingency. Launched 06:47 SGT 14 Nov; booster catch was aborted (Gulf splashdown)'],
+    ['30 Nov 2026', 'Deadline set by Senators Shaheen and Coons for SpaceX to confirm preservation of Ukraine Starlink/Starshield records and answer who authorised the restrictions (letter of 13 Nov)'],
+    ['3 Dec 2026', 'Tesla annual meeting at Giga Texas (three ballot items, no SpaceX merger proposal; Bloomberg says a merger announcement could come as soon as December)'],
     ['Dec 2026', 'Possible SpaceX–Tesla merger announcement “as soon as December” (Bloomberg, 12 Nov; unconfirmed, could slip to early 2027)']
   ],
   /* 1) Starlink */
@@ -118,7 +119,7 @@ window.SPCX_SEC = {
   ],
   /* 5) Elon promise tracker (non-AI rows; SI rows come from ai.js) */
   promises: [
-    ['20 Aug 2026', '“Looks like we will probably catch the ship with the tower in a few months … First reflight of the ship will be either end of this year or early next.”', 'Ship catch; first ship reflight', 'Late 2026 / early 2027', 'No ship catch or reflight yet (14 Oct 2026)', 'Pending', 'https://x.com/elonmusk/status/2090305535937851863'],
+    ['20 Aug 2026', '“Looks like we will probably catch the ship with the tower in a few months … First reflight of the ship will be either end of this year or early next.”', 'Ship catch; first ship reflight', 'Late 2026 / early 2027', 'Ship 42 caught by the tower on Flight 15 (~05:20 SGT 15 Nov 2026, about 3 months after the post); no ship reflight yet, Musk says Ship 42 could be reflown after a few weeks of refurbishment (16 Nov)', 'Catch met · reflight pending', 'https://x.com/elonmusk/status/2090305535937851863'],
     ['25 Jul 2026', '“Unless we discover problems after mission data review, SpaceX will attempt to catch the ship with the tower on next flight”', 'Ship catch on Flight 14', '28 Sep 2026 (Flight 14)', 'Flight 14 splashed down in the Pacific; no catch attempted (catch reported off before the flight)', 'Behind', 'https://x.com/elonmusk/status/2080876967839031712'],
     ['12 Jun 2026', 'Prospectus (company): “We expect Starship to commence payload delivery to orbit in the second half of 2026.”', 'Payload delivery to orbit', 'H2 2026', 'Flight 14 (28 Sep 2026) reached orbit and deployed 26 Starlink V3 satellites', 'Met', U.p424],
     ['3 Sep 2025', '“SpaceX will do orbital refilling several times next year with Starship V3.”', 'Several orbital refilling tests', 'End-2026', 'No propellant transfer attempted as of 14 Oct 2026; GAO (Jul 2026) says these tests are more than a year behind', 'Pending', 'https://x.com/elonmusk/status/1963333192938856662'],
