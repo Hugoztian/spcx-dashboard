@@ -64,7 +64,7 @@ window.SPCX_SEC = {
     ['14 Dec 2026', 'Russell US reconstitution effective (open; after the close on 11 Dec)'],
     ['11 Dec 2026', 'Nasdaq-100 reconstitution expected to be announced after the close'],
     ['Dec 2026', 'Starship Flight 16 aimed (NSF 18 Oct; Livemint 16 Nov: expected 10 Dec or early 2027; possibly first from LC-39A; B23/S43 likely)'],
-    ['19 Nov 2026', 'Falcon 9 USSF-317 (classified Space Force LEO payload) from Vandenberg SLC-4E; window about 23:00 SGT 19 Nov – 03:00 SGT 20 Nov (Livemint, 16 Nov)'],
+    ['20 Nov 2026', 'Falcon 9 USSF-317 (Space Force mission) from Vandenberg SLC-4E; four-hour window opens 10:46 SGT 20 Nov (6:46 p.m. PT 19 Nov), backup 12:26 SGT 21 Nov (SpaceX mission page, checked 18 Nov)'],
     ['Dec 2026', 'Shotwell gift shares (initial tranche of 2m+ pledged) due to be distributed to children\'s Trump accounts; watch for a Form 4 gift filing'],
     ['9 Dec 2026', 'Cochise County Planning & Zoning hearing on SpaceX Arizona AI campus special-use request (Willcox area; up to ~6 GW; SpaceX puts the campus at roughly US$50bn, 12 Nov)'],
     ['1 Dec 2026', 'MSCI November 2026 index review effective'],
