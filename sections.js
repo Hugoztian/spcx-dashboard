@@ -58,6 +58,7 @@ window.SPCX_SEC = {
     ['7 Oct 2026', 'Operations', 'Ship 40 arrived at the Port of Brownsville aboard the heavy-lift vessel Forte, 75 days after its Indian Ocean splashdown: the first flown Starship to return to Texas.', 'Corpus Christi Caller-Times, 9 Oct 2026 https://www.caller.com/story/news/local/texas/2026/10/09/spacex-starship-ship-40-recovered-starbase-port/92167239007/']
   ],
   next: [
+    ['24 Nov 2026', 'Falcon 9 USSF-266 (classified Space Force, third “TH” mission; likely part of the US$1.6bn SBST task order) from Vandenberg SLC-4E, window opens 7:55 a.m. PST (23:55 SGT 24 Nov); booster B1081 on its 29th flight (Spaceflight Now)'],
     ['9 Dec 2026', 'Starbase City Commission public hearing on SpaceX gas-fired power plant and super-compute facility tax abatement and development agreement (est. US$24bn initial phases)'],
     ['8 Dec 2026', 'Lock-up: 180-day expiry, up to 797.6m Class A shares become eligible to sell (424(b)(4) schedule; first session to trade them per trackers may be 9 Dec)'],
     ['21 Dec 2026', 'Nasdaq-100 annual reconstitution effective (open)'],
