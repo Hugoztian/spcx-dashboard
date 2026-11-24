@@ -58,7 +58,6 @@ window.SPCX_SEC = {
     ['7 Oct 2026', 'Operations', 'Ship 40 arrived at the Port of Brownsville aboard the heavy-lift vessel Forte, 75 days after its Indian Ocean splashdown: the first flown Starship to return to Texas.', 'Corpus Christi Caller-Times, 9 Oct 2026 https://www.caller.com/story/news/local/texas/2026/10/09/spacex-starship-ship-40-recovered-starbase-port/92167239007/']
   ],
   next: [
-    ['24 Nov 2026', 'Falcon 9 USSF-266 (classified Space Force, third “TH” mission; likely part of the US$1.6bn SBST task order) from Vandenberg SLC-4E, window opens 7:55 a.m. PST (23:55 SGT 24 Nov); booster B1081 on its 29th flight (Spaceflight Now)'],
     ['9 Dec 2026', 'Starbase City Commission public hearing on SpaceX gas-fired power plant and super-compute facility tax abatement and development agreement (est. US$24bn initial phases)'],
     ['8 Dec 2026', 'Lock-up: 180-day expiry, up to 797.6m Class A shares become eligible to sell (424(b)(4) schedule; first session to trade them per trackers may be 9 Dec)'],
     ['21 Dec 2026', 'Nasdaq-100 annual reconstitution effective (open)'],
@@ -69,13 +68,12 @@ window.SPCX_SEC = {
     ['9 Dec 2026', 'Cochise County Planning & Zoning hearing on SpaceX Arizona AI campus special-use request (Willcox area; up to ~6 GW; SpaceX puts the campus at roughly US$50bn, 12 Nov). Arizona AG Mayes asked on 19 Nov for the vote to be delayed; county calendar still lists 9 Dec'],
     ['3 Dec 2026', 'Arizona Attorney General town hall in Cochise on the proposed SpaceX data centre (5:30–7 p.m. MST; 08:30 SGT 4 Dec)'],
     ['1 Dec 2026', 'MSCI November 2026 index review effective'],
-    ['24 Nov 2026', 'FINRA short interest for settlement 13 Nov 2026'],
     ['1 Dec 2026', 'FCC comments and petitions to deny due on SpaceX’s Grain 800 MHz licence transfer (WT Docket 26-313); oppositions due 8 Dec'],
     ['7 Dec 2026', 'FAA public comment period closes on the Starbase Starship programmatic EIS'],
     ['8 Dec 2026', 'FCC oppositions due on SpaceX’s Grain 800 MHz licence transfer (WT Docket 26-313)'],
     ['30 Nov 2026', 'Deadline set by Senators Shaheen and Coons for SpaceX to confirm preservation of Ukraine Starlink/Starshield records and answer who authorised the restrictions (letter of 13 Nov)'],
     ['3 Dec 2026', 'Tesla annual meeting at Giga Texas (three ballot items, no SpaceX merger proposal; Bloomberg says a merger announcement could come as soon as December)'],
-    ['Dec 2026', 'Possible SpaceX–Tesla merger announcement “as soon as December” (Bloomberg, 12 Nov; unconfirmed, could slip to early 2027)']
+    ['Dec 2026', 'Possible SpaceX–Tesla merger announcement “as soon as December” (Bloomberg, 12 Nov; unconfirmed, could slip to early 2027). FT, 24 Nov: five-director special committees working toward a possible year-end deadline, not yet close to agreement']
   ],
   /* 1) Starlink */
   countries: [
