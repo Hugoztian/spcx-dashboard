@@ -65,6 +65,8 @@ window.SPCX_SEC = {
     ['14 Dec 2026', 'Russell US reconstitution effective (open; after the close on 11 Dec)'],
     ['11 Dec 2026', 'Nasdaq-100 reconstitution expected to be announced after the close'],
     ['Dec 2026', 'Starship Flight 16 aimed (NSF 18 Oct; Livemint 16 Nov: expected 10 Dec or early 2027; possibly first from LC-39A; B23/S43 likely)'],
+    ['Dec 2026', 'SpaceX’s newly issued Class A share for each active Trump Account due to be transferred “next month” (Musk on X, 26 Nov); share count not yet disclosed'],
+    ['Jun 2027', 'Musk’s personal matching share per US child to be transferred when his lock-up expires (Musk on X, 26 Nov); he also pledged another share every year (27 Nov)'],
     ['Dec 2026', 'Shotwell gift shares (initial tranche of 2m+ pledged) due to be distributed to children\'s Trump accounts; watch for a Form 4 gift filing'],
     ['9 Dec 2026', 'Cochise County Planning & Zoning hearing on SpaceX Arizona AI campus special-use request (Willcox area; up to ~6 GW; SpaceX puts the campus at roughly US$50bn, 12 Nov). Arizona AG Mayes asked on 19 Nov for the vote to be delayed; county calendar still lists 9 Dec'],
     ['3 Dec 2026', 'Arizona Attorney General town hall in Cochise on the proposed SpaceX data centre (5:30–7 p.m. MST; 08:30 SGT 4 Dec)'],
