@@ -58,13 +58,13 @@ window.SPCX_SEC = {
     ['7 Oct 2026', 'Operations', 'Ship 40 arrived at the Port of Brownsville aboard the heavy-lift vessel Forte, 75 days after its Indian Ocean splashdown: the first flown Starship to return to Texas.', 'Corpus Christi Caller-Times, 9 Oct 2026 https://www.caller.com/story/news/local/texas/2026/10/09/spacex-starship-ship-40-recovered-starbase-port/92167239007/']
   ],
   next: [
-    ['29 Nov 2026', 'Falcon 9 USSF-380 from Vandenberg, 04:39 UTC (12:39 SGT 29 Nov), and Falcon 9 Cygnus NG-25 to the ISS from Cape Canaveral, 15:47 UTC (23:47 SGT 29 Nov) (NextLiftoff schedule)'],
+    ['29 Nov 2026', 'Falcon 9 USSF-380 from Vandenberg, 8:39 p.m. PT 28 Nov (12:39 SGT 29 Nov; backup 29 Nov 6:26 p.m. PT), and Falcon 9 Cygnus NG-25 to the ISS from SLC-40, 10:40 a.m. ET (23:40 SGT 29 Nov) (SpaceX launch pages)'],
     ['9 Dec 2026', 'Starbase City Commission public hearing on SpaceX gas-fired power plant and super-compute facility tax abatement and development agreement (est. US$24bn initial phases)'],
     ['8 Dec 2026', 'Lock-up: 180-day expiry, up to 797.6m Class A shares become eligible to sell (424(b)(4) schedule; first session to trade them per trackers may be 9 Dec)'],
     ['21 Dec 2026', 'Nasdaq-100 annual reconstitution effective (open)'],
     ['14 Dec 2026', 'Russell US reconstitution effective (open; after the close on 11 Dec)'],
     ['11 Dec 2026', 'Nasdaq-100 reconstitution expected to be announced after the close'],
-    ['Dec 2026', 'Starship Flight 16 aimed (NSF 18 Oct; Livemint 16 Nov: expected 10 Dec or early 2027; possibly first from LC-39A; B23/S43 likely)'],
+    ['Dec 2026', 'Starship Flight 16 aimed for December (NSF 18 Oct) but unconfirmed: the 10 Dec slot dropped off the FAA planning deck (19/25 Nov) with no new date; may slip to early 2027. Ship 43 receiving engines (NSF 26 Nov); reports now point to Starbase Pad 2 rather than LC-39A; B23/S43'],
     ['Dec 2026', 'SpaceX’s newly issued Class A share for each active Trump Account due to be transferred “next month” (Musk on X, 26 Nov); share count not yet disclosed'],
     ['Jun 2027', 'Musk’s personal matching share per US child to be transferred when his lock-up expires (Musk on X, 26 Nov); he also pledged another share every year (27 Nov)'],
     ['Dec 2026', 'Shotwell gift shares (initial tranche of 2m+ pledged) due to be distributed to children\'s Trump accounts; watch for a Form 4 gift filing'],
